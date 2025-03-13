@@ -1,0 +1,18 @@
+<resources>
+    <string name="cyclone">Cyclone</string>
+    <string name="open_github">Open github</string>
+    <string name="run">Run</string>
+    <string name="stop">Stop</string>
+    <string name="theme">Theme</string>
+    <string name="btn_continue">Continue</string>
+    <string name="text_login">Login to Account </string>
+    <string name="text_login_description">Please sign in to your existing account.</string>
+    <string name="text_phone_number">Phone number</string>
+    <string name="text_dont_have_account">Don’t have an account? </string>
+    <string name="text_sign_up">Sign up</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string-array name="arr">
+        <item>item 1</item>
+        <item> item 2</item>
+    </string-array>
+</resources>
