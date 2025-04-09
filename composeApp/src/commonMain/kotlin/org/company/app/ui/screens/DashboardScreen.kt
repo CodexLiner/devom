@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import org.company.app.ui.components.AppContainer
-import org.company.app.ui.components.CustomBottomNavigationBar
+import org.company.app.ui.components.BottomNavigationBar
 import org.company.app.ui.navigation.NavigationHost
 import org.company.app.ui.navigation.Screens
 
@@ -25,7 +25,7 @@ fun DashboardScreen() {
     Scaffold(
         modifier = Modifier.safeDrawingPadding(),
         bottomBar = {
-            CustomBottomNavigationBar(
+            BottomNavigationBar(
                 selectedIndex = selectedTab,
                 onItemSelected = { index ->
                     selectedTab = index
