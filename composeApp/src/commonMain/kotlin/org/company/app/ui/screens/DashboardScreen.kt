@@ -32,6 +32,7 @@ fun DashboardScreen() {
                     val destination = when (index) {
                         0 -> Screens.Home.path
                         1 -> Screens.Bookings.path
+                        3 -> Screens.Profile.path
                         else -> Screens.Home.path
                     }
                     navController.navigate(destination) {
