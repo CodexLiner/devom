@@ -7,9 +7,8 @@ import androidx.navigation.compose.composable
 import org.company.app.ui.screens.HomeScreen
 import org.company.app.ui.screens.booking.BookingScreen
 import org.company.app.ui.screens.login.LoginScreen
+import org.company.app.ui.screens.profile.ProfileScreen
 import org.company.app.ui.screens.register.RegisterScreen
-import org.company.app.ui.screens.signup.DocumentUploadScreen
-import org.company.app.ui.screens.signup.GeneralScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController, startDestination: String) {
@@ -27,6 +26,9 @@ fun NavigationHost(navHostController: NavHostController, startDestination: Strin
 
         composable(Screens.Bookings.path) {
             BookingScreen(navHostController)
+        }
+        composable(Screens.Profile.path) {
+            ProfileScreen(navHostController)
         }
     }
 }
