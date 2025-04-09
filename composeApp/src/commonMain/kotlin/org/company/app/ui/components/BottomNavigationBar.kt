@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import org.company.app.models.BottomNavItem
 
 @Composable
-fun CustomBottomNavigationBar(
+fun BottomNavigationBar(
     selectedIndex: Int,
     onItemSelected: (Int) -> Unit
 ) {
