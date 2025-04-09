@@ -1,40 +1,34 @@
 package org.company.app
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.russhwolf.settings.get
-import com.russhwolf.settings.set
-import kotlinx.coroutines.launch
-import multiplatform_app.composeapp.generated.resources.*
 import org.company.app.theme.AppTheme
 import org.company.app.ui.components.AppContainer
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.screens.login.LoginScreen
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
+import org.company.app.ui.components.CustomBottomNavigationBar
+import org.company.app.ui.navigation.AuthNavHost
+import org.company.app.ui.navigation.NavigationHost
+import org.company.app.ui.navigation.Screens
+import org.company.app.ui.screens.DashboardScreen
 
 @Composable
 internal fun App() = AppTheme {
-    rememberNavController()
-    AppContainer(modifier = Modifier.safeDrawingPadding()) {
-        Box(modifier = Modifier.fillMaxSize() , contentAlignment = Alignment.Center) {
-            LoginScreen(rememberNavController())
-        }
-    }
-}
+    var isLoggedIn by remember { mutableStateOf(false) } // Replace with actual login state from ViewModel
 
-
-
-@Composable
-fun localStringResources(localKey: StringResource): String {
-    return LogicKt.serverStrings.getOrElse(localKey.key) {
-        stringResource(localKey)
+    if (isLoggedIn) {
+        DashboardScreen()
+    } else {
+        AuthNavHost(onLoginSuccess = {
+            isLoggedIn = true
+        })
     }
 }

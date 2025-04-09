@@ -3,10 +3,12 @@ package org.company.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,19 +16,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import org.company.app.theme.bg_color
 import org.company.app.theme.input_color
 import org.company.app.theme.text_style_lead_text
 
 @Composable
 fun TextInputField(
-    modifier: Modifier = Modifier.fillMaxWidth().background(color = bg_color),
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedTextColor = input_color,
-        unfocusedTextColor = input_color,
-        unfocusedBorderColor = Color.Transparent,
-        disabledBorderColor = Color.Transparent,
-        errorBorderColor = Color.Transparent
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    backgroundColor: Color = bg_color,
+    placeholderColor: Color = input_color,
+    cornerRadius: Dp = 12.dp,
+    colors: TextFieldColors = TextFieldDefaults.colors().copy(
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
+        errorIndicatorColor = Color.Transparent,
     ),
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -36,21 +42,22 @@ fun TextInputField(
 
 
     var input by remember { mutableStateOf("") }
+
     OutlinedTextField(
-        placeholder = {
-            Text(text = placeholder, color = input_color, style = text_style_lead_text)
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(12),
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        colors = colors,
-        modifier = modifier,
+        value = input,
         onValueChange = {
             input = it
             onValueChange(it)
         },
-        value = input
+        placeholder = {
+            Text(text = placeholder, style = text_style_lead_text , color = placeholderColor)
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(cornerRadius),
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        colors = colors,
+        modifier = modifier.background(backgroundColor, shape = RoundedCornerShape(cornerRadius))
     )
 
 }

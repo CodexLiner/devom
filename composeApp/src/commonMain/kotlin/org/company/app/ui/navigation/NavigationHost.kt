@@ -1,12 +1,15 @@
 package org.company.app.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.company.app.ui.screens.HomeScreen
-import org.company.app.ui.screens.LoginScreen
+import org.company.app.ui.screens.booking.BookingScreen
+import org.company.app.ui.screens.login.LoginScreen
+import org.company.app.ui.screens.register.RegisterScreen
+import org.company.app.ui.screens.signup.DocumentUploadScreen
+import org.company.app.ui.screens.signup.GeneralScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController, startDestination: String) {
@@ -16,7 +19,14 @@ fun NavigationHost(navHostController: NavHostController, startDestination: Strin
             HomeScreen()
         }
         composable(Screens.Login.path) {
-            LoginScreen()
+            LoginScreen(navHostController)
+        }
+        composable(Screens.OtpScreen.path) {
+            RegisterScreen(navHostController)
+        }
+
+        composable(Screens.Bookings.path) {
+            BookingScreen(navHostController)
         }
     }
 }
