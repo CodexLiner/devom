@@ -28,6 +28,7 @@ import org.company.app.theme.orange_shadow
 import org.company.app.theme.text_style_h2
 import org.company.app.theme.text_style_h5
 import org.company.app.theme.text_style_lead_body_1
+import org.company.app.theme.text_style_lead_text
 import org.company.app.ui.components.BackButton
 import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.OtpView
@@ -44,7 +45,7 @@ fun RegisterScreen(navController: NavController) {
             horizontalAlignment = Alignment.Start
         ) {
             /**
-             * login text
+             * verify otp text
              */
             Text(
                 text = stringResource(Res.string.verify_mobile_number),
@@ -56,9 +57,8 @@ fun RegisterScreen(navController: NavController) {
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = stringResource(Res.string.we_have_sent_the_verification_code, "6378332"),
-                style = text_style_h5,
+                style = text_style_lead_text,
                 textAlign = TextAlign.Start,
-                color = grey_color
             )
 
             OtpView(modifier = Modifier.padding(top = 48.dp)) {

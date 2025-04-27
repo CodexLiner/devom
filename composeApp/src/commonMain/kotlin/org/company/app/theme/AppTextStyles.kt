@@ -2,7 +2,6 @@ package org.company.app.theme
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 internal val text_style_h5 = TextStyle.Default.copy(
@@ -10,7 +9,7 @@ internal val text_style_h5 = TextStyle.Default.copy(
     fontSize = 18.sp,
     lineHeight = 22.sp,
     letterSpacing = 0.sp,
-    textAlign = TextAlign.Center
+    color = grey_color
 )
 
 internal val text_style_h2 = TextStyle.Default.copy(
@@ -18,7 +17,7 @@ internal val text_style_h2 = TextStyle.Default.copy(
     fontSize = 28.sp,
     lineHeight = 36.sp,
     letterSpacing = 0.sp,
-    textAlign = TextAlign.Center
+    color = black_color
 )
 
 internal val text_style_lead_text = TextStyle.Default.copy(
@@ -26,7 +25,7 @@ internal val text_style_lead_text = TextStyle.Default.copy(
     fontSize = 16.sp,
     lineHeight = 24.sp,
     letterSpacing = 0.sp,
-    textAlign = TextAlign.Center
+    color = grey_color
 )
 
 internal val text_style_lead_body_1 = TextStyle.Default.copy(
@@ -34,5 +33,4 @@ internal val text_style_lead_body_1 = TextStyle.Default.copy(
     fontSize = 14.sp,
     lineHeight = 18.sp,
     letterSpacing = 0.sp,
-    textAlign = TextAlign.Center
 )

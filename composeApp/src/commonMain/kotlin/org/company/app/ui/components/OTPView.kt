@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -28,6 +29,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -38,77 +41,89 @@ import androidx.compose.ui.unit.sp
 import org.company.app.theme.grey_color
 import org.company.app.theme.primary_color
 
+
 @Composable
 fun OtpView(
     otpLength: Int = 4,
     modifier: Modifier = Modifier,
-    boxSize: Dp = 70.dp,
     boxColor: Color = Color.White,
     borderColor: Color = grey_color,
-    selectedBorderColor: Color = primary_color ,
+    selectedBorderColor: Color = primary_color,
     cornerRadius: Dp = 24.dp,
-    itemSpacing: Dp = 24.dp,
     textColor: Color = Color.Black,
     textSize: TextUnit = 24.sp,
+    itemSpacing: Dp = 16.dp,
     onOtpEntered: (String) -> Unit
 ) {
     var otp by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
 
-    BasicTextField(
-        value = otp,
-        onValueChange = { newValue ->
-            if (newValue.length <= otpLength && newValue.all { it.isDigit() }) {
-                otp = newValue
-                if (otp.length == otpLength) {
-                    onOtpEntered(otp)
-                }
-            }
-        },
-        interactionSource = interactionSource,
-        cursorBrush = SolidColor(Color.Transparent),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        textStyle = TextStyle(color = Color.Transparent),
-        modifier = modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester)
-            .clickable(indication = null, interactionSource = interactionSource) {
-                focusRequester.requestFocus()
-            }
-            .wrapContentHeight(),
-        decorationBox = { innerTextField ->
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    repeat(otpLength) { index ->
-                        Box(
-                            modifier = Modifier
-                                .size(boxSize)
-                                .background(boxColor, shape = RoundedCornerShape(cornerRadius))
-                                .border(
-                                    1.dp,
-                                    if (otp.length == index) selectedBorderColor else borderColor,
-                                    shape = RoundedCornerShape(cornerRadius)
-                                )
-                                .wrapContentSize(Alignment.Center)
-                        ) {
-                            Text(
-                                text = otp.getOrNull(index)?.toString() ?: "",
-                                style = TextStyle(fontSize = textSize, color = textColor, textAlign = TextAlign.Center)
-                            )
-                        }
+    var parentWidth by remember { mutableStateOf(0) }
+
+    Box(
+        modifier = modifier.fillMaxWidth().wrapContentHeight().onSizeChanged { size ->
+            parentWidth = size.width
+        }.clickable(
+            interactionSource = interactionSource, indication = null
+        ) {
+            focusRequester.requestFocus()
+        }, contentAlignment = Alignment.Center
+    ) {
+        BasicTextField(
+            value = otp,
+            onValueChange = { newValue ->
+                if (newValue.length <= otpLength && newValue.all { it.isDigit() }) {
+                    otp = newValue
+                    if (otp.length == otpLength) {
+                        onOtpEntered(otp)
                     }
                 }
-                innerTextField()
-            }
-        }
-    )
+            },
+            interactionSource = interactionSource,
+            cursorBrush = SolidColor(Color.Transparent),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            textStyle = TextStyle.Default.copy(color = Color.Transparent),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                        .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(
+                        itemSpacing, Alignment.CenterHorizontally
+                    ), verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (parentWidth > 0) {
+                        val totalSpacingPx =
+                            with(LocalDensity.current) { itemSpacing.toPx() * (otpLength - 1) }
+                        val sidePaddingPx = with(LocalDensity.current) { 16.dp.toPx() * 2 }
+                        val boxSizePx =
+                            (parentWidth.toFloat() - totalSpacingPx - sidePaddingPx) / otpLength
+                        val boxSizeDp = with(LocalDensity.current) { boxSizePx.toDp() }
+
+                        repeat(otpLength) { index ->
+                            Box(
+                                modifier = Modifier.size(boxSizeDp)
+                                    .background(boxColor, RoundedCornerShape(cornerRadius)).border(
+                                        width = 1.dp,
+                                        color = if (otp.length == index) selectedBorderColor else borderColor,
+                                        shape = RoundedCornerShape(cornerRadius)
+                                    ), contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = otp.getOrNull(index)?.toString() ?: "",
+                                    style = TextStyle(
+                                        fontSize = textSize,
+                                        color = textColor,
+                                        textAlign = TextAlign.Center
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    innerTextField()
+                }
+            })
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
