@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import org.company.app.ui.screens.login.LoginScreen
 import org.company.app.ui.screens.register.RegisterScreen
 import org.company.app.ui.screens.signup.DocumentUploadScreen
-import org.company.app.ui.screens.signup.GeneralScreen
+import org.company.app.ui.screens.signup.MainScreen
 import org.company.app.ui.screens.signup.SignupSuccessScreen
 
 @Composable
@@ -16,7 +16,7 @@ fun AuthNavHost(onLoginSuccess: () -> Unit) {
 
     NavHost(
         navController = navController,
-        startDestination = Screens.Login.path
+        startDestination = Screens.Register.path
     ) {
         composable(Screens.Login.path) {
             LoginScreen(navController)
@@ -30,7 +30,7 @@ fun AuthNavHost(onLoginSuccess: () -> Unit) {
             }
         }
         composable(Screens.Register.path){
-            GeneralScreen(navController)
+            MainScreen(navController)
         }
         composable(Screens.Document.path) {
             DocumentUploadScreen(navController)
