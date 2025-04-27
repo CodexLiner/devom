@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.ShapedScreen
+import org.company.app.ui.components.Stepper
 
 @Composable
 fun SignupSuccessScreen(navHostController: NavHostController , onSuccess : () -> Unit) {

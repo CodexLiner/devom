@@ -19,6 +19,13 @@ internal val text_style_h2 = TextStyle.Default.copy(
     letterSpacing = 0.sp,
     color = black_color
 )
+internal val text_style_h4 = TextStyle.Default.copy(
+    fontWeight = FontWeight.W700,
+    fontSize = 20.sp,
+    lineHeight = 24.sp,
+    letterSpacing = 0.sp,
+    color = black_color
+)
 
 internal val text_style_lead_text = TextStyle.Default.copy(
     fontWeight = FontWeight.W500,

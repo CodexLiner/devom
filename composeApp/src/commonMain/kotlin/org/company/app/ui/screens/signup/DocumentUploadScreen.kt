@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.ShapedScreen
+import org.company.app.ui.components.Stepper
 import org.company.app.ui.navigation.Screens
 
 
