@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,93 +66,107 @@ fun LoginScreen(navController: NavController) {
 
 @Composable
 fun LoginMainContent(navController: NavController) {
-    Column {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(top = 48.dp).padding(horizontal = 24.dp)
-                .weight(1f),
-            horizontalAlignment = Alignment.Start
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp)
+            .padding(top = 24.dp, bottom = 16.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        // --- Login Texts ---
+        Text(
+            text = stringResource(Res.string.text_login),
+            style = text_style_h2,
+        )
+        Text(
+            modifier = Modifier.padding(top = 8.dp),
+            text = stringResource(Res.string.text_login_description),
+            style = text_style_lead_text,
+        )
+
+        // --- Phone Input ---
+        Text(
+            modifier = Modifier.padding(top = 32.dp, bottom = 3.dp),
+            text = stringResource(Res.string.text_phone_number),
+            style = text_style_lead_text,
+            color = "#32343E".toColor()
+        )
+        TextInputField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 3.dp),
+            leadingIcon = {
+                Image(
+                    painter = painterResource(Res.drawable.ic_phone),
+                    contentDescription = EMPTY,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        )
+
+        // --- Primary Button (Phone Login) ---
+        ButtonPrimary(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth()
+                .height(52.dp), // ➔ Slightly reduced height for smaller screens
         ) {
-            /**
-             * login text
-             */
-            Text(
-                text = stringResource(Res.string.text_login),
-                style = text_style_h2,
-                color = black_color
-            )
-            Text(
-                modifier = Modifier.padding(top = 8.dp),
-                text = stringResource(Res.string.text_login_description),
-                style = text_style_h5,
-                color = grey_color
-            )
-
-            /**
-             * login text input area
-             */
-            Text(
-                modifier = Modifier.padding(top = 52.dp, bottom = 3.dp),
-                text = stringResource(Res.string.text_phone_number),
-                style = text_style_lead_text,
-                color = "#32343E".toColor()
-            )
-            TextInputField(
-                modifier = Modifier.fillMaxWidth().padding(top = 3.dp), leadingIcon = {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_phone),
-                        contentDescription = EMPTY,
-                        modifier = Modifier.size(24.dp)
-                    )
-                })
-            ButtonPrimary(modifier = Modifier.padding(top = 16.dp).fillMaxWidth().height(58.dp)) {
-                navController.navigate(Screens.OtpScreen.path)
-            }
-
-            /**
-             * divider
-             */
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.padding(vertical = 32.dp)
-            ) {
-                Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(grey_color))
-                Box(
-                    modifier = Modifier.wrapContentSize().background(white_color)
-                        .padding(horizontal = 5.dp), contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "OR", color = grey_color, style = text_style_lead_text)
-                }
-            }
-
-            /**
-             * login with google
-             */
-            ButtonPrimary(
-                buttonText = stringResource(Res.string.sign_in_with_google),
-                textColor = Color.Black,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                leadingIcon = {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_google),
-                        contentDescription = EMPTY,
-                        modifier = Modifier.size(24.dp)
-                    )
-                },
-                modifier = Modifier.padding(top = 16.dp).fillMaxWidth().height(58.dp)
-                    .border(1.dp, color = grey_color.copy(0.2f), shape = RoundedCornerShape(12.dp))
-            ) {
-
-            }
-
+            navController.navigate(Screens.OtpScreen.path)
         }
 
+        // --- Divider with OR ---
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).clickable {
-                navController.navigate(Screens.Register.path)
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(0.5.dp)
+                    .background(grey_color)
+            )
+            Box(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .background(white_color)
+                    .padding(horizontal = 5.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "OR", color = grey_color, style = text_style_lead_text)
+            }
+        }
+
+        // --- Google Login Button ---
+        ButtonPrimary(
+            buttonText = stringResource(Res.string.sign_in_with_google),
+            textColor = Color.Black,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+            ),
+            leadingIcon = {
+                Image(
+                    painter = painterResource(Res.drawable.ic_google),
+                    contentDescription = EMPTY,
+                    modifier = Modifier.size(24.dp)
+                )
             },
-            contentAlignment = Alignment.TopCenter
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp) // ➔ Consistent button height
+                .border(1.dp, color = grey_color.copy(0.2f), shape = RoundedCornerShape(12.dp))
+        ) {}
+
+        // --- Sign Up link ---
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+                .clickable {
+                    navController.navigate(Screens.Register.path)
+                },
+            contentAlignment = Alignment.Center
         ) {
             val span = SpanStyle(color = orange_shadow, textDecoration = TextDecoration.Underline)
             val spannedText = buildAnnotatedString {
@@ -159,15 +175,18 @@ fun LoginMainContent(navController: NavController) {
                     append(stringResource(Res.string.text_sign_up))
                 }
             }
-
             Text(spannedText, color = grey_color, style = text_style_lead_body_1)
         }
     }
 }
 
+
 @Composable
 private fun LoginHeaderContent() {
-    Box(modifier = Modifier.fillMaxWidth().wrapContentHeight(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
         Image(
             painter = painterResource(Res.drawable.devom_logo),
             modifier = Modifier.size(188.dp),
