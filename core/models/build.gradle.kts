@@ -1,22 +1,26 @@
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 group = "com.devom.core.models"
 
 kotlin {
-    jvm()
-    jvmToolchain(17)
+    jvmToolchain(11)
     iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                //put your multiplatform dependencies here
-            }
+        commonMain.dependencies {
+
+        }
+        androidMain.dependencies {
+
+        }
+        iosMain.dependencies {
+
         }
 
     }

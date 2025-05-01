@@ -30,5 +30,8 @@ dependencyResolutionManagement {
 }
 include(":composeApp")
 include((":core:models"))
+include((":domain"))
 include((":core:utils"))
-
+include((":data:cache"))
+include((":data:server"))
+include((":data:repository"))

@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
 }
 
-group = "com.devom.core.utils"
+group = "com.devom.data.cache"
 
 kotlin {
     jvmToolchain(11)
@@ -26,7 +26,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.devom.core.utils"
+    namespace = "com.devom.data.cache"
     compileSdk = 35
 
     defaultConfig {
