@@ -7,6 +7,7 @@ group = "com.devom"
 
 kotlin {
     jvmToolchain(11)
+    androidTarget()
     iosX64()
     iosArm64()
     iosSimulatorArm64()

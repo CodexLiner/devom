@@ -7,6 +7,7 @@ plugins {
 group = "com.devom.core.models"
 
 kotlin {
+    androidTarget()
     jvmToolchain(11)
     iosX64()
     iosArm64()
