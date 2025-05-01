@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,14 +43,19 @@ import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.ShapedScreen
 import org.company.app.ui.components.Stepper
 import org.company.app.ui.navigation.Screens
+import org.company.app.ui.screens.signup.fragments.GeneralMainContent
+import org.company.app.ui.screens.signup.fragments.SkillsMainContent
+import org.company.app.ui.screens.signup.fragments.UploadDocumentMainContent
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MainScreen(navController: NavHostController) {
 
+    val currentStep = remember { mutableIntStateOf(0) }
+
     ShapedScreen(
         headerContent = {
-            MainScreenHeader(navController)
+            MainScreenHeader(navController , currentStep = currentStep)
         },
         mainContent = {
             Column(
@@ -65,7 +71,11 @@ fun MainScreen(navController: NavHostController) {
                         .padding(top = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    GeneralMainContent()
+                    when(currentStep.intValue) {
+                        0 -> GeneralMainContent()
+                        1 -> SkillsMainContent()
+                        2 -> UploadDocumentMainContent()
+                    }
                 }
 
                 Column(
@@ -80,7 +90,11 @@ fun MainScreen(navController: NavHostController) {
                             .fillMaxWidth()
                             .height(58.dp)
                     ) {
-                        navController.navigate(Screens.Document.path)
+                        if (currentStep.intValue > 2) {
+                            navController.navigate(Screens.Document.path)
+                        } else {
+                            currentStep.intValue++
+                        }
                     }
 
                     Box(
@@ -109,9 +123,8 @@ fun MainScreen(navController: NavHostController) {
 }
 
 @Composable
-fun MainScreenHeader(navController: NavHostController) {
+fun MainScreenHeader(navController: NavHostController, currentStep: MutableIntState) {
     val steps = listOf("General", "Skills", "Document")
-    val currentStep = remember { mutableIntStateOf(0) }
 
     Box(
         contentAlignment = Alignment.Center,
