@@ -33,6 +33,7 @@ import org.company.app.ui.components.ShapedScreen
 import org.company.app.ui.components.Stepper
 import org.company.app.ui.components.TextInputField
 import org.company.app.ui.navigation.Screens
+import org.company.app.ui.screens.signup.fragments.GeneralMainContent
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -103,52 +104,4 @@ fun GeneralScreen(navController: NavController) {
             }
         }
     )
-}
-
-
-@Composable
-internal fun GeneralMainContent() {
-    Column {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextInputField(
-                placeholder = "Enter name"
-            )
-            TextInputField(
-                placeholder = "Enter email"
-            )
-            TextInputField(
-                placeholder = "Enter phone"
-            )
-            TextInputField(
-                placeholder = "Enter location"
-            )
-            TextInputField(
-                placeholder = "Enter date of birth",
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_phone),
-                        contentDescription = "Calendar",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            )
-
-            Text(
-                text = "Referral Code (optional)",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            TextInputField(
-                placeholder = "Enter Code"
-            )
-        }
-    }
-
-
 }

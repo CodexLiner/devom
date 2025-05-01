@@ -32,6 +32,7 @@ import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.ShapedScreen
 import org.company.app.ui.components.Stepper
 import org.company.app.ui.navigation.Screens
+import org.company.app.ui.screens.signup.fragments.UploadSection
 
 
 @Composable
@@ -96,43 +97,4 @@ fun DocumentUploadScreen(navHostController: NavHostController) {
             }
         }
     )
-}
-
-
-@Composable
-fun UploadSection(title: String, isFocused: Boolean = false) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = title,
-            color = Color.Black,
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .border(
-                    width = 2.dp,
-                    color = if (isFocused) Color(0xFF007AFF) else Color.LightGray.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .background(Color(0xFFF6F9FF), shape = RoundedCornerShape(8.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = Icons.Default.ThumbUp,
-                    contentDescription = null,
-                    tint = Color.Gray.copy(alpha = 0.6f)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Upload your file here",
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            }
-        }
-    }
 }
