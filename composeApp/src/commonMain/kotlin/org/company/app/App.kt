@@ -14,9 +14,12 @@ import org.company.app.ui.screens.DashboardScreen
 
 @Composable
 internal fun App() = AppTheme {
+
     var isLoggedIn by remember { mutableStateOf(false) } // Replace with actual login state from ViewModel
     LaunchedEffect(Unit) {
-        Project.registerUserUseCase.invoke(UserRequest())
+        Project.user.registerUserUseCase.invoke(UserRequest()).collect {
+            println("RESULTISCAMEAND $it")
+        }
     }
 
     if (isLoggedIn) {

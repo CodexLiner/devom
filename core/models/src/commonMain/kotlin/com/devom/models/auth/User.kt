@@ -29,4 +29,28 @@ data class UserRequest(
     val userTypeId: Int = 0
 )
 
+@Serializable
+data class UserResponse(
+    @SerialName("id")
+    val id: Int = 0,
+
+    @SerialName("uuid")
+    val uuid: String = "",
+
+    @SerialName("access_key")
+    val accessKey: String = "",
+
+    @SerialName("refresh_key")
+    val refreshKey: String = "",
+
+    @SerialName("fullname")
+    val fullName: String = "",
+
+    @SerialName("email")
+    val email: String = "",
+
+    @SerialName("mobile_no")
+    val mobileNo: String = ""
+)
+
 
