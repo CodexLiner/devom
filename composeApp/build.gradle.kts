@@ -56,6 +56,8 @@ kotlin {
 
             implementation("com.russhwolf:multiplatform-settings:1.0.0")
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
+
+            implementation(project(":domain"))
         }
 
         commonTest.dependencies {

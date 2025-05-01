@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
 }
 
-group = "com.devom.core.utils"
+group = "com.devom.data.server"
 
 kotlin {
     jvmToolchain(11)
@@ -13,6 +13,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":core:models"))
 
         }
         androidMain.dependencies {
@@ -26,7 +27,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.devom.core.utils"
+    namespace = "com.devom.data.server"
     compileSdk = 35
 
     defaultConfig {
