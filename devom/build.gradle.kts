@@ -14,8 +14,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":domain"))
-            implementation(project(":core:models"))
+            api(project(":domain"))
+            implementation(project(":data:repository"))
+            api(project(":core:models"))
 
         }
         androidMain.dependencies {
