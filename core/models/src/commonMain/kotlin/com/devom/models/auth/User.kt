@@ -1,28 +1,32 @@
 package com.devom.models.auth
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UserRequest(
-    @SerializedName("fullname")
+    @SerialName("fullname")
     val fullName: String = "",
 
-    @SerializedName("email")
+    @SerialName("email")
     val email: String = "",
 
-    @SerializedName("mobile_no")
+    @SerialName("mobile_no")
     val mobileNo: String = "",
 
-    @SerializedName("city")
+    @SerialName("city")
     val city: Int = 0,
 
-    @SerializedName("state")
+    @SerialName("state")
     val state: Int = 0,
 
-    @SerializedName("country")
+    @SerialName("country")
     val country: Int = 0,
 
-    @SerializedName("date_of_birth")
+    @SerialName("date_of_birth")
     val dateOfBirth: String = "",
 
-    @SerializedName("user_type_id")
+    @SerialName("user_type_id")
     val userTypeId: Int = 0
 )
+
 

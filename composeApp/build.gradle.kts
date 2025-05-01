@@ -47,15 +47,6 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network.ktor)
             implementation(libs.kotlinx.datetime)
-            implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.3")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3")
-
-            implementation("io.github.pdvrieze.xmlutil:core:0.84.2")
-            implementation("io.github.pdvrieze.xmlutil:serialization:0.84.2")
-
-
-            implementation("com.russhwolf:multiplatform-settings:1.0.0")
-            implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
 
             implementation(project(":devom"))
         }
