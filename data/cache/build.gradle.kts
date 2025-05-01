@@ -6,6 +6,7 @@ plugins {
 group = "com.devom.data.cache"
 
 kotlin {
+    androidTarget()
     jvmToolchain(11)
     iosX64()
     iosArm64()

@@ -6,6 +6,7 @@ plugins {
 group = "com.devom.domain"
 
 kotlin {
+    androidTarget()
     jvmToolchain(11)
     iosX64()
     iosArm64()
