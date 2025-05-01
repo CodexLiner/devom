@@ -17,6 +17,7 @@ kotlin {
             api(project(":domain"))
             implementation(project(":data:repository"))
             api(project(":core:models"))
+            api(project(":core:utils"))
 
         }
         androidMain.dependencies {

@@ -15,6 +15,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:models"))
+            implementation(project(":core:utils"))
+            implementation(libs.kotlinx.coroutines.core)
 
         }
         androidMain.dependencies {
