@@ -15,7 +15,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":data:repository"))
             implementation(project(":core:models"))
-
         }
         androidMain.dependencies {
 
