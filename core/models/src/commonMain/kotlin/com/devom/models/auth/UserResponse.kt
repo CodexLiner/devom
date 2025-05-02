@@ -1,4 +1,7 @@
 package com.devom.models.auth
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 @Serializable
 data class UserResponse(
     @SerialName("user_id") val userId: Int,
