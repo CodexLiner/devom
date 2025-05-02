@@ -1,8 +1,8 @@
 package com.devom.network.models
 
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.http.ContentType
 import io.ktor.http.HeadersBuilder
 import io.ktor.http.HttpHeaders
@@ -11,8 +11,8 @@ import kotlinx.serialization.json.Json
 
 class NetworkClientConfig {
     var enableLogging: Boolean = true
-    var logger: Logger = Logger.DEFAULT
-    var logLevel: LogLevel = LogLevel.INFO
+    var logger: Logger = Logger.SIMPLE
+    var logLevel: LogLevel = LogLevel.ALL
 
     var requestTimeoutMillis: Long = 30_000
     var connectTimeoutMillis: Long = 15_000
