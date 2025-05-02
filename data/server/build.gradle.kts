@@ -16,6 +16,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:models"))
             implementation(project(":core:utils"))
+            implementation(project(":network"))
             implementation(libs.kotlinx.coroutines.core)
 
         }
