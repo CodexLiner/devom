@@ -4,4 +4,5 @@ import com.devom.domain.auth.RegisterUserUseCase
 
 class User {
     val registerUserUseCase by lazy { RegisterUserUseCase() }
+    
 }

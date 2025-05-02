@@ -45,4 +45,3 @@ data class CreateUserResponse(
     @SerialName("updated_at") val updatedAt: String = ""
 )
 
-
