@@ -1,4 +1,4 @@
-package auth
+package com.devom.data.server.auth
 
 import com.devom.models.auth.CreateUserRequest
 import com.devom.models.auth.CreateUserResponse
@@ -7,7 +7,8 @@ import com.devom.models.auth.UserResponse
 import com.devom.network.NetworkClient
 import com.devom.network.utils.toResponseResult
 import com.devom.utils.network.ResponseResult
-import endpoints.AuthEndpoints
+import com.devom.data.server.endpoints.AuthEndpoints
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRemoteDataSource {
    suspend fun signUp(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>>
    suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
+   suspend fun generateOtp(mobileNo : String) : Flow<ResponseResult<String>>
 }
 
 class UserRemoteDataSourceImpl : UserRemoteDataSource {
@@ -32,7 +34,14 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
      * @return Flow<ResponseResult<UserResponse>>
      */
     override suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserResponse>> =
-        ktorClient.post { setBody(credentials) }.toResponseResult()
+        ktorClient.post(AuthEndpoints.LoginWithOtp.path) { setBody(credentials) }.toResponseResult()
+
+    /**
+     * @param mobileNo
+     * @return Flow<ResponseResult<String>>
+     */
+    override suspend fun generateOtp(mobileNo: String): Flow<ResponseResult<String>> =
+        ktorClient.get(AuthEndpoints.GenerateOtp.path) { setBody(mobileNo) }.toResponseResult()
 
 
 }
