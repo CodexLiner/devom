@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 group = "com.devom.network"

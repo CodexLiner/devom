@@ -12,8 +12,12 @@ object NetworkClient {
 
     private var config: NetworkClientConfig = NetworkClientConfig()
 
-    lateinit var ktorClient: HttpClient
+    var ktorClient: HttpClient = buildClient()
         private set
+        get() {
+            if (config.baseUrl.isNullOrBlank()) throw IllegalStateException("Base URL not configured please call configure method")
+            return field
+        }
 
     fun configure(configure: NetworkClientConfig.() -> Unit) {
         config = NetworkClientConfig().apply(configure)
