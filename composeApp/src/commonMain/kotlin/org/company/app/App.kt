@@ -18,7 +18,22 @@ internal fun App() = AppTheme {
 
     var isLoggedIn by remember { mutableStateOf(false) } // Replace with actual login state from ViewModel
     LaunchedEffect(Unit) {
-        Project.user.registerUserUseCase.invoke(CreateUserRequest()).collect {
+        NetworkClient.configure {
+            baseUrl = "https://api.devom.co.in/"
+        }
+
+        val createUserRequest = CreateUserRequest(
+            fullName = "John Doe",
+            email = "john.doe1@example.com",
+            mobileNo = "1234567890",
+            city = 101,
+            state = 21,
+            country = 1,
+            dateOfBirth = "1990-01-01",
+            userTypeId = 2
+        )
+
+        Project.user.registerUserUseCase.invoke(createUserRequest).collect {
             println("RESULTISCAMEAND $it")
         }
     }
