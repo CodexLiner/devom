@@ -30,6 +30,7 @@ dependencyResolutionManagement {
 }
 include(":composeApp")
 include(":devom")
+include(":network")
 include((":core:models"))
 include((":domain"))
 include((":core:utils"))
