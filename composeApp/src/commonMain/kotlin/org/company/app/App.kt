@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.devom.Project
 import com.devom.models.auth.CreateUserRequest
+import com.devom.network.NetworkClient
 import org.company.app.theme.AppTheme
 import org.company.app.ui.navigation.AuthNavHost
 import org.company.app.ui.screens.DashboardScreen
