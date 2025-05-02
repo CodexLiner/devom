@@ -1,15 +1,13 @@
 package com.devom.data.repository.user
 
-import auth.UserRemoteDataSource
 import auth.UserRemoteDataSourceImpl
-import com.devom.models.auth.UserRequest
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.CreateUserRequest
+import com.devom.models.auth.CreateUserResponse
 import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 interface UserRepository {
-    suspend fun addUser(user : UserRequest) : Flow<ResponseResult<UserResponse>>
+    suspend fun addUser(user : CreateUserRequest) : Flow<ResponseResult<CreateUserResponse>>
 }
 
 class UserRepositoryImpl : UserRepository {
@@ -18,7 +16,7 @@ class UserRepositoryImpl : UserRepository {
     /**
      * add new user
      */
-    override suspend fun addUser(user: UserRequest): Flow<ResponseResult<UserResponse>> = remoteDataSource.signUp(user)
+    override suspend fun addUser(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>> = remoteDataSource.signUp(user)
 
 
 }
