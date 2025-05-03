@@ -1,5 +1,7 @@
 package com.devom.network.models
 
+import com.devom.network.AUTHORIZATION_HEADER_PREFIX
+import com.devom.network.TokenManager
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.SIMPLE
@@ -26,10 +28,21 @@ class NetworkClientConfig {
         explicitNulls = false
     }
 
+    fun setTokens(access: String, refresh: String) {
+        TokenManager.setTokens(
+            access = access,
+            refresh = refresh
+        )
+    }
+
+    val onLogOut : (String) -> Unit = {}
+
     var defaultHeaders: (HeadersBuilder.() -> Unit)? = {
         append(HttpHeaders.ContentType, ContentType.Application.Json)
         append(HttpHeaders.Accept, ContentType.Application.Json)
+        append(HttpHeaders.Authorization, "$AUTHORIZATION_HEADER_PREFIX${TokenManager.getAccessToken()}")
     }
 
     var baseUrl: String? = null
+    var accessTokenEndpoint: String? = "/admin/getaccesstoken"
 }

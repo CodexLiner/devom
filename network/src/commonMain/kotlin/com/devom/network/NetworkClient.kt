@@ -1,16 +1,24 @@
 package com.devom.network
 
+import co.touchlab.kermit.Logger
 import com.devom.network.models.NetworkClientConfig
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.sha1
+import kotlinx.coroutines.runBlocking
 
 object NetworkClient {
 
-    private var config: NetworkClientConfig = NetworkClientConfig()
+    internal var config: NetworkClientConfig = NetworkClientConfig()
 
     var ktorClient: HttpClient = buildClient()
         private set
@@ -26,15 +34,36 @@ object NetworkClient {
 
     private fun buildClient(): HttpClient = HttpClient {
 
-        if (config.enableLogging) {
-            install(Logging) {
+        if (config.enableLogging) install(Logging) {
                 logger = config.logger
                 level = config.logLevel
-            }
         }
 
         install(ContentNegotiation) {
             json(config.jsonConfig)
+        }
+
+        install(HttpRequestRetry) {
+            maxRetries = 1
+
+            retryIf { request, response ->
+                val shouldRetry = (response.status == HttpStatusCode.Unauthorized)
+                TokenManager.isTokenExpired = (shouldRetry)
+                shouldRetry
+            }
+
+            delayMillis { retry -> retry * 1000L }
+
+            modifyRequest { request ->
+                if (TokenManager.isTokenExpired) runBlocking {
+                    TokenManager.refreshToken()
+                    request.headers.remove(HttpHeaders.Authorization)
+                    config.defaultHeaders?.let { headersConfig ->
+                        Logger.d("AccessToken Updated Please Update Headers With New Token")
+                        headersConfig(request.headers)
+                    }
+                }
+            }
         }
 
         install(HttpTimeout) {
@@ -44,10 +73,19 @@ object NetworkClient {
         }
 
         defaultRequest {
-            config.defaultHeaders?.let { headersConfig ->
-                headersConfig(this.headers)
-            }
+            config.defaultHeaders?.invoke(this.headers)
             config.baseUrl?.let { url(it) }
         }
+    }
+
+    fun onLogout(message: String) {
+        config.onLogOut(message)
+    }
+
+    fun setAccessToken(access: String, refresh: String) {
+        TokenManager.setTokens(
+            access = access,
+            refresh = refresh
+        )
     }
 }
