@@ -18,6 +18,7 @@ internal fun App() = AppTheme {
 
     var isLoggedIn by remember { mutableStateOf(false) } // Replace with actual login state from ViewModel
     LaunchedEffect(Unit) {
+
         NetworkClient.configure {
             baseUrl = "https://api.devom.co.in/"
         }

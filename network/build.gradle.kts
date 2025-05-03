@@ -23,6 +23,9 @@ kotlin {
             api(libs.ktor.client.logging)
             api(libs.coil.network.ktor)
             api(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kermit)
+            implementation(libs.multiplatformSettings)
+            implementation(libs.multiplatform.settings.no.arg)
 
         }
         androidMain.dependencies {
