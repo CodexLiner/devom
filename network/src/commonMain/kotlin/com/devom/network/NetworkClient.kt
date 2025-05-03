@@ -4,16 +4,14 @@ import co.touchlab.kermit.Logger
 import com.devom.network.models.NetworkClientConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.plugin
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.sha1
 import kotlinx.coroutines.runBlocking
 
 object NetworkClient {
@@ -35,8 +33,8 @@ object NetworkClient {
     private fun buildClient(): HttpClient = HttpClient {
 
         if (config.enableLogging) install(Logging) {
-                logger = config.logger
-                level = config.logLevel
+            logger = config.logger
+            level = config.logLevel
         }
 
         install(ContentNegotiation) {
@@ -59,9 +57,12 @@ object NetworkClient {
                     Logger.d("AccessToken Is Expired Refreshing Now")
                     TokenManager.refreshToken()
                     request.headers.remove(HttpHeaders.Authorization)
-                    config.defaultHeaders?.let { headersConfig ->
-                        Logger.d("AccessToken Updated Please Update Headers With New Token")
-                        headersConfig(request.headers)
+                    config.mainHeaders.forEach { (key, value) ->
+                        request.headers.remove(key)
+                        request.headers.append(key, value)
+                    }
+                    config.addHeaders?.let { addHeaders ->
+                       request.headers.appendAll(Headers.build { addHeaders() })
                     }
                 }
             }
@@ -74,7 +75,15 @@ object NetworkClient {
         }
 
         defaultRequest {
-            config.defaultHeaders?.invoke(this.headers)
+            config.mainHeaders.forEach { (key, value) ->
+                headers.remove(key)
+                headers.append(key, value)
+            }
+
+            config.addHeaders?.let { addHeaders ->
+                headers.appendAll(Headers.build { addHeaders() })
+            }
+
             config.baseUrl?.let { url(it) }
         }
     }
@@ -82,12 +91,5 @@ object NetworkClient {
     fun onLogout(message: String) {
         Logger.d("AccessToken SessionIs Expired Logging Out")
         config.onLogOut(message)
-    }
-
-    fun setAccessToken(access: String, refresh: String) {
-        TokenManager.setTokens(
-            access = access,
-            refresh = refresh
-        )
     }
 }
