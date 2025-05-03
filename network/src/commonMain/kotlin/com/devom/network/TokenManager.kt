@@ -7,6 +7,7 @@ import com.russhwolf.settings.set
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 
 internal object TokenManager {
 
@@ -48,22 +49,26 @@ internal object TokenManager {
     /**
      * gets refresh token
      */
-    suspend fun refreshToken(): String? {
-        return runCatching {
-            NetworkClient.ktorClient.post(NetworkClient.config.accessTokenEndpoint.orEmpty()) {
-                setBody(
-                    mapOf("refresh_token" to refreshToken)
-                )
-            }.body<BaseResponse<String>>()
-        }.onSuccess { response ->
-            response.data?.let {
-                settings[ACCESS_TOKEN_KEY] = it
-                accessToken = it
-            } ?: run {
-                logout()
+    suspend fun refreshToken(): String? = runCatching {
+        val response = NetworkClient.ktorClient.post(NetworkClient.config.accessTokenEndpoint.orEmpty()) {
+            setBody(mapOf("refresh_token" to refreshToken))
+        }
+
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                val newToken = response.body<BaseResponse<String>>().data.orEmpty()
+                settings[ACCESS_TOKEN_KEY] = newToken
+                accessToken = newToken
+                newToken
             }
-        }.getOrNull()?.data.orEmpty()
-    }
+            HttpStatusCode.Unauthorized -> {
+                logout()
+                throw Exception("Session Expired")
+            }
+            else -> throw Exception("Session Expired")
+        }
+    }.getOrNull()
+
 
 
     /**
