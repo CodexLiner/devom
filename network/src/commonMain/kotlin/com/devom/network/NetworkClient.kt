@@ -18,7 +18,7 @@ import kotlinx.coroutines.runBlocking
 
 object NetworkClient {
 
-    internal var config: NetworkClientConfig = NetworkClientConfig()
+    var config: NetworkClientConfig = NetworkClientConfig()
 
     var ktorClient: HttpClient = buildClient()
         private set
@@ -56,6 +56,7 @@ object NetworkClient {
 
             modifyRequest { request ->
                 if (TokenManager.isTokenExpired) runBlocking {
+                    Logger.d("AccessToken Is Expired Refreshing Now")
                     TokenManager.refreshToken()
                     request.headers.remove(HttpHeaders.Authorization)
                     config.defaultHeaders?.let { headersConfig ->
@@ -79,6 +80,7 @@ object NetworkClient {
     }
 
     fun onLogout(message: String) {
+        Logger.d("AccessToken SessionIs Expired Logging Out")
         config.onLogOut(message)
     }
 

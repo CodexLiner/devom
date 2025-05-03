@@ -13,6 +13,7 @@ interface UserRepository {
     suspend fun addUser(user : CreateUserRequest) : Flow<ResponseResult<CreateUserResponse>>
     suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
     suspend fun generateOtp(mobileNo : String) : Flow<ResponseResult<String>>
+    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
 }
 
 class UserRepositoryImpl : UserRepository {
@@ -32,6 +33,10 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun generateOtp(mobileNo: String): Flow<ResponseResult<String>> = apiFlow {
         remoteDataSource.generateOtp(mobileNo)
+    }
+
+    override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserResponse>> = apiFlow {
+        remoteDataSource.getUser(params)
     }
 
 }
