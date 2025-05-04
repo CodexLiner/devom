@@ -26,7 +26,6 @@ import org.company.app.theme.black_color
 import org.company.app.theme.grey_color
 import org.company.app.theme.orange_shadow
 import org.company.app.theme.text_style_h2
-import org.company.app.theme.text_style_h5
 import org.company.app.theme.text_style_lead_body_1
 import org.company.app.theme.text_style_lead_text
 import org.company.app.ui.components.BackButton
@@ -36,7 +35,7 @@ import org.company.app.ui.navigation.Screens
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController, mobileNumber: String?) {
     BackButton(onClick = {
         navController.navigateUp()
     }) {
@@ -56,7 +55,7 @@ fun RegisterScreen(navController: NavController) {
 
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = stringResource(Res.string.we_have_sent_the_verification_code, "6378332"),
+                text = stringResource(Res.string.we_have_sent_the_verification_code, mobileNumber.toString()),
                 style = text_style_lead_text,
                 textAlign = TextAlign.Start,
             )

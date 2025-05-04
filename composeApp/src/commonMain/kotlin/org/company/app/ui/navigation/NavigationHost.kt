@@ -17,12 +17,6 @@ fun NavigationHost(navHostController: NavHostController, startDestination: Strin
         composable(Screens.Home.path) {
             HomeScreen()
         }
-        composable(Screens.Login.path) {
-            LoginScreen(navHostController)
-        }
-        composable(Screens.OtpScreen.path) {
-            RegisterScreen(navHostController)
-        }
 
         composable(Screens.Bookings.path) {
             BookingScreen(navHostController)

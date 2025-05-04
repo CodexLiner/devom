@@ -9,5 +9,7 @@ class GenerateOtpUseCase {
     /**
      * generate otp
      */
-    suspend operator fun invoke(mobileNo: String) = userRepository.generateOtp(mobileNo)
+    suspend operator fun invoke(mobileNo: String) = userRepository.generateOtp(
+        mapOf("mobile_no" to mobileNo)
+    )
 }

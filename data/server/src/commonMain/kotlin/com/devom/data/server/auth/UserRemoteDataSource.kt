@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRemoteDataSource {
    suspend fun signUp(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>>
    suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
-   suspend fun generateOtp(mobileNo : String) : Flow<ResponseResult<String>>
+   suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<String>>
    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
 }
 
@@ -43,8 +43,8 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
      * @param mobileNo
      * @return Flow<ResponseResult<String>>
      */
-    override suspend fun generateOtp(mobileNo: String): Flow<ResponseResult<String>> =
-        ktorClient.get(AuthEndpoints.GenerateOtp.path) { setBody(mobileNo) }.toResponseResult()
+    override suspend fun generateOtp(body : Map<String , String>): Flow<ResponseResult<String>> =
+        ktorClient.get(AuthEndpoints.GenerateOtp.path) { setBody(body) }.toResponseResult()
 
     override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserResponse>> =
         ktorClient.get(AuthEndpoints.GetUser.path) {
