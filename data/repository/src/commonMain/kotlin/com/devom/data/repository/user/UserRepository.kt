@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun addUser(user : CreateUserRequest) : Flow<ResponseResult<CreateUserResponse>>
     suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
-    suspend fun generateOtp(mobileNo : String) : Flow<ResponseResult<String>>
+    suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<String>>
     suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
 }
 
@@ -31,8 +31,8 @@ class UserRepositoryImpl : UserRepository {
         remoteDataSource.loginWithOtp(credentials)
     }
 
-    override suspend fun generateOtp(mobileNo: String): Flow<ResponseResult<String>> = apiFlow {
-        remoteDataSource.generateOtp(mobileNo)
+    override suspend fun generateOtp(body : Map<String , String>): Flow<ResponseResult<String>> = apiFlow {
+        remoteDataSource.generateOtp(body)
     }
 
     override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserResponse>> = apiFlow {
