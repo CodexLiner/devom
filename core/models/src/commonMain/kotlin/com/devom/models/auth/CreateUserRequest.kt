@@ -5,19 +5,19 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateUserRequest(
-    @SerialName("fullname") val fullName: String = "",
+    @SerialName("fullname") var fullName: String = "",
 
-    @SerialName("email") val email: String = "",
+    @SerialName("email") var email: String = "",
 
-    @SerialName("mobile_no") val mobileNo: String = "",
+    @SerialName("mobile_no") var mobileNo: String = "",
 
-    @SerialName("city") val city: Int = 0,
+    @SerialName("city") var city: String = "",
 
-    @SerialName("state") val state: Int = 0,
+    @SerialName("state") var state: String = "",
 
-    @SerialName("country") val country: Int = 0,
+    @SerialName("country") var country: String = "",
 
-    @SerialName("date_of_birth") val dateOfBirth: String = "",
+    @SerialName("date_of_birth") var dateOfBirth: String = "",
 
     @SerialName("user_type_id") val userTypeId: Int = 0
 )
