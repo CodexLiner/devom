@@ -11,12 +11,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.devom.utils.Application.hideToast
+import com.devom.utils.Application.toastState
 import kotlinx.coroutines.launch
-import org.company.app.utils.App
 
 @Composable
 fun ShowSnackBar() {
-    val snackBarState = App.toastState.collectAsState()
+    val snackBarState = toastState.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     if (snackBarState.value.isNullOrEmpty().not()) {
@@ -31,7 +32,7 @@ fun ShowSnackBar() {
                     snackBarHostState.showSnackbar(
                         message = snackBarState.value.orEmpty()
                     )
-                    App.hideToast()
+                    hideToast()
                 }
             }
         }

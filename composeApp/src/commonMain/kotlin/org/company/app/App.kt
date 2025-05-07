@@ -14,13 +14,14 @@ import androidx.compose.ui.Modifier
 import com.devom.Project
 import com.devom.models.auth.CreateUserRequest
 import com.devom.network.NetworkClient
+import com.devom.utils.Application.loaderState
 import org.company.app.theme.AppTheme
+import org.company.app.ui.components.AppContainer
 import org.company.app.ui.components.ProgressLoader
 import org.company.app.ui.components.ShowSnackBar
 import org.company.app.ui.navigation.AuthNavHost
 import org.company.app.ui.providers.LoadingCompositionProvider
 import org.company.app.ui.screens.DashboardScreen
-import org.company.app.utils.App.loaderState
 
 
 @Composable
@@ -42,15 +43,17 @@ internal fun App() = AppTheme {
     }
 
     LoadingCompositionProvider(state = loaderState.collectAsState().value) {
-        Scaffold(snackbarHost = {
-            ShowSnackBar()
-        }, content = {
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (isLoggedIn) DashboardScreen() else AuthNavHost(onLoginSuccess = {
-                    isLoggedIn = false
-                })
-                ProgressLoader()
-            }
-        })
+        AppContainer {
+            Scaffold(snackbarHost = {
+                ShowSnackBar()
+            }, content = {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (isLoggedIn) DashboardScreen() else AuthNavHost(onLoginSuccess = {
+                        isLoggedIn = false
+                    })
+                    ProgressLoader()
+                }
+            })
+        }
     }
 }
