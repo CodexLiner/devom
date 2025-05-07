@@ -10,7 +10,6 @@ import com.devom.network.utils.setParams
 import com.devom.network.utils.toResponseResult
 import com.devom.utils.network.ResponseResult
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
