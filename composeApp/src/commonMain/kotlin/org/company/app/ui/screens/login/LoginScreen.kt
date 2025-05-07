@@ -123,7 +123,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 .height(52.dp),
         ) {
             viewModel.sendOtp(mobileNumber.value) {
-                navController.navigate(Screens.OtpScreen.path.plus("/$mobileNumber"))
+                navController.navigate(Screens.OtpScreen.path.plus("/${mobileNumber.value}"))
             }
         }
 
