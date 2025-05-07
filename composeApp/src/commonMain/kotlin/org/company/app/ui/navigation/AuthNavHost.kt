@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.company.app.ui.screens.login.LoginScreen
-import org.company.app.ui.screens.register.RegisterScreen
+import org.company.app.ui.screens.register.VerifyOtpScreen
 import org.company.app.ui.screens.signup.DocumentUploadScreen
 import org.company.app.ui.screens.signup.MainScreen
 import org.company.app.ui.screens.signup.SignupSuccessScreen
@@ -24,11 +24,11 @@ fun AuthNavHost(onLoginSuccess: () -> Unit) {
         }
 
         composable(
-            route = Screens.OtpScreen.path.plus("{mobileNumber}"), arguments = listOf(
+            route = Screens.OtpScreen.path.plus("/{mobileNumber}"), arguments = listOf(
                 navArgument("mobileNumber") { type = NavType.StringType })
         ) {
             val mobileNumber = it.arguments?.getString("mobileNumber")
-            RegisterScreen(navController = navController , mobileNumber = mobileNumber)
+            VerifyOtpScreen(navController = navController , mobileNumber = mobileNumber)
         }
         composable(Screens.SignUpSuccess.path) {
             SignupSuccessScreen(navHostController = navController) {

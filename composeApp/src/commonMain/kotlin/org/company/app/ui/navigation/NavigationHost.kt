@@ -6,9 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.company.app.ui.screens.HomeScreen
 import org.company.app.ui.screens.booking.BookingScreen
-import org.company.app.ui.screens.login.LoginScreen
 import org.company.app.ui.screens.profile.ProfileScreen
-import org.company.app.ui.screens.register.RegisterScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController, startDestination: String) {

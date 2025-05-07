@@ -19,8 +19,9 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             Project.user.generateOtpUseCase.invoke(mobileNumber).collect {
                 it.onResult {
-
+                    onOtpSent()
                 }
+                onOtpSent()
             }
         }
     }
