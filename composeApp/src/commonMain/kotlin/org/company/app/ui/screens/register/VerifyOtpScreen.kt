@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,12 +36,12 @@ import org.company.app.ui.navigation.Screens
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun RegisterScreen(navController: NavController, mobileNumber: String?) {
+fun VerifyOtpScreen(navController: NavController, mobileNumber: String?) {
     BackButton(onClick = {
         navController.navigateUp()
     }) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(top = 48.dp).padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxSize().statusBarsPadding().padding(top = 42.dp).padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.Start
         ) {
             /**

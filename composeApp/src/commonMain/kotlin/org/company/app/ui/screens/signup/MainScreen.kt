@@ -19,9 +19,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +36,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import co.touchlab.kermit.Logger
+import com.devom.models.auth.CreateUserRequest
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_left
 import org.company.app.theme.grey_color
@@ -52,6 +58,14 @@ import org.jetbrains.compose.resources.painterResource
 fun MainScreen(navController: NavHostController) {
 
     val currentStep = remember { mutableIntStateOf(0) }
+    var createUserRequest by remember {
+        mutableStateOf(CreateUserRequest())
+    }
+    LaunchedEffect(createUserRequest) {
+        Logger.d("LONG") {
+            "MainScreen launched  $createUserRequest"
+        }
+    }
 
     ShapedScreen(
         headerContent = {
@@ -72,7 +86,9 @@ fun MainScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     when(currentStep.intValue) {
-                        0 -> GeneralMainContent()
+                        0 -> GeneralMainContent(createUserRequest) {
+                            createUserRequest = it.copy()
+                        }
                         1 -> SkillsMainContent()
                         2 -> UploadDocumentMainContent()
                     }
@@ -128,18 +144,13 @@ fun MainScreenHeader(navController: NavHostController, currentStep: MutableIntSt
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
+        modifier = Modifier.fillMaxWidth()
+
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
-                    onClick = { navController.popBackStack() }, // Added back click too
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.wrapContentSize()
                 ) {
                     Image(
