@@ -39,7 +39,7 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
         ktorClient.post(AuthEndpoints.LoginWithOtp.path) { setBody(credentials) }.toResponseResult()
 
     /**
-     * @param mobileNo
+     * @param body
      * @return Flow<ResponseResult<String>>
      */
     override suspend fun generateOtp(body : Map<String , String>): Flow<ResponseResult<String>> =
