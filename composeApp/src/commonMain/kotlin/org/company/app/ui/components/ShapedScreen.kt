@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -17,7 +18,7 @@ fun ShapedScreen(
     headerContent: @Composable () -> Unit,
     mainContent: @Composable () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(color = black_color)) {
+    Column(modifier = Modifier.fillMaxSize().background(color = black_color).statusBarsPadding()) {
         Box(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
             headerContent()
         }
