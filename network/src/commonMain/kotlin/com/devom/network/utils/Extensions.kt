@@ -20,7 +20,7 @@ inline fun <reified T> HttpResponse.toResponseResult(): Flow<ResponseResult<T>> 
             status.isSuccess() && parsed.data != null -> ResponseResult.Success(parsed.data)
             else -> {
                 ResponseResult.Error(
-                    message = parsed.message,
+                    message = if (parsed.message.isBlank()) "Something went wrong" else parsed.message,
                     code = status.value
                 )
             }

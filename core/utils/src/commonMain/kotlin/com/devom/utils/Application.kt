@@ -1,8 +1,8 @@
-package org.company.app.utils
+package com.devom.utils
 
 import kotlinx.coroutines.flow.MutableStateFlow
 
-object App {
+object Application {
     private val _loaderState = MutableStateFlow(false)
     val loaderState = _loaderState
 
