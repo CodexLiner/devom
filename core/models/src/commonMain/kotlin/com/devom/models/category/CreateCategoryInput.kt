@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateCategoryInput(
     @SerialName("name")
-    val name: String,
+    val name: String = "",
 
     @SerialName("slug")
-    val slug: String
+    val slug: String = ""
 )

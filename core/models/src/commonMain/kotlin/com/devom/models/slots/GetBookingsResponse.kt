@@ -5,29 +5,29 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetBookingsResponse(
-    @SerialName("booking_id") val bookingId: Int,
+    @SerialName("booking_id") val bookingId: Int = 0,
 
-    @SerialName("booking_code") val bookingCode: String,
+    @SerialName("booking_code") val bookingCode: String = "",
 
-    @SerialName("status") val status: String,
+    @SerialName("status") val status: String = "",
 
-    @SerialName("booking_date") val bookingDate: String,
+    @SerialName("booking_date") val bookingDate: String = "",
 
-    @SerialName("item_ids") val itemIds: List<Int>,
+    @SerialName("item_ids") val itemIds: List<Int> = emptyList(),
 
-    @SerialName("user_name") val userName: String,
+    @SerialName("user_name") val userName: String = "",
 
-    @SerialName("pooja_name") val poojaName: String,
+    @SerialName("pooja_name") val poojaName: String = "",
 
-    @SerialName("pandit_name") val panditName: String,
+    @SerialName("pandit_name") val panditName: String = "",
 
-    @SerialName("user_imagge") val userImage: String?,
+    @SerialName("user_imagge") val userImage: String? = null,
 
-    @SerialName("pooja_image") val poojaImage: String,
+    @SerialName("pooja_image") val poojaImage: String = "",
 
-    @SerialName("available_date") val availableDate: String,
+    @SerialName("available_date") val availableDate: String = "",
 
-    @SerialName("start_time") val startTime: String,
+    @SerialName("start_time") val startTime: String = "",
 
-    @SerialName("end_time") val endTime: String,
+    @SerialName("end_time") val endTime: String = ""
 )
