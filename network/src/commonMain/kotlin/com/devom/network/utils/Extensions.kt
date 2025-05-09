@@ -14,7 +14,10 @@ import kotlinx.serialization.json.JsonObject
 
 inline fun <reified T> HttpResponse.toResponseResult(): Flow<ResponseResult<T>> = flow {
     val responseText = bodyAsText()
-    val parsed = NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText)
+    val parsed = runCatching { NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText) }.getOrElse {
+        emit(ResponseResult.Error(message = "Something went wrong", code = status.value))
+        return@flow
+    }
     emit(
         when {
             status.isSuccess() && parsed.data != null -> ResponseResult.Success(parsed.data)
