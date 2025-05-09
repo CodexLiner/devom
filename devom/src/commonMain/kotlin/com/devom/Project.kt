@@ -1,5 +1,6 @@
 package com.devom
 
+import com.devom.category.Category
 import com.devom.pandit.Pandit
 import com.devom.pooja.Pooja
 import com.devom.user.User
@@ -19,5 +20,10 @@ object Project {
      * contains all the use cases for pandit related operations
      */
     val pandit by lazy { Pandit() }
+
+    /**
+     * contains all the use cases for category related operations
+     */
+    val category by lazy { Category() }
 
 }

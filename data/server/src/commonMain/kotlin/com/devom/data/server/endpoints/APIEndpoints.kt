@@ -17,3 +17,9 @@ sealed class PanditSlotsEndpoints(val path: String) {
     object BookPanditSlot : AuthEndpoints("/pandit/book-slot")
     object GetBookings : AuthEndpoints("/pandit/booking")
 }
+
+sealed class CategoryEndpoints(val path: String) {
+    object GetCategories : AuthEndpoints("/category")
+    object UpdateCategory : AuthEndpoints("/category")
+    object CreateCategory : AuthEndpoints("/category")
+}
