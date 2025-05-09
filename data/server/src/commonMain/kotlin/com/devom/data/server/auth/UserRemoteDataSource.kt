@@ -43,7 +43,7 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
      * @return Flow<ResponseResult<String>>
      */
     override suspend fun generateOtp(body : Map<String , String>): Flow<ResponseResult<String>> =
-        ktorClient.get(AuthEndpoints.GenerateOtp.path) { setBody(body) }.toResponseResult()
+        ktorClient.post(AuthEndpoints.GenerateOtp.path) { setBody(body) }.toResponseResult()
 
     override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserResponse>> =
         ktorClient.get(AuthEndpoints.GetUser.path) {
