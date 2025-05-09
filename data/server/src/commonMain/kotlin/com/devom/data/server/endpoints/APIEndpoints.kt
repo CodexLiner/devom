@@ -15,6 +15,13 @@ sealed class PoojaEndPoints(val path: String) {
     object RemovePooja : AuthEndpoints("/pooja")
 }
 
+sealed class PoojaItemEndPoints(val path: String) {
+    object GetPoojaItems : AuthEndpoints("/poojaitem")
+    object CreatePoojaItem : AuthEndpoints("/poojaitem")
+    object RemovePoojaItem : AuthEndpoints("/poojaitem")
+    object UpdatePoojaItem : AuthEndpoints("/poojaitem")
+}
+
 sealed class PanditSlotsEndpoints(val path: String) {
     object GetAvailableSlots : AuthEndpoints("/pandit/slots")
     object CreatePanditSlot : AuthEndpoints("/pandit/slots")
