@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UpdateCategoryInput(
     @SerialName("name")
-    val name: String,
+    val name: String = "",
 
     @SerialName("slug")
-    val slug: String,
+    val slug: String = "",
 
     @SerialName("description")
-    val description: String,
+    val description: String = ""
 )
