@@ -3,13 +3,7 @@ package com.devom.domain.pooja
 import com.devom.data.repository.pooja.PoojaRepository
 import com.devom.data.repository.pooja.PoojaRepositoryImpl
 
-class GetPoojaUseCase {
-
+class RemovePoojaUseCase {
     private val poojaRepository : PoojaRepository = PoojaRepositoryImpl()
-
-    /**
-     * get pooja
-     * @return Flow<ResponseResult<List<PoojaItem>>>
-     */
-    suspend operator fun invoke() = poojaRepository.getPooja()
+    suspend operator fun invoke(poojaId : String) = poojaRepository.removePooja(poojaId)
 }
