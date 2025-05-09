@@ -10,3 +10,10 @@ sealed class AuthEndpoints(val path: String) {
 sealed class PoojaEndPoints(val path: String) {
     object GetPooja : AuthEndpoints("/pooja")
 }
+
+sealed class PanditSlotsEndpoints(val path: String) {
+    object GetAvailableSlots : AuthEndpoints("/pandit/slots")
+    object CreatePanditSlot : AuthEndpoints("/pandit/slots")
+    object BookPanditSlot : AuthEndpoints("/pandit/book-slot")
+    object GetBookings : AuthEndpoints("/pandit/booking")
+}
