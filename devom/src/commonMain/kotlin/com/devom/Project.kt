@@ -1,8 +1,10 @@
 package com.devom
 
 import com.devom.category.Category
+import com.devom.models.pooja.GetPoojaItemResponse
 import com.devom.pandit.Pandit
 import com.devom.pooja.Pooja
+import com.devom.poojaitem.PoojaItem
 import com.devom.user.User
 
 object Project {
@@ -25,5 +27,11 @@ object Project {
      * contains all the use cases for category related operations
      */
     val category by lazy { Category() }
+
+    /**
+     * contains all the use cases for poojaItem related operations
+     */
+    val poojaItem by lazy { PoojaItem() }
+
 
 }
