@@ -13,11 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
-import com.devom.utils.Application
 import com.devom.utils.Application.isLoggedIn
 import com.devom.utils.Application.loaderState
 import com.devom.utils.Application.loginState
@@ -53,15 +51,12 @@ internal fun App() = AppTheme {
     }
 
     LaunchedEffect(isLoggedIn) {
-        Application.isLoggedIn(accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true)
+        isLoggedIn(accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true)
         NetworkClient.configure {
             baseUrl = "https://api.devom.co.in/"
             onLogOut = {
-                Logger.d("ON_LOGOUT") {
-                    "user has been logged out"
-                }
-                Application.isLoggedIn(false)
-
+                Logger.d("ON_LOGOUT") { "user has been logged out" }
+                isLoggedIn(false)
             }
             setTokens(
                 access = accessKey.orEmpty(), refresh = refreshToken.orEmpty()

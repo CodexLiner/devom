@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 object NetworkClient {
 
     var config: NetworkClientConfig = NetworkClientConfig()
+        private set
 
     var ktorClient: HttpClient = buildClient()
         private set
