@@ -29,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +42,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import multiplatform_app.composeapp.generated.resources.Res
+import multiplatform_app.composeapp.generated.resources.ic_google
 import org.company.app.models.sampleBookings
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -48,8 +53,14 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingScreen(navHostController: NavHostController) {
+    val viewModel : BookingViewModel = viewModel { BookingViewModel() }
+    val bookings = viewModel.bookings.collectAsState()
     val tabs = listOf("Pending", "Completed", "Cancelled")
     var selectedTabIndex by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getBookings()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
@@ -105,14 +116,14 @@ fun BookingScreen(navHostController: NavHostController) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-            items(sampleBookings) { booking ->
+            items(bookings.value) { booking ->
                 BookingCard(
-                    name = booking.name,
-                    phone = booking.phone,
-                    address = booking.address,
-                    poojaType = booking.poojaType,
-                    dateTime = booking.dateTime,
-                    imageUrl = booking.imageRes
+                    name = booking.userName,
+                    phone = booking.bookingCode,
+                    address = booking.bookingCode,
+                    poojaType = booking.poojaName,
+                    dateTime = booking.startTime,
+                    imageUrl = Res.drawable.ic_google
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }

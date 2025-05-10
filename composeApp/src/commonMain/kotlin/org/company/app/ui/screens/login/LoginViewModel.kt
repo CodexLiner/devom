@@ -21,7 +21,6 @@ class LoginViewModel : ViewModel() {
                 it.onResult {
                     onOtpSent()
                 }
-                onOtpSent()
             }
         }
     }

@@ -9,12 +9,15 @@ object Application {
     private var _toastState = MutableStateFlow<String?>(null)
     val toastState = _toastState
 
+    private val _loginState = MutableStateFlow(false)
+    val loginState = _loginState
 
-    fun show() {
+
+    fun showLoader() {
         _loaderState.value = true
     }
 
-    fun hide() {
+    fun hideLoader() {
         _loaderState.value = false
     }
 
@@ -24,6 +27,10 @@ object Application {
 
     fun hideToast() {
         _toastState.value = null
+    }
+
+    fun isLoggedIn(boolean: Boolean) {
+        _loginState.value = boolean
     }
 
 }

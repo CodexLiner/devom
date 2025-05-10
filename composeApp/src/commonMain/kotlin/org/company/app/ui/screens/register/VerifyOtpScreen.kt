@@ -77,9 +77,7 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String?) {
 
             ButtonPrimary(modifier = Modifier.padding(top = 48.dp).fillMaxWidth().height(58.dp)) {
                 if (otpState.isNotBlank()) {
-                    viewModel.verifyOtp(mobileNumber = mobileNumber.orEmpty(), otp = otpState) {
-                        navController.navigate(Screens.SignUpSuccess.path)
-                    }
+                    viewModel.verifyOtp(mobileNumber = mobileNumber.orEmpty(), otp = otpState)
                 } else Application.showToast("Please enter otp")
             }
 

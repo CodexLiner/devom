@@ -13,7 +13,7 @@ import org.company.app.ui.screens.signup.MainScreen
 import org.company.app.ui.screens.signup.SignupSuccessScreen
 
 @Composable
-fun AuthNavHost(onLoginSuccess: () -> Unit) {
+fun AuthNavHost() {
     val navController = rememberNavController()
 
     NavHost(
@@ -31,9 +31,7 @@ fun AuthNavHost(onLoginSuccess: () -> Unit) {
             VerifyOtpScreen(navController = navController , mobileNumber = mobileNumber)
         }
         composable(Screens.SignUpSuccess.path) {
-            SignupSuccessScreen(navHostController = navController) {
-                onLoginSuccess()
-            }
+            SignupSuccessScreen(navHostController = navController)
         }
         composable(Screens.Register.path) {
             MainScreen(navController)

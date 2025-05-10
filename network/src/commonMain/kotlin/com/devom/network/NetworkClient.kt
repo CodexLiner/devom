@@ -57,7 +57,7 @@ object NetworkClient {
                     Logger.d("AccessToken Is Expired Refreshing Now")
                     TokenManager.refreshToken()
                     request.headers.remove(HttpHeaders.Authorization)
-                    config.mainHeaders.forEach { (key, value) ->
+                    config.getMainHeaders().forEach { (key, value) ->
                         request.headers.remove(key)
                         request.headers.append(key, value)
                     }
@@ -75,7 +75,7 @@ object NetworkClient {
         }
 
         defaultRequest {
-            config.mainHeaders.forEach { (key, value) ->
+            config.getMainHeaders().forEach { (key, value) ->
                 headers.remove(key)
                 headers.append(key, value)
             }

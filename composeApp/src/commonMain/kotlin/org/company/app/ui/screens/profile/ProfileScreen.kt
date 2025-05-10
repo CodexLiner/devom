@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.devom.utils.Application
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_cyclone
 import org.company.app.theme.primary_color
@@ -88,7 +89,9 @@ fun ProfileScreen(
                 }
             },
             actions = {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    Application.isLoggedIn(true)
+                }) {
                     Icon(Icons.Default.Refresh, contentDescription = null, tint = Color.White)
                 }
             },

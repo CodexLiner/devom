@@ -31,6 +31,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.utils.Application
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.devom_logo
 import multiplatform_app.composeapp.generated.resources.ic_google
@@ -122,9 +123,11 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 .fillMaxWidth()
                 .height(52.dp),
         ) {
-            viewModel.sendOtp(mobileNumber.value) {
-                navController.navigate(Screens.OtpScreen.path.plus("/${mobileNumber.value}"))
-            }
+            if(mobileNumber.value.isNotBlank()) {
+                viewModel.sendOtp(mobileNumber.value) {
+                    navController.navigate(Screens.OtpScreen.path.plus("/${mobileNumber.value}"))
+                }
+            } else Application.showToast("please enter mobile number.")
         }
 
         // --- Divider with OR ---
