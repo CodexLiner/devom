@@ -66,16 +66,7 @@ internal fun App() = AppTheme {
             }
         }
     }
-
-    LoadingCompositionProvider(state = loaderState.collectAsState().value) {
-        AppContainer {
-            Scaffold(snackbarHost = {
-                ShowSnackBar()
-            }, content = {
-               MainScreen(isLoggedIn)
-            })
-        }
-    }
+    MainScreen(isLoggedIn)
 }
 
 
