@@ -31,3 +31,4 @@ data class GetBookingsResponse(
 
     @SerialName("end_time") val endTime: String = ""
 )
+

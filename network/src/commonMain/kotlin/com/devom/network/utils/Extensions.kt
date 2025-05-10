@@ -1,5 +1,6 @@
 package com.devom.network.utils
 
+import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
 import com.devom.network.models.BaseResponse
 import com.devom.utils.network.ResponseResult
@@ -14,10 +15,8 @@ import kotlinx.serialization.json.JsonObject
 
 inline fun <reified T> HttpResponse.toResponseResult(): Flow<ResponseResult<T>> = flow {
     val responseText = bodyAsText()
-    val parsed = runCatching { NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText) }.getOrElse {
-        emit(ResponseResult.Error(message = "Something went wrong", code = status.value))
-        return@flow
-    }
+    Logger.d("DataResponseText $responseText")
+    val parsed =  NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText)
     emit(
         when {
             status.isSuccess() && parsed.data != null -> ResponseResult.Success(parsed.data)
