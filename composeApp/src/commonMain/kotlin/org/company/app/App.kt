@@ -1,5 +1,11 @@
 package org.company.app
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
@@ -7,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
 import com.devom.utils.Application
+import com.devom.utils.Application.isLoggedIn
 import com.devom.utils.Application.loaderState
 import com.devom.utils.Application.loginState
 import com.russhwolf.settings.Settings
@@ -56,8 +64,7 @@ internal fun App() = AppTheme {
 
             }
             setTokens(
-                access = accessKey.orEmpty(),
-                refresh = refreshToken.orEmpty()
+                access = accessKey.orEmpty(), refresh = refreshToken.orEmpty()
             )
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
@@ -70,11 +77,36 @@ internal fun App() = AppTheme {
             Scaffold(snackbarHost = {
                 ShowSnackBar()
             }, content = {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (isLoggedIn) DashboardScreen() else AuthNavHost()
-                    ProgressLoader()
-                }
+               MainScreen(isLoggedIn)
             })
+        }
+    }
+}
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun MainScreen(isLoggedIn: Boolean) {
+    LoadingCompositionProvider(state = loaderState.collectAsState().value) {
+        AppContainer {
+            Scaffold(
+                snackbarHost = { ShowSnackBar() },
+                content = {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        AnimatedContent(
+                            targetState = isLoggedIn,
+                            transitionSpec = {
+                                fadeIn(animationSpec = tween(300)) with fadeOut(animationSpec = tween(300))
+                            },
+                            label = "Auth/Dashboard Transition"
+                        ) { target ->
+                            if (target) DashboardScreen() else AuthNavHost()
+                        }
+
+                        ProgressLoader()
+                    }
+                }
+            )
         }
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
@@ -90,9 +91,9 @@ fun ProfileScreen(
             },
             actions = {
                 IconButton(onClick = {
-                    Application.isLoggedIn(true)
+                    Application.logout()
                 }) {
-                    Icon(Icons.Default.Refresh, contentDescription = null, tint = Color.White)
+                    Icon(Icons.Default.Lock, contentDescription = null, tint = Color.White)
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE66B1E))
