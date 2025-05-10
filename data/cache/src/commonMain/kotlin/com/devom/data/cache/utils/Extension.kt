@@ -9,6 +9,7 @@ var jsonConfig: Json = Json {
     prettyPrint = false
     isLenient = true
     ignoreUnknownKeys = true
+    coerceInputValues = true
     encodeDefaults = true
     explicitNulls = false
 }
