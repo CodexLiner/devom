@@ -29,8 +29,12 @@ object Application {
         _toastState.value = null
     }
 
-    fun isLoggedIn(boolean: Boolean) {
-        _loginState.value = boolean
+    fun logout() {
+        _loginState.value = false
+    }
+
+    fun isLoggedIn(isLoggedIn: Boolean) {
+        _loginState.value = isLoggedIn
     }
 
 }
