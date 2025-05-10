@@ -28,7 +28,7 @@ import org.company.app.ui.components.ShapedScreen
 import org.company.app.ui.components.Stepper
 
 @Composable
-fun SignupSuccessScreen(navHostController: NavHostController , onSuccess : () -> Unit) {
+fun SignupSuccessScreen(navHostController: NavHostController) {
     val steps = listOf("General", "Skills", "Document")
     val currentStep = 1
 
@@ -94,7 +94,7 @@ fun SignupSuccessScreen(navHostController: NavHostController , onSuccess : () ->
                         .padding(bottom = 32.dp)
                         .height(58.dp)
                 ) {
-                    onSuccess()
+
                 }
             }
         }

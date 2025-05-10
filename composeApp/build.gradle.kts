@@ -47,7 +47,9 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network.ktor)
             implementation(libs.kotlinx.datetime)
-            implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
+            implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.multiplatformSettings)
+            implementation(libs.multiplatform.settings.no.arg)
 
 
             implementation(project(":devom"))

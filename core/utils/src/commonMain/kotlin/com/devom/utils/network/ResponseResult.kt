@@ -25,24 +25,24 @@ fun <T> ResponseResult<T>.doOnNetworkError(block: (ResponseResult.NetworkError) 
     if (this is ResponseResult.NetworkError) block(this)
 }
 
-fun <T> ResponseResult<T>.onResult(block: (ResponseResult<T>) -> Unit) {
+fun <T> ResponseResult<T>.onResult(block: (ResponseResult.Success<T>) -> Unit) {
     when (this) {
         is ResponseResult.Error -> {
             Application.showToast(this.message)
-            Application.hide()
+            Application.hideLoader()
         }
 
         ResponseResult.Loading -> {
-            Application.show()
+            Application.showLoader()
         }
 
         ResponseResult.NetworkError -> {
             Application.showToast("No Internet Connection")
-            Application.hide()
+            Application.hideLoader()
         }
 
-        is ResponseResult.Success<*> -> {
-            Application.hide()
+        is ResponseResult.Success<T> -> {
+            Application.hideLoader()
             block(this)
         }
     }

@@ -34,19 +34,18 @@ class NetworkClientConfig {
         )
     }
 
-    val onLogOut : (String) -> Unit = {}
+    var onLogOut : (String) -> Unit = {}
 
     internal var addHeaders: (HeadersBuilder.() -> Unit)? = null
 
-    val mainHeaders = mutableMapOf<String, String>().apply {
-        HeadersBuilder().apply {
+    fun getMainHeaders(): Map<String, String> {
+        return HeadersBuilder().apply {
             append(HttpHeaders.ContentType, ContentType.Application.Json)
             append(HttpHeaders.Accept, ContentType.Application.Json)
             append(HttpHeaders.Authorization, "$AUTHORIZATION_HEADER_PREFIX${TokenManager.getAccessToken()}")
-        }.build().forEach { key, values ->
-            this[key] = values.last()
-        }
+        }.build().entries().associate { (key, values) -> key to values.last() }
     }
+
 
 
     fun addHeaders(block: HeadersBuilder.() -> Unit) {

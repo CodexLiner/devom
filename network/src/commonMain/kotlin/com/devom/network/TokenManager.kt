@@ -8,9 +8,15 @@ import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 internal object TokenManager {
-
+    @Serializable
+    data class AuthTokenData(
+        @SerialName("access_token") val accessToken: String,
+        @SerialName("refresh_token") val refreshToken: String,
+    )
     val settings: Settings = Settings()
     private var refreshToken: String? = null
     private var accessToken: String? = null
@@ -56,10 +62,12 @@ internal object TokenManager {
 
         when (response.status) {
             HttpStatusCode.OK -> {
-                val newToken = response.body<BaseResponse<String>>().data.orEmpty()
-                settings[ACCESS_TOKEN_KEY] = newToken
-                accessToken = newToken
-                newToken
+                val newToken = response.body<BaseResponse<AuthTokenData>>().data
+                settings[ACCESS_TOKEN_KEY] = newToken?.accessToken.orEmpty()
+                accessToken = newToken?.accessToken.orEmpty()
+                settings[REFRESH_TOKEN_KEY] = newToken?.refreshToken.orEmpty()
+                refreshToken = newToken?.refreshToken.orEmpty()
+                newToken?.accessToken.orEmpty()
             }
             HttpStatusCode.Unauthorized -> {
                 logout()

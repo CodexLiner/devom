@@ -7,14 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.devom.Project
-import com.devom.models.auth.CreateUserRequest
+import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
+import com.devom.utils.Application
 import com.devom.utils.Application.loaderState
+import com.devom.utils.Application.loginState
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import org.company.app.theme.AppTheme
 import org.company.app.ui.components.AppContainer
 import org.company.app.ui.components.ProgressLoader
@@ -23,21 +23,44 @@ import org.company.app.ui.navigation.AuthNavHost
 import org.company.app.ui.providers.LoadingCompositionProvider
 import org.company.app.ui.screens.DashboardScreen
 
+val settings = Settings()
 
 @Composable
 internal fun App() = AppTheme {
+    var accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
+    var refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
+    var uuid = settings.get<String>(UUID_KEY)
+    val isLoggedIn by loginState.collectAsState()
 
-    var isLoggedIn by remember { mutableStateOf(false) }
+    LaunchedEffect(isLoggedIn) {
+        Logger.d("KERMIT_LOGOUT ${loaderState.value}")
+        if (isLoggedIn.not()) {
+            settings.remove(ACCESS_TOKEN_KEY)
+            settings.remove(REFRESH_TOKEN_KEY)
+        } else {
+            accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
+            refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
+            uuid = settings.get<String>(UUID_KEY)
+        }
+    }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isLoggedIn) {
+        Application.isLoggedIn(accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true)
         NetworkClient.configure {
             baseUrl = "https://api.devom.co.in/"
+            onLogOut = {
+                Logger.d("ON_LOGOUT") {
+                    "user has been logged out"
+                }
+                Application.isLoggedIn(false)
+
+            }
             setTokens(
-                access = "a009adbb10410e20296ed3dd0ba6aa7f2465d879d3788178f200a6ddcf4e13af",
-                refresh = "a64fcd3ca04cf5cce0757556e12e62f041d03de86d949c7f0f357c6979ea68a3"
+                access = accessKey.orEmpty(),
+                refresh = refreshToken.orEmpty()
             )
             addHeaders {
-                append("uuid", "3c9346b6-7bea-4a47-8da7-dfbebd6477a1")
+                append(UUID_KEY, uuid.orEmpty())
             }
         }
     }
@@ -48,9 +71,7 @@ internal fun App() = AppTheme {
                 ShowSnackBar()
             }, content = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    if (isLoggedIn) DashboardScreen() else AuthNavHost(onLoginSuccess = {
-                        isLoggedIn = false
-                    })
+                    if (isLoggedIn) DashboardScreen() else AuthNavHost()
                     ProgressLoader()
                 }
             })
