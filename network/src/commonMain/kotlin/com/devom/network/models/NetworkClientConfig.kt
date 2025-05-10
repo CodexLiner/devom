@@ -22,10 +22,9 @@ class NetworkClientConfig {
 
     var jsonConfig: Json = Json {
         prettyPrint = false
+        coerceInputValues = true
         isLenient = true
         ignoreUnknownKeys = true
-        encodeDefaults = true
-        explicitNulls = false
     }
 
     fun setTokens(access: String, refresh: String) {

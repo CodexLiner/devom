@@ -8,4 +8,5 @@ data class BaseResponse<T>(
     val status: Boolean = false,
     val message: String = "",
     val error: JsonElement? = null,
-    val data: T? = null,)
+    val data: T? = null,
+)
