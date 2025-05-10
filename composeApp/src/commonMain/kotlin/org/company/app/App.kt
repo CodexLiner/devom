@@ -66,6 +66,7 @@ internal fun App() = AppTheme {
             }
         }
     }
+    
     MainScreen(isLoggedIn)
 }
 
