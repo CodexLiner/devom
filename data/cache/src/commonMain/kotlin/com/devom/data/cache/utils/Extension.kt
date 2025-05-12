@@ -18,5 +18,5 @@ inline fun <reified T> String?.toCacheResult(): Flow<ResponseResult<T>> = flow {
     this@toCacheResult?.let {
         val jsonData = jsonConfig.decodeFromString<T>(this@toCacheResult)
         emit(ResponseResult.Success(jsonData))
-    } ?: emit(ResponseResult.Error("No Cache found", 404))
+    }
 }
