@@ -37,11 +37,24 @@ val settings = Settings()
 
 @Composable
 internal fun App() = AppTheme {
-    val accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
-    val refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
-    val uuid = settings.get<String>(UUID_KEY)
+    var accessKey by remember { mutableStateOf(settings.get<String>(ACCESS_TOKEN_KEY)) }
+    var refreshToken by remember { mutableStateOf(settings.get<String>(ACCESS_TOKEN_KEY)) }
+    var uuid by remember { mutableStateOf(settings.get<String>(UUID_KEY)) }
+
     val isLoggedIn by loginState.collectAsState()
     var initialized by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isLoggedIn){
+        if (isLoggedIn.not()) {
+            settings.remove(ACCESS_TOKEN_KEY)
+            settings.remove(ACCESS_TOKEN_KEY)
+            settings.remove(UUID_KEY)
+        } else {
+            accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
+            refreshToken = settings.get<String>(ACCESS_TOKEN_KEY)
+            uuid = settings.get<String>(UUID_KEY)
+        }
+    }
 
     LaunchedEffect(Unit) {
         val loggedIn = accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true
