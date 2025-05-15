@@ -1,6 +1,5 @@
 package org.company.app.ui.screens.booking
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
@@ -39,15 +39,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil3.compose.AsyncImage
+import com.devom.models.slots.GetBookingsResponse
+import com.devom.utils.date.toIsoDate
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_google
-import org.company.app.models.sampleBookings
-import org.jetbrains.compose.resources.DrawableResource
+import multiplatform_app.composeapp.generated.resources.placeholder
+import org.company.app.theme.green_color
+import org.company.app.theme.grey_color
+import org.company.app.theme.primary_color
+import org.company.app.theme.text_style_h2
+import org.company.app.theme.text_style_lead_text
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,14 +125,7 @@ fun BookingScreen(navHostController: NavHostController) {
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
             items(bookings.value) { booking ->
-                BookingCard(
-                    name = booking.userName,
-                    phone = booking.bookingCode,
-                    address = booking.bookingCode,
-                    poojaType = booking.poojaName,
-                    dateTime = booking.startTime,
-                    imageUrl = Res.drawable.ic_google
-                )
+                BookingCard(booking)
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
@@ -134,72 +135,74 @@ fun BookingScreen(navHostController: NavHostController) {
 
 @Composable
 fun BookingCard(
-    name: String,
-    phone: String,
-    address: String,
-    poojaType: String,
-    dateTime: String,
-    imageUrl: DrawableResource
+    booking: GetBookingsResponse,
+    statusColor: Color = green_color
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .background(Color(0xFFFDFDFD), shape = RoundedCornerShape(12.dp)).padding(12.dp)
     ) {
-        Image(
-            painter = painterResource(imageUrl),
+
+        AsyncImage(
+            error = painterResource(Res.drawable.placeholder),
+            placeholder = painterResource(Res.drawable.ic_google),
+            model = booking.userImage,
             contentDescription = null,
-            modifier = Modifier.size(64.dp).clip(RoundedCornerShape(12.dp))
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(112.dp , 139.dp).clip(RoundedCornerShape(12.dp)),
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = name,
+                    color = Color.Black,
+                    text = booking.userName,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.weight(1f)
                 )
 
-                Box(
-                    modifier = Modifier.background(
-                        Color(0x1AFFC107),
-                        shape = RoundedCornerShape(50)
-                    ).padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
+                Box(modifier = Modifier.background(Color(0x1AFFC107), shape = RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 2.dp)) {
                     Text(
-                        "Pending",
-                        color = Color(0xFFFFC107),
+                        booking.status,
+                        color = statusColor,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
 
-            Text(text = phone, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-            Text(text = address, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+            Text(text = booking.mobileNo, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+            Row(verticalAlignment = Alignment.CenterVertically){
+                Text(modifier = Modifier.weight(1f), text = booking.address.ifEmpty { "N/A" }, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                Text(modifier = Modifier, text = "₹1101", fontSize = 14.sp, style = text_style_h2, color = primary_color)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp) , color = grey_color)
 
             Row {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         "POOJA TYPE",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
+                        style = text_style_lead_text,
                         color = Color.Gray
                     )
-                    Text(poojaType, style = MaterialTheme.typography.bodySmall)
+                    Text(booking.poojaName.ifEmpty { "Pooja type not specified" }, style = MaterialTheme.typography.bodySmall)
                 }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         "DATE & TIME",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
+                        style = text_style_lead_text,
                         color = Color.Gray
                     )
-                    Text(dateTime, style = MaterialTheme.typography.bodySmall)
+                    Text(booking.bookingDate.toIsoDate().toString(), style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

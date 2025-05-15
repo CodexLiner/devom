@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlinx.serialization)
+
+
 }
 
 kotlin {
@@ -44,12 +46,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.composee)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.coil)
             implementation(libs.coil.network.ktor)
             implementation(libs.kotlinx.datetime)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.multiplatformSettings)
             implementation(libs.multiplatform.settings.no.arg)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
 
 
             implementation(project(":devom"))
@@ -67,6 +71,7 @@ kotlin {
             implementation(libs.androidx.activityCompose)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.ktor.client.android)
         }
 
         iosMain.dependencies {
