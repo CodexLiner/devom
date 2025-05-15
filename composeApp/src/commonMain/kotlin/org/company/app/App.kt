@@ -13,9 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
+import com.devom.utils.Application
 import com.devom.utils.Application.isLoggedIn
 import com.devom.utils.Application.loaderState
 import com.devom.utils.Application.loginState
@@ -33,41 +37,30 @@ val settings = Settings()
 
 @Composable
 internal fun App() = AppTheme {
-    var accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
-    var refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
-    var uuid = settings.get<String>(UUID_KEY)
+    val accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
+    val refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
+    val uuid = settings.get<String>(UUID_KEY)
     val isLoggedIn by loginState.collectAsState()
+    var initialized by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isLoggedIn) {
-        Logger.d("KERMIT_LOGOUT ${loaderState.value}")
-        if (isLoggedIn.not()) {
-            settings.remove(ACCESS_TOKEN_KEY)
-            settings.remove(REFRESH_TOKEN_KEY)
-        } else {
-            accessKey = settings.get<String>(ACCESS_TOKEN_KEY)
-            refreshToken = settings.get<String>(REFRESH_TOKEN_KEY)
-            uuid = settings.get<String>(UUID_KEY)
-        }
-    }
-
-    LaunchedEffect(isLoggedIn) {
-        isLoggedIn(accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true)
+    LaunchedEffect(Unit) {
+        val loggedIn = accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true
+        isLoggedIn(loggedIn)
         NetworkClient.configure {
-            baseUrl = "https://api.devom.co.in/"
+            setTokens(access = accessKey.orEmpty(), refresh = refreshToken.orEmpty())
+            baseUrl = "https://devom-api-bold-smoke-8130.fly.dev"
             onLogOut = {
                 Logger.d("ON_LOGOUT") { "user has been logged out" }
                 isLoggedIn(false)
             }
-            setTokens(
-                access = accessKey.orEmpty(), refresh = refreshToken.orEmpty()
-            )
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
             }
         }
+        initialized = true
     }
-    
-    MainScreen(isLoggedIn)
+
+    if (initialized) MainScreen(isLoggedIn)
 }
 
 
@@ -76,24 +69,23 @@ internal fun App() = AppTheme {
 fun MainScreen(isLoggedIn: Boolean) {
     LoadingCompositionProvider(state = loaderState.collectAsState().value) {
         AppContainer {
-            Scaffold(
-                snackbarHost = { ShowSnackBar() },
-                content = {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        AnimatedContent(
-                            targetState = isLoggedIn,
-                            transitionSpec = {
-                                fadeIn(animationSpec = tween(300)) with fadeOut(animationSpec = tween(300))
-                            },
-                            label = "Auth/Dashboard Transition"
-                        ) { target ->
-                            if (target) DashboardScreen() else AuthNavHost()
-                        }
-
-                        ProgressLoader()
+            Scaffold(snackbarHost = { ShowSnackBar() }, content = {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AnimatedContent(
+                        targetState = isLoggedIn, transitionSpec = {
+                            fadeIn(animationSpec = tween(300)) with fadeOut(
+                                animationSpec = tween(
+                                    300
+                                )
+                            )
+                        }, label = "Auth/Dashboard Transition"
+                    ) { target ->
+                        if (target) DashboardScreen() else AuthNavHost()
                     }
+
+                    ProgressLoader()
                 }
-            )
+            })
         }
     }
 }
