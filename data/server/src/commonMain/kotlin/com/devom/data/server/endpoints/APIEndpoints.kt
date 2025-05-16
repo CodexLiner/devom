@@ -5,6 +5,7 @@ sealed class AuthEndpoints(val path: String) {
     object LoginWithOtp : AuthEndpoints("/users/dologin")
     object GenerateOtp : AuthEndpoints("/users/generate_otp")
     object GetUser : AuthEndpoints("/app_users")
+    object GetUserProfile : AuthEndpoints("/users")
 }
 
 sealed class PoojaEndPoints(val path: String) {

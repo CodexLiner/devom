@@ -20,6 +20,7 @@ interface UserRemoteDataSource {
    suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
    suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<GenericResponse>>
    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
+   suspend fun getUserProfile() : Flow<ResponseResult<UserResponse>>
 }
 
 class UserRemoteDataSourceImpl : UserRemoteDataSource {
@@ -50,4 +51,7 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
         ktorClient.get(AuthEndpoints.GetUser.path) {
             setParams(params)
         }.toResponseResult()
+
+    override suspend fun getUserProfile(): Flow<ResponseResult<UserResponse>> =
+        ktorClient.get(AuthEndpoints.GetUserProfile.path).toResponseResult()
 }
