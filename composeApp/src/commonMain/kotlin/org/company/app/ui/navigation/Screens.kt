@@ -18,8 +18,5 @@ sealed class Screens(val path: String) {
     data object Bookings : Screens(path = "bookings")
     data object OtpScreen : Screens(path = "otpScreen")
     data object Profile : Screens(path = "profile")
-
-
-
-
+    data object EditProfile : Screens(path = "edit_profile")
 }

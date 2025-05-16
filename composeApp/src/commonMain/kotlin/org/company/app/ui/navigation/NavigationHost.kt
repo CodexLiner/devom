@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.company.app.ui.screens.HomeScreen
 import org.company.app.ui.screens.booking.BookingScreen
+import org.company.app.ui.screens.profile.EditProfileScreen
 import org.company.app.ui.screens.profile.ProfileScreen
 
 @Composable
@@ -21,6 +22,10 @@ fun NavigationHost(navHostController: NavHostController, startDestination: Strin
         }
         composable(Screens.Profile.path) {
             ProfileScreen(navHostController)
+        }
+
+        composable(Screens.EditProfile.path) {
+            EditProfileScreen()
         }
     }
 }

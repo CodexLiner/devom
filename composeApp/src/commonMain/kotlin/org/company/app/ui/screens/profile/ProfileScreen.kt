@@ -43,6 +43,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,12 +54,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.utils.Application
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_cyclone
 import org.company.app.theme.primary_color
 import org.company.app.theme.white_color
+import org.company.app.ui.navigation.Screens
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,13 +70,14 @@ fun ProfileScreen(
     navHostController: NavHostController,
     rating: Float = 4.0f,
     progress: Int = 50,
-    onUpdateProfile: () -> Unit = {},
-    onBiographyClick: () -> Unit = {},
-    onDocumentsClick: () -> Unit = {},
-    onReviewRatingsClick: () -> Unit = {},
     onNotificationToggle: (Boolean) -> Unit = {},
     onAvailabilityToggle: (Boolean) -> Unit = {}
 ) {
+    val viewModel = viewModel<ProfileViewModel> {
+        ProfileViewModel()
+    }
+    val user by viewModel.user.collectAsState()
+
     var notificationsEnabled by remember { mutableStateOf(false) }
     var availabilityEnabled by remember { mutableStateOf(true) }
 
@@ -156,7 +160,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "Rajesh Sharma",
+                    user?.fullName.orEmpty(),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -186,10 +190,18 @@ fun ProfileScreen(
             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
         ) {
             Column {
-                ProfileOption("Update Profile", onUpdateProfile)
-                ProfileOption("Biography", onBiographyClick)
-                ProfileOption("Documents", onDocumentsClick)
-                ProfileOption("Review & Ratings", onReviewRatingsClick, showDivider = false)
+                ProfileOption("Update Profile") {
+                    navHostController.navigate(Screens.EditProfile.path)
+                }
+                ProfileOption("Biography") {
+
+                }
+                ProfileOption("Documents") {
+
+                }
+                ProfileOption("Review & Ratings", showDivider = false){
+
+                }
             }
         }
 
@@ -227,9 +239,11 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileOption(title: String, onClick: () -> Unit, showDivider: Boolean = true) {
+fun ProfileOption(title: String, showDivider: Boolean = true , onClick: () -> Unit,) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).clickable {
+            onClick()
+        },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

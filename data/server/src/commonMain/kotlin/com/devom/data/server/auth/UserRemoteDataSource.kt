@@ -12,6 +12,7 @@ import com.devom.network.utils.toResponseResult
 import com.devom.utils.network.ResponseResult
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,7 @@ interface UserRemoteDataSource {
    suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<GenericResponse>>
    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
    suspend fun getUserProfile() : Flow<ResponseResult<UserResponse>>
+   suspend fun updateUserProfile(user : UserResponse) : Flow<ResponseResult<UserResponse>>
 }
 
 class UserRemoteDataSourceImpl : UserRemoteDataSource {
@@ -54,4 +56,7 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
 
     override suspend fun getUserProfile(): Flow<ResponseResult<UserResponse>> =
         ktorClient.get(AuthEndpoints.GetUserProfile.path).toResponseResult()
+
+    override suspend fun updateUserProfile(user: UserResponse): Flow<ResponseResult<UserResponse>> =
+        ktorClient.put(AuthEndpoints.UpdateUserProfile.path.plus("/${user.userId}")) { setBody(user) }.toResponseResult()
 }

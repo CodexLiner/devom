@@ -21,14 +21,18 @@ import androidx.compose.ui.unit.dp
 import org.company.app.theme.bg_color
 import org.company.app.theme.input_color
 import org.company.app.theme.text_style_lead_text
-
 @Composable
 fun TextInputField(
+    initialValue: String = "",
     modifier: Modifier = Modifier.fillMaxWidth(),
     backgroundColor: Color = bg_color,
     placeholderColor: Color = input_color,
     cornerRadius: Dp = 12.dp,
-    colors: TextFieldColors = TextFieldDefaults.colors().copy(
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = backgroundColor,
+        unfocusedContainerColor = backgroundColor,
+        disabledContainerColor = backgroundColor,
+        errorContainerColor = backgroundColor,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
         disabledIndicatorColor = Color.Transparent,
@@ -39,9 +43,7 @@ fun TextInputField(
     placeholder: String = "Enter phone number",
     onValueChange: (String) -> Unit = {}
 ) {
-
-
-    var input by remember { mutableStateOf("") }
+    var input by remember { mutableStateOf(initialValue) }
 
     OutlinedTextField(
         value = input,
@@ -49,15 +51,19 @@ fun TextInputField(
             input = it
             onValueChange(it)
         },
-        placeholder = {
-            Text(text = placeholder, style = text_style_lead_text , color = placeholderColor)
+        label = {
+            Text(
+                text = placeholder,
+                style = text_style_lead_text,
+                color = placeholderColor,
+                modifier = Modifier.background(Color.Transparent)
+            )
         },
         singleLine = true,
         shape = RoundedCornerShape(cornerRadius),
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         colors = colors,
-        modifier = modifier.background(backgroundColor, shape = RoundedCornerShape(cornerRadius))
+        modifier = modifier.fillMaxWidth()
     )
-
 }
