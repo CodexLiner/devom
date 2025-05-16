@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.company.app.ui.navigation.Screens.BookingDetails
+import org.company.app.ui.screens.booking.details.BookingDetailScreen
 import org.company.app.ui.screens.login.LoginScreen
 import org.company.app.ui.screens.register.VerifyOtpScreen
 import org.company.app.ui.screens.signup.DocumentUploadScreen
@@ -38,6 +40,11 @@ fun AuthNavHost() {
         }
         composable(Screens.Document.path) {
             DocumentUploadScreen(navController)
+        }
+        composable(BookingDetails.path) {
+            BookingDetailScreen(
+                navController,
+            )
         }
     }
 }
