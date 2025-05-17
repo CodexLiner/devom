@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
 import com.devom.utils.Application.isLoggedIn
@@ -28,9 +29,9 @@ import com.devom.app.theme.AppTheme
 import com.devom.app.ui.components.AppContainer
 import com.devom.app.ui.components.ProgressLoader
 import com.devom.app.ui.components.ShowSnackBar
-import com.devom.app.ui.navigation.AuthNavHost
+import com.devom.app.ui.navigation.NavigationHost
+import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.providers.LoadingCompositionProvider
-import com.devom.app.ui.screens.DashboardScreen
 
 val settings = Settings()
 
@@ -79,6 +80,7 @@ internal fun App() = AppTheme {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(isLoggedIn: Boolean) {
+    val navController = rememberNavController()
     LoadingCompositionProvider(state = loaderState.collectAsState().value) {
         AppContainer {
             Scaffold(snackbarHost = { ShowSnackBar() }, content = {
@@ -92,7 +94,7 @@ fun MainScreen(isLoggedIn: Boolean) {
                             )
                         }, label = "Auth/Dashboard Transition"
                     ) { target ->
-                        if (target) DashboardScreen() else DashboardScreen()
+                        NavigationHost(navController = navController , startDestination =   Screens.Dashboard.path)
                     }
 
                     ProgressLoader()

@@ -19,4 +19,6 @@ sealed class Screens(val path: String) {
     data object OtpScreen : Screens(path = "otpScreen")
     data object Profile : Screens(path = "profile")
     data object EditProfile : Screens(path = "edit_profile")
+    data object Dashboard : Screens(path = "dashboard")
+
 }

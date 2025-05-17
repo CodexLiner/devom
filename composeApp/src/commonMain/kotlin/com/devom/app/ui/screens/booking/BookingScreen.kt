@@ -1,7 +1,6 @@
 package com.devom.app.ui.screens.booking
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,19 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,17 +40,18 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import com.devom.models.slots.GetBookingsResponse
-import com.devom.utils.date.toIsoDate
-import pandijtapp.composeapp.generated.resources.Res
-import pandijtapp.composeapp.generated.resources.ic_google
-import pandijtapp.composeapp.generated.resources.placeholder
 import com.devom.app.theme.green_color
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.primary_color
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_text
+import com.devom.app.ui.components.AppBar
+import com.devom.models.slots.GetBookingsResponse
+import com.devom.utils.date.toIsoDate
 import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_google
+import pandijtapp.composeapp.generated.resources.placeholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,22 +68,7 @@ fun BookingScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White)
     ) {
-        TopAppBar(
-            title = { Text("Bookings") }, navigationIcon = {
-                Icon(
-                    Icons.Default.Menu,
-                    contentDescription = null,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }, actions = {
-                Text(
-                    text = "Export",
-                    color = Color.White,
-                    modifier = Modifier.padding(end = 16.dp).clickable { /* Export action */ })
-            }, colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color(0xFFFF6F00), titleContentColor = Color.White
-            )
-        )
+        AppBar(title = "Bookings",)
 
         TabRow(
             modifier = Modifier.fillMaxWidth(),

@@ -55,6 +55,7 @@ import com.devom.app.theme.primary_color
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.white_color
+import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.navigation.Screens
 import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
@@ -87,12 +88,11 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        TopAppBar(
-            title = { Text("My Profile", color = Color.White) },
-            navigationIcon = {
-                IconButton(onClick = { }) {
-                    Icon(painterResource(Res.drawable.ic_menu), contentDescription = null, tint = Color.White)
-                }
+
+        AppBar(
+            title = "Profile",
+            onNavigationIconClick = {
+                navHostController.popBackStack()
             },
             actions = {
                 IconButton(onClick = {
@@ -100,8 +100,7 @@ fun ProfileScreen(
                 }) {
                     Icon(painterResource(Res.drawable.ic_logout), contentDescription = null, tint = Color.White)
                 }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE66B1E))
+            }
         )
 
         Box(
