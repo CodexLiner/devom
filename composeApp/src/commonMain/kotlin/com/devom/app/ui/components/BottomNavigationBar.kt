@@ -84,7 +84,7 @@ fun BottomNavigationBar(
                     ),
                     shape = CircleShape
                 )
-                .clickable { /* FAB Action */ },
+                .clickable(interactionSource = null , indication = null) { /* FAB Action */ },
             contentAlignment = Alignment.Center
         ) {
             Image(

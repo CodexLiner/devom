@@ -2,6 +2,7 @@ package com.devom.app.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
@@ -47,7 +48,7 @@ fun DashboardScreen() {
         },
         content = { paddingValues ->
             AppContainer {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
                     NavigationHost(
                         navHostController = navController,
                         startDestination = Screens.Profile.path

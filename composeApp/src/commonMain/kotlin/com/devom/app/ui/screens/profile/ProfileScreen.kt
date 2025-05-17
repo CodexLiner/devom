@@ -135,13 +135,14 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
+
                 AsyncImage(
                     error = painterResource(Res.drawable.placeholder),
                     placeholder = painterResource(Res.drawable.ic_google),
                     model = user?.profilePictureUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(115.dp).clip(CircleShape),
+                    modifier = Modifier.padding(top = 32.dp).size(115.dp).clip(CircleShape),
                 )
 
                 Box(
@@ -197,13 +198,9 @@ fun ProfileScreen(
                 ProfileOption("Update Profile") {
                     navHostController.navigate(Screens.EditProfile.path)
                 }
-                ProfileOption("Biography") {
-
-                }
-                ProfileOption("Documents") {
-
-                }
-                ProfileOption("Review & Ratings", showDivider = false){
+                ProfileOption("Biography")
+                ProfileOption("Documents")
+                ProfileOption("Review & Ratings"){
 
                 }
             }
@@ -244,11 +241,11 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileOption(title: String, showDivider: Boolean = true , onClick: () -> Unit,) {
+fun ProfileOption(title: String, onClick: () -> Unit = {}) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).clickable {
+        modifier = Modifier.fillMaxWidth().clickable {
             onClick()
-        },
+        }.padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
