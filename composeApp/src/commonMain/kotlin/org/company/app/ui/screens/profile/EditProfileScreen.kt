@@ -19,9 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.devom.models.auth.UserResponse
@@ -29,7 +26,6 @@ import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.calendar_linear
 import multiplatform_app.composeapp.generated.resources.ic_cyclone
 import org.company.app.theme.grey_color
-import org.company.app.theme.orange_shadow
 import org.company.app.theme.text_style_lead_body_1
 import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.TextInputField
