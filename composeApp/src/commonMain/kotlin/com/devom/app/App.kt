@@ -94,7 +94,10 @@ fun MainScreen(isLoggedIn: Boolean) {
                             )
                         }, label = "Auth/Dashboard Transition"
                     ) { target ->
-                        NavigationHost(navController = navController , startDestination =   Screens.Dashboard.path)
+                        NavigationHost(
+                            navController = navController,
+                            startDestination = if (target) Screens.Dashboard.path else Screens.Login.path
+                        )
                     }
 
                     ProgressLoader()
