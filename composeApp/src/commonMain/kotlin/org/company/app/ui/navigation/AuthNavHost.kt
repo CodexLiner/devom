@@ -9,9 +9,9 @@ import androidx.navigation.navArgument
 import org.company.app.ui.navigation.Screens.BookingDetails
 import org.company.app.ui.screens.booking.details.BookingDetailScreen
 import org.company.app.ui.screens.login.LoginScreen
-import org.company.app.ui.screens.register.VerifyOtpScreen
+import org.company.app.ui.screens.otpscreen.VerifyOtpScreen
 import org.company.app.ui.screens.signup.DocumentUploadScreen
-import org.company.app.ui.screens.signup.MainScreen
+import org.company.app.ui.screens.signup.RegisterMainScreen
 import org.company.app.ui.screens.signup.SignupSuccessScreen
 
 @Composable
@@ -36,7 +36,7 @@ fun AuthNavHost() {
             SignupSuccessScreen(navHostController = navController)
         }
         composable(Screens.Register.path) {
-            MainScreen(navController)
+            RegisterMainScreen(navController)
         }
         composable(Screens.Document.path) {
             DocumentUploadScreen(navController)

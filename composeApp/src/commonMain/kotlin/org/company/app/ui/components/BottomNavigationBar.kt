@@ -32,11 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.company.app.models.BottomNavItem
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Preview
 @Composable
 fun BottomNavigationBar(
-    selectedIndex: Int,
-    onItemSelected: (Int) -> Unit
+    selectedIndex: Int = 1,
+    onItemSelected: (Int) -> Unit = {}
 ) {
     val items = listOf(
         BottomNavItem("Home", Icons.Default.Home, selectedIndex == 0),
@@ -62,14 +64,13 @@ fun BottomNavigationBar(
                 BottomNavItem(item, index, onItemSelected)
             }
 
-            Spacer(modifier = Modifier.width(56.dp)) // Space for FAB
+            Spacer(modifier = Modifier.width(56.dp))
 
             items.drop(2).forEachIndexed { index, item ->
                 BottomNavItem(item, index + 2, onItemSelected)
             }
         }
 
-        // Center Floating Button
         Box(
             modifier = Modifier
                 .size(64.dp)
@@ -104,7 +105,9 @@ fun BottomNavItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .clickable { onClick(index) }
+            .clickable(interactionSource = null, indication = null, onClick = {
+                onClick(index)
+            })
             .padding(horizontal = 8.dp)
     ) {
         Icon(

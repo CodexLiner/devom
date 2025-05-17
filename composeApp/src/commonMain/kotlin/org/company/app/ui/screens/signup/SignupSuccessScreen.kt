@@ -45,7 +45,7 @@ fun SignupSuccessScreen(navHostController: NavHostController) {
                 Column(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(bottom = 80.dp), // to give space for button
+                        .padding(bottom = 80.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(

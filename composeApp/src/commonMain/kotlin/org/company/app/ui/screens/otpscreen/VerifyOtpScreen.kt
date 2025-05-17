@@ -1,4 +1,4 @@
-package org.company.app.ui.screens.register
+package org.company.app.ui.screens.otpscreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +38,6 @@ import org.company.app.theme.text_style_lead_text
 import org.company.app.ui.components.BackButton
 import org.company.app.ui.components.ButtonPrimary
 import org.company.app.ui.components.OtpView
-import org.company.app.ui.navigation.Screens
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

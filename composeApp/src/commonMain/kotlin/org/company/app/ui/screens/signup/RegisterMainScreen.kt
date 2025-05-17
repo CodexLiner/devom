@@ -55,7 +55,7 @@ import org.company.app.ui.screens.signup.fragments.UploadDocumentMainContent
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun RegisterMainScreen(navController: NavHostController) {
 
     val currentStep = remember { mutableIntStateOf(0) }
     var createUserRequest by remember {

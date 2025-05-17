@@ -78,15 +78,7 @@ fun EditProfileScreen() {
                         .padding(top = 16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    val span = SpanStyle(
-                        color = orange_shadow,
-                        textDecoration = TextDecoration.Underline
-                    )
-                    val spannedText = buildAnnotatedString {
-                        append("Delete My Account??")
-                    }
-
-                    Text(spannedText, color = grey_color, style = text_style_lead_body_1)
+                    Text("Delete My Account", color = grey_color, style = text_style_lead_body_1)
                 }
             }
         }
@@ -150,9 +142,7 @@ fun EditProfileFormContent(userResponse: UserResponse) {
                 placeholder = "Address"
             ) {
                 userResponse.country = it
-
             }
-
 
             TextInputField(
                 initialValue = userResponse.dateOfBirth,

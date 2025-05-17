@@ -1,4 +1,4 @@
-package org.company.app.ui.screens.register
+package org.company.app.ui.screens.otpscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
