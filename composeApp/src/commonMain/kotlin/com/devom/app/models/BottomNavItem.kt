@@ -1,9 +1,9 @@
 package com.devom.app.models
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import org.jetbrains.compose.resources.DrawableResource
 
 data class BottomNavItem(
     val label: String,
-    val icon: ImageVector,
+    val icon: DrawableResource,
     val isSelected: Boolean
 )

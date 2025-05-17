@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.Stepper
@@ -87,15 +88,17 @@ fun SignupSuccessScreen(navHostController: NavHostController) {
                 }
 
                 ButtonPrimary(
-                    buttonText = "Login Now",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(bottom = 32.dp)
-                        .height(58.dp)
-                ) {
+                        .height(58.dp),
+                    buttonText = "Login Now",
+                    onClick = {
 
-                }
+                    },
+                    fontStyle = text_style_lead_text
+                )
             }
         }
 

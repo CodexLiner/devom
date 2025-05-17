@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.Stepper
@@ -65,11 +66,13 @@ fun DocumentUploadScreen(navHostController: NavHostController) {
                         .padding(horizontal = 24.dp, vertical = 16.dp)
                 ) {
                     ButtonPrimary(
+                        modifier = Modifier.padding(top = 48.dp).fillMaxWidth().height(58.dp),
                         buttonText = "Submit",
-                        modifier = Modifier.padding(top = 48.dp).fillMaxWidth().height(58.dp)
-                    ) {
-                        navHostController.navigate(Screens.SignUpSuccess.path)
-                    }
+                        onClick = {
+                            navHostController.navigate(Screens.SignUpSuccess.path)
+                        },
+                        fontStyle = text_style_lead_text
+                    )
 
                     Spacer(modifier = Modifier.height(12.dp))
 

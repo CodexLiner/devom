@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.devom.app.theme.bg_color
 import com.devom.app.theme.input_color
+import com.devom.app.theme.text_black_shade
 import com.devom.app.theme.text_style_lead_text
 @Composable
 fun TextInputField(
@@ -25,10 +26,12 @@ fun TextInputField(
     modifier: Modifier = Modifier.fillMaxWidth(),
     backgroundColor: Color = bg_color,
     placeholderColor: Color = input_color,
+    inputColor: Color = text_black_shade,
     cornerRadius: Dp = 12.dp,
     colors: TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = backgroundColor,
         unfocusedContainerColor = backgroundColor,
+        focusedTextColor = inputColor,
         disabledContainerColor = backgroundColor,
         errorContainerColor = backgroundColor,
         focusedIndicatorColor = Color.Transparent,

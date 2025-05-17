@@ -22,11 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.devom.models.auth.UserResponse
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.calendar_linear
-import multiplatform_app.composeapp.generated.resources.ic_cyclone
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.calendar_linear
+import pandijtapp.composeapp.generated.resources.ic_cyclone
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.TextInputField
 import org.jetbrains.compose.resources.painterResource
@@ -60,13 +61,15 @@ fun EditProfileScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ButtonPrimary(
+                    modifier = Modifier.fillMaxWidth().height(58.dp),
                     buttonText = "Update",
-                    modifier = Modifier.fillMaxWidth().height(58.dp)
-                ) {
-                    user?.let {
-                        viewModel.updateUserProfile(it)
-                    }
-                }
+                    onClick = {
+                        user?.let {
+                            viewModel.updateUserProfile(it)
+                        }
+                    },
+                    fontStyle = text_style_lead_text
+                )
 
                 Box(
                     modifier = Modifier

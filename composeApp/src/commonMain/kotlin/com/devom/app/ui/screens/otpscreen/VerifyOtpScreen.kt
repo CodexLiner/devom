@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.utils.Application
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.resend_otp
-import multiplatform_app.composeapp.generated.resources.resend_otp_message
-import multiplatform_app.composeapp.generated.resources.verify_mobile_number
-import multiplatform_app.composeapp.generated.resources.we_have_sent_the_verification_code
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.resend_otp
+import pandijtapp.composeapp.generated.resources.resend_otp_message
+import pandijtapp.composeapp.generated.resources.verify_mobile_number
+import pandijtapp.composeapp.generated.resources.we_have_sent_the_verification_code
 import com.devom.app.theme.black_color
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.orange_shadow
@@ -74,11 +74,15 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String?) {
                 otpState = it
             }
 
-            ButtonPrimary(modifier = Modifier.padding(top = 48.dp).fillMaxWidth().height(58.dp)) {
-                if (otpState.isNotBlank()) {
-                    viewModel.verifyOtp(mobileNumber = mobileNumber.orEmpty(), otp = otpState)
-                } else Application.showToast("Please enter otp")
-            }
+            ButtonPrimary(
+                modifier = Modifier.padding(top = 48.dp).fillMaxWidth().height(58.dp),
+                onClick = {
+                    if (otpState.isNotBlank()) {
+                        viewModel.verifyOtp(mobileNumber = mobileNumber.orEmpty(), otp = otpState)
+                    } else Application.showToast("Please enter otp")
+                },
+                fontStyle = text_style_lead_text
+            )
 
             Box(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),

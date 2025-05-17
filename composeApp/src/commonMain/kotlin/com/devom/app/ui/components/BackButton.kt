@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.ic_left
 import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_left
 
 @Composable
 fun BackButton(

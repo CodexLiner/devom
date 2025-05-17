@@ -38,12 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import co.touchlab.kermit.Logger
 import com.devom.models.auth.CreateUserRequest
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.ic_left
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_left
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.orange_shadow
 import com.devom.app.theme.text_style_h4
 import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.white_color
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
@@ -104,14 +105,16 @@ fun RegisterMainScreen(navController: NavHostController) {
                     ButtonPrimary(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(58.dp)
-                    ) {
-                        if (currentStep.intValue > 2) {
-                            navController.navigate(Screens.Document.path)
-                        } else {
-                            currentStep.intValue++
-                        }
-                    }
+                            .height(58.dp),
+                        onClick = {
+                            if (currentStep.intValue > 2) {
+                                navController.navigate(Screens.Document.path)
+                            } else {
+                                currentStep.intValue++
+                            }
+                        },
+                        fontStyle = text_style_lead_text
+                    )
 
                     Box(
                         modifier = Modifier

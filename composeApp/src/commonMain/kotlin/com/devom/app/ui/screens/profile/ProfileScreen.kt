@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.utils.Application
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.ic_cyclone
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_cyclone
 import com.devom.app.theme.primary_color
 import com.devom.app.theme.white_color
 import com.devom.app.ui.navigation.Screens

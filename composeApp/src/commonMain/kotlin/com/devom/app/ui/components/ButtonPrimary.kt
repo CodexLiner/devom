@@ -12,10 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.btn_continue
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.btn_continue
 import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.white_color
 import org.jetbrains.compose.resources.stringResource
 
@@ -31,7 +33,8 @@ fun ButtonPrimary(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     buttonText: String = stringResource(Res.string.btn_continue),
-    onClick: () -> Unit
+    fontStyle: TextStyle = text_style_h5,
+    onClick: () -> Unit,
 ) {
 
     Button(modifier = modifier, colors = colors, shape = shape, onClick = onClick) {
@@ -40,7 +43,7 @@ fun ButtonPrimary(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             leadingIcon?.invoke()
-            Text(text = buttonText, color = textColor)
+            Text(text = buttonText, color = textColor , style = fontStyle)
             trailingIcon?.invoke()
         }
     }

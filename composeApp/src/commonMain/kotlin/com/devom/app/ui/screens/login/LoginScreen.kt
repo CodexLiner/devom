@@ -32,16 +32,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.utils.Application
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.devom_logo
-import multiplatform_app.composeapp.generated.resources.ic_google
-import multiplatform_app.composeapp.generated.resources.ic_phone
-import multiplatform_app.composeapp.generated.resources.sign_in_with_google
-import multiplatform_app.composeapp.generated.resources.text_dont_have_account
-import multiplatform_app.composeapp.generated.resources.text_login
-import multiplatform_app.composeapp.generated.resources.text_login_description
-import multiplatform_app.composeapp.generated.resources.text_phone_number
-import multiplatform_app.composeapp.generated.resources.text_sign_up
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.devom_logo
+import pandijtapp.composeapp.generated.resources.ic_google
+import pandijtapp.composeapp.generated.resources.ic_phone
+import pandijtapp.composeapp.generated.resources.sign_in_with_google
+import pandijtapp.composeapp.generated.resources.text_dont_have_account
+import pandijtapp.composeapp.generated.resources.text_login
+import pandijtapp.composeapp.generated.resources.text_login_description
+import pandijtapp.composeapp.generated.resources.text_phone_number
+import pandijtapp.composeapp.generated.resources.text_sign_up
 import com.devom.app.EMPTY
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.orange_shadow
@@ -122,13 +122,15 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 .padding(top = 16.dp)
                 .fillMaxWidth()
                 .height(52.dp),
-        ) {
-            if(mobileNumber.value.isNotBlank()) {
-                viewModel.sendOtp(mobileNumber.value) {
-                    navController.navigate(Screens.OtpScreen.path.plus("/${mobileNumber.value}"))
-                }
-            } else Application.showToast("please enter mobile number.")
-        }
+            onClick = {
+                if(mobileNumber.value.isNotBlank()) {
+                    viewModel.sendOtp(mobileNumber.value) {
+                        navController.navigate(Screens.OtpScreen.path.plus("/${mobileNumber.value}"))
+                    }
+                } else Application.showToast("please enter mobile number.")
+            },
+            fontStyle = text_style_lead_text,
+        )
 
         // --- Divider with OR ---
         Box(
@@ -155,6 +157,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
 
         // --- Google Login Button ---
         ButtonPrimary(
+            fontStyle = text_style_lead_text,
             buttonText = stringResource(Res.string.sign_in_with_google),
             textColor = Color.Black,
             colors = ButtonDefaults.buttonColors(

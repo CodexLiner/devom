@@ -1,4 +1,4 @@
-rootProject.name = "Multiplatform-App"
+rootProject.name = "PandijtApp"
 
 pluginManagement {
     repositories {

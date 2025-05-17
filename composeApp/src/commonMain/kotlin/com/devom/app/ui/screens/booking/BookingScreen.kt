@@ -48,9 +48,9 @@ import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.utils.date.toIsoDate
-import multiplatform_app.composeapp.generated.resources.Res
-import multiplatform_app.composeapp.generated.resources.ic_google
-import multiplatform_app.composeapp.generated.resources.placeholder
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_google
+import pandijtapp.composeapp.generated.resources.placeholder
 import com.devom.app.theme.green_color
 import com.devom.app.theme.grey_color
 import com.devom.app.theme.primary_color

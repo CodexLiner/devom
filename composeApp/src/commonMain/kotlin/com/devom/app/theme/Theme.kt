@@ -3,9 +3,16 @@ package com.devom.app.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.inter_iltalic
+import pandijtapp.composeapp.generated.resources.inter_normal
 
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryLight,
@@ -85,10 +92,43 @@ private val DarkColorScheme = darkColorScheme(
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
+
 @Composable
 internal fun AppTheme(
     content: @Composable () -> Unit
 ) {
+    val fontFamily = FontFamily(
+        org.jetbrains.compose.resources.Font(
+            style = FontStyle.Italic,
+            resource = Res.font.inter_iltalic,
+        ),
+        org.jetbrains.compose.resources.Font(
+            style = FontStyle.Normal,
+            resource = Res.font.inter_normal,
+        )
+    )
+
+    val customTypography = Typography().run {
+        Typography(
+            displayLarge = displayLarge.copy(fontFamily = fontFamily),
+            displayMedium = displayMedium.copy(fontFamily = fontFamily),
+            displaySmall = displaySmall.copy(fontFamily = fontFamily),
+            headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+            headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+            headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+            titleLarge = titleLarge.copy(fontFamily = fontFamily),
+            titleMedium = titleMedium.copy(fontFamily = fontFamily),
+            titleSmall = titleSmall.copy(fontFamily = fontFamily),
+            bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+            bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+            bodySmall = bodySmall.copy(fontFamily = fontFamily),
+            labelLarge = labelLarge.copy(fontFamily = fontFamily),
+            labelMedium = labelMedium.copy(fontFamily = fontFamily),
+            labelSmall = labelSmall.copy(fontFamily = fontFamily),
+        )
+    }
+
+
     val systemIsDark = isSystemInDarkTheme()
     val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
     CompositionLocalProvider(

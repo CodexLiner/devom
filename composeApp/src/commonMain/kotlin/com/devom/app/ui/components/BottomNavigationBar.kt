@@ -1,5 +1,6 @@
 package com.devom.app.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,12 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +23,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devom.app.models.BottomNavItem
+import org.jetbrains.compose.resources.imageResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_nav_add
+import pandijtapp.composeapp.generated.resources.ic_nav_bookings
+import pandijtapp.composeapp.generated.resources.ic_nav_home
+import pandijtapp.composeapp.generated.resources.ic_nav_profile
+import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 
 @Preview
 @Composable
@@ -41,10 +45,10 @@ fun BottomNavigationBar(
     onItemSelected: (Int) -> Unit = {}
 ) {
     val items = listOf(
-        BottomNavItem("Home", Icons.Default.Home, selectedIndex == 0),
-        BottomNavItem("Booking", Icons.Default.MoreVert, selectedIndex == 1),
-        BottomNavItem("Wallet", Icons.Default.AccountBox, selectedIndex == 2),
-        BottomNavItem("Profile", Icons.Default.Person, selectedIndex == 3)
+        BottomNavItem("Home", Res.drawable.ic_nav_home, selectedIndex == 0),
+        BottomNavItem("Booking", Res.drawable.ic_nav_bookings, selectedIndex == 1),
+        BottomNavItem("Wallet", Res.drawable.ic_nav_wallet, selectedIndex == 2),
+        BottomNavItem("Profile", Res.drawable.ic_nav_profile, selectedIndex == 3)
     )
 
     Box(
@@ -85,10 +89,9 @@ fun BottomNavigationBar(
                 .clickable { /* FAB Action */ },
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
+            Image(
+                painter = painterResource(Res.drawable.ic_nav_add),
                 contentDescription = "Add",
-                tint = Color.White,
                 modifier = Modifier.size(32.dp)
             )
         }
@@ -110,10 +113,10 @@ fun BottomNavItem(
             })
             .padding(horizontal = 8.dp)
     ) {
-        Icon(
-            imageVector = item.icon,
+        Image(
+            colorFilter = ColorFilter.tint(if (item.isSelected) Color(0xFFFF6F00) else Color.Gray),
             contentDescription = item.label,
-            tint = if (item.isSelected) Color(0xFFFF6F00) else Color.Gray,
+            painter = painterResource(item.icon),
             modifier = Modifier.size(24.dp)
         )
         Text(
