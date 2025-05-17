@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.btn_continue
-import org.company.app.theme.orange_shadow
-import org.company.app.theme.white_color
+import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.white_color
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

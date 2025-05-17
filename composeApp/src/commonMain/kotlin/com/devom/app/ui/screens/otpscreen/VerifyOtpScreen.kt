@@ -29,15 +29,15 @@ import multiplatform_app.composeapp.generated.resources.resend_otp
 import multiplatform_app.composeapp.generated.resources.resend_otp_message
 import multiplatform_app.composeapp.generated.resources.verify_mobile_number
 import multiplatform_app.composeapp.generated.resources.we_have_sent_the_verification_code
-import org.company.app.theme.black_color
-import org.company.app.theme.grey_color
-import org.company.app.theme.orange_shadow
-import org.company.app.theme.text_style_h2
-import org.company.app.theme.text_style_lead_body_1
-import org.company.app.theme.text_style_lead_text
-import org.company.app.ui.components.BackButton
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.components.OtpView
+import com.devom.app.theme.black_color
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.text_style_h2
+import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.theme.text_style_lead_text
+import com.devom.app.ui.components.BackButton
+import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.OtpView
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

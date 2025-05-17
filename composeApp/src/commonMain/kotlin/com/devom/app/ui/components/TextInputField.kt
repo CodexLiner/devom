@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.company.app.theme.bg_color
-import org.company.app.theme.input_color
-import org.company.app.theme.text_style_lead_text
+import com.devom.app.theme.bg_color
+import com.devom.app.theme.input_color
+import com.devom.app.theme.text_style_lead_text
 @Composable
 fun TextInputField(
     initialValue: String = "",

@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.components.ShapedScreen
-import org.company.app.ui.components.Stepper
-import org.company.app.ui.navigation.Screens
-import org.company.app.ui.screens.signup.fragments.UploadSection
+import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.ShapedScreen
+import com.devom.app.ui.components.Stepper
+import com.devom.app.ui.navigation.Screens
+import com.devom.app.ui.screens.signup.fragments.UploadSection
 
 
 @Composable

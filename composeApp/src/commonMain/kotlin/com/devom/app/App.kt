@@ -24,13 +24,13 @@ import com.devom.utils.Application.loaderState
 import com.devom.utils.Application.loginState
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
-import org.company.app.theme.AppTheme
-import org.company.app.ui.components.AppContainer
-import org.company.app.ui.components.ProgressLoader
-import org.company.app.ui.components.ShowSnackBar
-import org.company.app.ui.navigation.AuthNavHost
-import org.company.app.ui.providers.LoadingCompositionProvider
-import org.company.app.ui.screens.DashboardScreen
+import com.devom.app.theme.AppTheme
+import com.devom.app.ui.components.AppContainer
+import com.devom.app.ui.components.ProgressLoader
+import com.devom.app.ui.components.ShowSnackBar
+import com.devom.app.ui.navigation.AuthNavHost
+import com.devom.app.ui.providers.LoadingCompositionProvider
+import com.devom.app.ui.screens.DashboardScreen
 
 val settings = Settings()
 

@@ -55,9 +55,9 @@ import androidx.navigation.NavHostController
 import com.devom.utils.Application
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_cyclone
-import org.company.app.theme.primary_color
-import org.company.app.theme.white_color
-import org.company.app.ui.navigation.Screens
+import com.devom.app.theme.primary_color
+import com.devom.app.theme.white_color
+import com.devom.app.ui.navigation.Screens
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)

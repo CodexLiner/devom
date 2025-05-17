@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.company.app.ui.screens.HomeScreen
-import org.company.app.ui.screens.booking.BookingScreen
-import org.company.app.ui.screens.profile.EditProfileScreen
-import org.company.app.ui.screens.profile.ProfileScreen
+import com.devom.app.ui.screens.HomeScreen
+import com.devom.app.ui.screens.booking.BookingScreen
+import com.devom.app.ui.screens.profile.EditProfileScreen
+import com.devom.app.ui.screens.profile.ProfileScreen
 
 @Composable
 fun NavigationHost(navHostController: NavHostController, startDestination: String) {

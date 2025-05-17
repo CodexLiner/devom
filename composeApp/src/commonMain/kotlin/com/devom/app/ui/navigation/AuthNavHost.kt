@@ -6,13 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import org.company.app.ui.navigation.Screens.BookingDetails
-import org.company.app.ui.screens.booking.details.BookingDetailScreen
-import org.company.app.ui.screens.login.LoginScreen
-import org.company.app.ui.screens.otpscreen.VerifyOtpScreen
-import org.company.app.ui.screens.signup.DocumentUploadScreen
-import org.company.app.ui.screens.signup.RegisterMainScreen
-import org.company.app.ui.screens.signup.SignupSuccessScreen
+import com.devom.app.ui.screens.login.LoginScreen
+import com.devom.app.ui.navigation.Screens.BookingDetails
+import com.devom.app.ui.screens.booking.details.BookingDetailScreen
+import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
+import com.devom.app.ui.screens.signup.DocumentUploadScreen
+import com.devom.app.ui.screens.signup.RegisterMainScreen
+import com.devom.app.ui.screens.signup.SignupSuccessScreen
 
 @Composable
 fun AuthNavHost() {

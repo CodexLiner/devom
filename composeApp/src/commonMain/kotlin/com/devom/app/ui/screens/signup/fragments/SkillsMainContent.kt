@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_phone
-import org.company.app.ui.components.TextInputField
+import com.devom.app.ui.components.TextInputField
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

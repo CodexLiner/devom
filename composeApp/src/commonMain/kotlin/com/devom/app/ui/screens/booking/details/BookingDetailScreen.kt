@@ -13,10 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devom.models.slots.GetBookingsResponse
-import org.company.app.theme.grey_color
-import org.company.app.theme.text_black_shade
-import org.company.app.theme.text_style_lead_body_1
-import org.company.app.theme.text_style_lead_text
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.text_black_shade
+import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.theme.text_style_lead_text
 
 @Composable
 fun BookingDetailScreen(navController: NavController ) {

@@ -12,10 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import org.company.app.ui.components.AppContainer
-import org.company.app.ui.components.BottomNavigationBar
-import org.company.app.ui.navigation.NavigationHost
-import org.company.app.ui.navigation.Screens
+import com.devom.app.ui.components.AppContainer
+import com.devom.app.ui.components.BottomNavigationBar
+import com.devom.app.ui.navigation.NavigationHost
+import com.devom.app.ui.navigation.Screens
 
 @Composable
 fun DashboardScreen() {

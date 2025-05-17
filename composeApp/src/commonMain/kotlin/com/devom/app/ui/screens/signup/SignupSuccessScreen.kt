@@ -23,9 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.components.ShapedScreen
-import org.company.app.ui.components.Stepper
+import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.ShapedScreen
+import com.devom.app.ui.components.Stepper
 
 @Composable
 fun SignupSuccessScreen(navHostController: NavHostController) {

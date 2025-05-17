@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import org.company.app.ui.providers.LocalLoaderState
+import com.devom.app.ui.providers.LocalLoaderState
 
 @Composable
 fun ProgressLoader() {

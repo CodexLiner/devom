@@ -40,18 +40,18 @@ import co.touchlab.kermit.Logger
 import com.devom.models.auth.CreateUserRequest
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_left
-import org.company.app.theme.grey_color
-import org.company.app.theme.orange_shadow
-import org.company.app.theme.text_style_h4
-import org.company.app.theme.text_style_lead_body_1
-import org.company.app.theme.white_color
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.components.ShapedScreen
-import org.company.app.ui.components.Stepper
-import org.company.app.ui.navigation.Screens
-import org.company.app.ui.screens.signup.fragments.GeneralMainContent
-import org.company.app.ui.screens.signup.fragments.SkillsMainContent
-import org.company.app.ui.screens.signup.fragments.UploadDocumentMainContent
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.text_style_h4
+import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.theme.white_color
+import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.ShapedScreen
+import com.devom.app.ui.components.Stepper
+import com.devom.app.ui.navigation.Screens
+import com.devom.app.ui.screens.signup.fragments.GeneralMainContent
+import com.devom.app.ui.screens.signup.fragments.SkillsMainContent
+import com.devom.app.ui.screens.signup.fragments.UploadDocumentMainContent
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

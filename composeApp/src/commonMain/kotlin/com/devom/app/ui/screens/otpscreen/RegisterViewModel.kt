@@ -9,10 +9,10 @@ import com.devom.utils.network.ResponseResult
 import com.devom.utils.network.onResult
 import com.russhwolf.settings.set
 import kotlinx.coroutines.launch
-import org.company.app.ACCESS_TOKEN_KEY
-import org.company.app.REFRESH_TOKEN_KEY
-import org.company.app.UUID_KEY
-import org.company.app.settings
+import com.devom.app.ACCESS_TOKEN_KEY
+import com.devom.app.REFRESH_TOKEN_KEY
+import com.devom.app.UUID_KEY
+import com.devom.app.settings
 
 class RegisterViewModel : ViewModel() {
 

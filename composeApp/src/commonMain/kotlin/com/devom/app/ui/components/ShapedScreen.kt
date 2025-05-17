@@ -11,8 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.company.app.theme.black_color
-import org.company.app.theme.white_color
+import com.devom.app.theme.black_color
+import com.devom.app.theme.white_color
 @Composable
 fun ShapedScreen(
     headerContent: @Composable () -> Unit,

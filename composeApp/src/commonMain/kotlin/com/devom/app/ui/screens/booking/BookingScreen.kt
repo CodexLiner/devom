@@ -51,11 +51,11 @@ import com.devom.utils.date.toIsoDate
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.ic_google
 import multiplatform_app.composeapp.generated.resources.placeholder
-import org.company.app.theme.green_color
-import org.company.app.theme.grey_color
-import org.company.app.theme.primary_color
-import org.company.app.theme.text_style_h2
-import org.company.app.theme.text_style_lead_text
+import com.devom.app.theme.green_color
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.primary_color
+import com.devom.app.theme.text_style_h2
+import com.devom.app.theme.text_style_lead_text
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)

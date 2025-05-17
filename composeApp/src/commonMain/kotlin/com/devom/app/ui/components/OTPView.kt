@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.company.app.theme.grey_color
-import org.company.app.theme.primary_color
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.primary_color
 
 
 @Composable

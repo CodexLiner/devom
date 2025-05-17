@@ -25,10 +25,10 @@ import com.devom.models.auth.UserResponse
 import multiplatform_app.composeapp.generated.resources.Res
 import multiplatform_app.composeapp.generated.resources.calendar_linear
 import multiplatform_app.composeapp.generated.resources.ic_cyclone
-import org.company.app.theme.grey_color
-import org.company.app.theme.text_style_lead_body_1
-import org.company.app.ui.components.ButtonPrimary
-import org.company.app.ui.components.TextInputField
+import com.devom.app.theme.grey_color
+import com.devom.app.theme.text_style_lead_body_1
+import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.TextInputField
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
