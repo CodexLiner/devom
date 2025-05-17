@@ -23,7 +23,7 @@ fun DashboardScreen() {
     var selectedTab by remember { mutableStateOf(0) }
 
     Scaffold(
-        modifier = Modifier.safeDrawingPadding(),
+        modifier = Modifier,
         bottomBar = {
             BottomNavigationBar(
                 selectedIndex = selectedTab,
@@ -47,14 +47,10 @@ fun DashboardScreen() {
         },
         content = { paddingValues ->
             AppContainer {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                ) {
+                Box(modifier = Modifier.fillMaxSize()) {
                     NavigationHost(
                         navHostController = navController,
-                        startDestination = Screens.Home.path
+                        startDestination = Screens.Profile.path
                     )
                 }
             }

@@ -92,7 +92,7 @@ fun MainScreen(isLoggedIn: Boolean) {
                             )
                         }, label = "Auth/Dashboard Transition"
                     ) { target ->
-                        if (target) DashboardScreen() else AuthNavHost()
+                        if (target) DashboardScreen() else DashboardScreen()
                     }
 
                     ProgressLoader()

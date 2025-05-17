@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devom.app.models.BottomNavItem
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pandijtapp.composeapp.generated.resources.Res
@@ -120,6 +118,7 @@ fun BottomNavItem(
             modifier = Modifier.size(24.dp)
         )
         Text(
+            modifier = Modifier.padding(top = 8.dp),
             text = item.label,
             color = if (item.isSelected) Color(0xFFFF6F00) else Color.Gray,
             fontSize = 12.sp,

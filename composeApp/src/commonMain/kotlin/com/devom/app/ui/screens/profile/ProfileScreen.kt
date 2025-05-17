@@ -20,11 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,17 +45,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.devom.utils.Application
-import pandijtapp.composeapp.generated.resources.Res
-import pandijtapp.composeapp.generated.resources.ic_cyclone
+import coil3.compose.AsyncImage
+import com.devom.app.theme.black_color
 import com.devom.app.theme.primary_color
+import com.devom.app.theme.text_style_h5
+import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.white_color
 import com.devom.app.ui.navigation.Screens
+import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
+import pandijtapp.composeapp.generated.resources.ic_cyclone
+import pandijtapp.composeapp.generated.resources.ic_google
+import pandijtapp.composeapp.generated.resources.ic_logout
+import pandijtapp.composeapp.generated.resources.ic_menu
+import pandijtapp.composeapp.generated.resources.placeholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,14 +94,14 @@ fun ProfileScreen(
             title = { Text("My Profile", color = Color.White) },
             navigationIcon = {
                 IconButton(onClick = { }) {
-                    Icon(Icons.Default.Menu, contentDescription = null, tint = Color.White)
+                    Icon(painterResource(Res.drawable.ic_menu), contentDescription = null, tint = Color.White)
                 }
             },
             actions = {
                 IconButton(onClick = {
                     Application.logout()
                 }) {
-                    Icon(Icons.Default.Lock, contentDescription = null, tint = Color.White)
+                    Icon(painterResource(Res.drawable.ic_logout), contentDescription = null, tint = Color.White)
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE66B1E))
@@ -103,7 +111,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .height(12.dp)
+                .height(16.dp)
                 .clip(RoundedCornerShape(50))
                 .background(Color(0xFFE0E0E0))
         ) {
@@ -116,8 +124,10 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "${progress}% Completed",
-                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White),
+                    text = "${progress}% Completed",
+                    style = text_style_h5,
+                    fontSize = 10.sp,
+                    color = white_color,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -128,14 +138,15 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_cyclone),
+                AsyncImage(
+                    error = painterResource(Res.drawable.placeholder),
+                    placeholder = painterResource(Res.drawable.ic_google),
+                    model = user?.profilePictureUrl,
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, Color.White, CircleShape)
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(115.dp).clip(CircleShape),
                 )
+
                 Box(
                     modifier = Modifier
                         .offset(x = (-4).dp, y = (-4).dp)
@@ -171,7 +182,7 @@ fun ProfileScreen(
                     Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFBDBDBD))
                 }
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("(${rating}/5)", color = Color.Gray)
+                Text(text = "(${rating}/5)", color = black_color , style = text_style_lead_text)
             }
         }
 
@@ -207,7 +218,8 @@ fun ProfileScreen(
         Text(
             "Preferences",
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleSmall,
+            style = text_style_h5,
+            color = black_color,
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
         Card(
@@ -244,7 +256,7 @@ fun ProfileOption(title: String, showDivider: Boolean = true , onClick: () -> Un
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(title)
-        Icon(Icons.Default.ArrowForward, "")
+        Icon(painterResource(Res.drawable.arrow_drop_down_right), "")
     }
     HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
 }
