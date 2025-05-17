@@ -1,8 +1,6 @@
 package com.devom.app.ui.screens.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,7 +60,6 @@ import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
-import pandijtapp.composeapp.generated.resources.ic_cyclone
 import pandijtapp.composeapp.generated.resources.ic_google
 import pandijtapp.composeapp.generated.resources.ic_logout
 import pandijtapp.composeapp.generated.resources.ic_menu
