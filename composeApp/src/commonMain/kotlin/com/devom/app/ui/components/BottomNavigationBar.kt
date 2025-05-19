@@ -2,138 +2,189 @@ package com.devom.app.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.devom.app.models.BottomNavItem
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import pandijtapp.composeapp.generated.resources.Res
-import pandijtapp.composeapp.generated.resources.ic_nav_add
-import pandijtapp.composeapp.generated.resources.ic_nav_bookings
-import pandijtapp.composeapp.generated.resources.ic_nav_home
-import pandijtapp.composeapp.generated.resources.ic_nav_profile
-import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 
-@Preview
+data class BottomNavigationScreen(
+    val path: String,
+    val label: String,
+    val icon: DrawableResource,
+    val isSelected: Boolean,
+)
+
 @Composable
-fun BottomNavigationBar(
-    selectedIndex: Int = 1,
-    onItemSelected: (Int) -> Unit = {}
+fun BottomMenuBar(
+    screens: List<BottomNavigationScreen>,
+    selectedIndex: Int = 0,
+    onNavigateTo: (Int) -> Unit,
 ) {
-    val items = listOf(
-        BottomNavItem("Home", Res.drawable.ic_nav_home, selectedIndex == 0),
-        BottomNavItem("Booking", Res.drawable.ic_nav_bookings, selectedIndex == 1),
-        BottomNavItem("Wallet", Res.drawable.ic_nav_wallet, selectedIndex == 2),
-        BottomNavItem("Profile", Res.drawable.ic_nav_profile, selectedIndex == 3)
-    )
+    val backgroundShape = remember { menuBarShape() }
 
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .navigationBarsPadding()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items.take(2).forEachIndexed { index, item ->
-                BottomNavItem(item, index, onItemSelected)
-            }
-
-            Spacer(modifier = Modifier.width(56.dp))
-
-            items.drop(2).forEachIndexed { index, item ->
-                BottomNavItem(item, index + 2, onItemSelected)
-            }
-        }
-
+    Box {
         Box(
             modifier = Modifier
-                .size(64.dp)
-                .align(Alignment.TopCenter)
-                .offset(y = (-32).dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFA726), Color(0xFFFFC107))
-                    ),
-                    shape = CircleShape
-                )
-                .clickable(interactionSource = null , indication = null) { /* FAB Action */ },
-            contentAlignment = Alignment.Center
+
+                .fillMaxWidth()
+                .height(70.dp)
+                .background(Color.White, backgroundShape)
+                .align(Alignment.BottomCenter)
+        )
+
+        Column(
+            modifier = Modifier .padding(vertical = 16.dp).align(Alignment.TopCenter)
         ) {
-            Image(
-                painter = painterResource(Res.drawable.ic_nav_add),
-                contentDescription = "Add",
-                modifier = Modifier.size(32.dp)
-            )
+            FloatingActionButton(
+                shape = RoundedCornerShape(50),
+                containerColor = Color.White,
+                contentColor = Color.Gray,
+                onClick = {
+                    onNavigateTo(2) // properly navigate to FAB tab
+                },
+                modifier = Modifier.clip(RoundedCornerShape(50))
+            ) {
+                Row(
+                    modifier = Modifier.size(64.dp)
+                ) {
+                    BottomBarItem(
+                        screens = screens,
+                        screen = screens[2],
+                        showLabel = false,
+                        selectedIndex = selectedIndex,
+                        onNavigateTo = onNavigateTo
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+
+        Row(
+            modifier = Modifier
+                .height(56.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            BottomBarItem(screens, screens[0], selectedIndex, onNavigateTo)
+            BottomBarItem(screens, screens[1], selectedIndex, onNavigateTo)
+
+            Spacer(modifier = Modifier.width(72.dp))
+
+            BottomBarItem(screens, screens[3], selectedIndex, onNavigateTo)
+            BottomBarItem(screens, screens[4], selectedIndex, onNavigateTo)
         }
     }
 }
 
 
 @Composable
-fun BottomNavItem(
-    item: BottomNavItem,
-    index: Int,
-    onClick: (Int) -> Unit
+fun RowScope.BottomBarItem(
+    screens: List<BottomNavigationScreen>,
+    screen: BottomNavigationScreen,
+    selectedIndex: Int,
+    onNavigateTo: (Int) -> Unit,
+    showLabel: Boolean = true
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .clickable(interactionSource = null, indication = null, onClick = {
-                onClick(index)
-            })
-            .padding(horizontal = 8.dp)
-    ) {
-        Image(
-            colorFilter = ColorFilter.tint(if (item.isSelected) Color(0xFFFF6F00) else Color.Gray),
-            contentDescription = item.label,
-            painter = painterResource(item.icon),
-            modifier = Modifier.size(24.dp)
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = item.label,
-            color = if (item.isSelected) Color(0xFFFF6F00) else Color.Gray,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium
-        )
-        if (item.isSelected) {
-            Box(
-                modifier = Modifier
-                    .height(2.dp)
-                    .width(24.dp)
-                    .background(Color(0xFFFF6F00), shape = RoundedCornerShape(1.dp))
-                    .padding(top = 2.dp)
+    val selected = screen == screens[selectedIndex]
+
+    Box(
+        Modifier
+            .selectable(
+                selected = selected,
+                onClick = { onNavigateTo(screens.indexOf(screen)) },
+                role = Role.Tab,
+                interactionSource = null,
+                indication = null
             )
-        }
+            .fillMaxHeight()
+            .weight(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        BadgedBox(
+            badge = {},
+            content = {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Image(
+                        painter = painterResource(screen.icon),
+                        contentDescription = screen.label,
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(
+                            if (selected) Color(0xFFFF6F00) else Color.Gray
+                        )
+                    )
+                    if (showLabel) {
+                        Text(
+                            text = screen.label,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = if (selected) Color(0xFFFF6F00) else Color.Gray,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                }
+            }
+        )
     }
+}
+
+private fun menuBarShape() = GenericShape { size, _ ->
+    reset()
+
+    moveTo(0f, 0f)
+
+    val width = 150f
+    val height = 90f
+
+    val point1 = 75f
+    val point2 = 85f
+
+    lineTo(size.width / 2 - width, 0f)
+
+    cubicTo(
+        size.width / 2 - point1, 0f,
+        size.width / 2 - point2, height,
+        size.width / 2, height
+    )
+
+    cubicTo(
+        size.width / 2 + point2, height,
+        size.width / 2 + point1, 0f,
+        size.width / 2 + width, 0f
+    )
+
+    lineTo(size.width / 2 + width, 0f)
+
+    lineTo(size.width, 0f)
+    lineTo(size.width, size.height)
+    lineTo(0f, size.height)
+
+    close()
 }

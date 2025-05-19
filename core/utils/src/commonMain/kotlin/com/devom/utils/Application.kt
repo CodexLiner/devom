@@ -9,7 +9,7 @@ object Application {
     private var _toastState = MutableStateFlow<String?>(null)
     val toastState = _toastState
 
-    private val _loginState = MutableStateFlow(false)
+    private val _loginState = MutableStateFlow(true)
     val loginState = _loginState
 
 

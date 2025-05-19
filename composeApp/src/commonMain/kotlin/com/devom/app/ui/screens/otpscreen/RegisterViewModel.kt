@@ -13,6 +13,7 @@ import com.devom.app.ACCESS_TOKEN_KEY
 import com.devom.app.REFRESH_TOKEN_KEY
 import com.devom.app.UUID_KEY
 import com.devom.app.settings
+import com.devom.utils.Application.showToast
 
 class RegisterViewModel : ViewModel() {
 
@@ -29,6 +30,16 @@ class RegisterViewModel : ViewModel() {
                     settings[REFRESH_TOKEN_KEY] = result.data.refreshToken
                     settings[UUID_KEY] = result.data.uuid
                     Application.isLoggedIn(true)
+                }
+            }
+        }
+    }
+
+    fun resendOtp(mobileNumber: String) {
+        viewModelScope.launch {
+            Project.user.generateOtpUseCase.invoke(mobileNumber).collect { result ->
+                result.onResult {
+                    showToast("otp sent successfully ${it.data.otp}")
                 }
             }
         }

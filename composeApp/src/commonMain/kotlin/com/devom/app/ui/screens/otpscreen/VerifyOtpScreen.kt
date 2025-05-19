@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.otpscreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.BackButton
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.OtpView
+import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -96,7 +98,9 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
                     }
                 }
 
-                Text(spannedText, color = greyColor, style = text_style_lead_body_1)
+                Text(modifier = Modifier.clickable {
+                    viewModel.resendOtp(mobileNumber = mobileNumber.orEmpty())
+                }, text = spannedText, color = greyColor, style = text_style_lead_body_1)
             }
 
         }

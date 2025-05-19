@@ -31,6 +31,7 @@ fun TextInputField(
         focusedContainerColor = backgroundColor,
         unfocusedContainerColor = backgroundColor,
         focusedTextColor = inputColor,
+        unfocusedTextColor = inputColor,
         disabledContainerColor = backgroundColor,
         errorContainerColor = backgroundColor,
         focusedIndicatorColor = Color.Transparent,
