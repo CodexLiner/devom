@@ -58,8 +58,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    val viewModel: LoginViewModel = viewModel { LoginViewModel() }
+fun LoginScreen(navController: NavController , viewModel: LoginViewModel = viewModel { LoginViewModel() }) {
     ShapedScreen(headerContent = {
         LoginHeaderContent()
     }, mainContent = {

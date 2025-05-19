@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import com.devom.network.NetworkClient
@@ -41,7 +41,7 @@ internal fun App() = AppTheme {
     var refreshToken by remember { mutableStateOf(settings.get<String>(ACCESS_TOKEN_KEY)) }
     var uuid by remember { mutableStateOf(settings.get<String>(UUID_KEY)) }
 
-    val isLoggedIn by loginState.collectAsState()
+    val isLoggedIn by loginState.collectAsStateWithLifecycle()
     var initialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(isLoggedIn){
@@ -81,7 +81,7 @@ internal fun App() = AppTheme {
 @Composable
 fun MainScreen(isLoggedIn: Boolean) {
     val navController = rememberNavController()
-    LoadingCompositionProvider(state = loaderState.collectAsState().value) {
+    LoadingCompositionProvider(state = loaderState.collectAsStateWithLifecycle().value) {
         AppContainer {
             Scaffold(snackbarHost = { ShowSnackBar() }, content = {
                 Box(modifier = Modifier.fillMaxSize()) {

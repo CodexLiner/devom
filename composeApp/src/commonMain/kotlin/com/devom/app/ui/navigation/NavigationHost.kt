@@ -45,7 +45,7 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
             DashboardScreen(navController)
         }
         composable(Screens.EditProfile.path) {
-            EditProfileScreen()
+            EditProfileScreen(navController)
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.white_color
 import org.jetbrains.compose.resources.painterResource
@@ -19,6 +20,7 @@ import pandijtapp.composeapp.generated.resources.ic_menu
 @Composable
 fun AppBar(
     title: String = "",
+    navigationIcon : Painter = painterResource(Res.drawable.ic_menu),
     onNavigationIconClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
@@ -26,11 +28,7 @@ fun AppBar(
         title = { Text(title, color = white_color , style = text_style_h5) },
         navigationIcon = {
             IconButton(onClick = onNavigationIconClick) {
-                Icon(
-                    painterResource(Res.drawable.ic_menu),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+                Icon(navigationIcon, contentDescription = null, tint = Color.White)
             }
         },
         actions = actions,

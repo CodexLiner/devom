@@ -13,6 +13,7 @@ data class UserResponse(
     @SerialName("state") var state: String = "",
     @SerialName("country") var country: String = "",
     @SerialName("date_of_birth") var dateOfBirth: String = "",
+    @SerialName("address") val address: String = "",
     @SerialName("profile_picture_url") val profilePictureUrl: String? = null,
     @SerialName("user_type_id") val userTypeId: Int = 0,
     @SerialName("uuid") val uuid: String = "",

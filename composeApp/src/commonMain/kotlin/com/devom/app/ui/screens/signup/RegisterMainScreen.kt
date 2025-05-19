@@ -35,6 +35,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import co.touchlab.kermit.Logger
 import com.devom.models.auth.CreateUserRequest
@@ -56,15 +57,21 @@ import com.devom.app.ui.screens.signup.fragments.UploadDocumentMainContent
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun RegisterMainScreen(navController: NavHostController) {
+fun RegisterMainScreen(navController: NavHostController , viewModel: SignUpViewModel = SignUpViewModel()) {
+    val createUserStatus by viewModel.signUpState.collectAsStateWithLifecycle()
 
     val currentStep = remember { mutableIntStateOf(0) }
     var createUserRequest by remember {
         mutableStateOf(CreateUserRequest())
     }
-    LaunchedEffect(createUserRequest) {
-        Logger.d("LONG") {
-            "MainScreen launched  $createUserRequest"
+
+    LaunchedEffect(createUserStatus) {
+        if (createUserStatus == true) {
+            navController.navigate(Screens.SignUpSuccess.path) {
+                popUpTo(Screens.Register.path) {
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -107,11 +114,7 @@ fun RegisterMainScreen(navController: NavHostController) {
                             .fillMaxWidth()
                             .height(58.dp),
                         onClick = {
-                            if (currentStep.intValue > 2) {
-                                navController.navigate(Screens.Document.path)
-                            } else {
-                                currentStep.intValue++
-                            }
+                            viewModel.signUp(createUserRequest)
                         },
                         fontStyle = text_style_lead_text
                     )
@@ -150,7 +153,7 @@ fun MainScreenHeader(navController: NavHostController, currentStep: MutableIntSt
         modifier = Modifier.fillMaxWidth()
 
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
                     onClick = { navController.popBackStack() },
@@ -171,7 +174,7 @@ fun MainScreenHeader(navController: NavHostController, currentStep: MutableIntSt
                 )
             }
 
-            Stepper(steps = steps, currentStep = currentStep.value)
+//            Stepper(steps = steps, currentStep = currentStep.value)
         }
     }
 }

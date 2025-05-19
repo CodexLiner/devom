@@ -41,9 +41,8 @@ import com.devom.app.ui.components.OtpView
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun VerifyOtpScreen(navController: NavController, mobileNumber: String?) {
+fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewModel : RegisterViewModel = viewModel { RegisterViewModel() }) {
 
-    val viewModel = viewModel { RegisterViewModel() }
     var otpState: String by remember { mutableStateOf("") }
 
     BackButton(onClick = {
