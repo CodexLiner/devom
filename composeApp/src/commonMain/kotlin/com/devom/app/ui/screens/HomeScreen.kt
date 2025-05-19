@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.AppBar
 
 @Composable
@@ -14,7 +15,7 @@ fun HomeScreen(modifier: Modifier = Modifier, navHostController: NavHostControll
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(backgroundColor)
     ) {
 
         AppBar(

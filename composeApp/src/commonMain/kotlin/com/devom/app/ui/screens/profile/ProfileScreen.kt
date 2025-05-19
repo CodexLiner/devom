@@ -50,6 +50,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
@@ -85,7 +86,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(backgroundColor)
     ) {
 
         AppBar(
