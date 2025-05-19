@@ -15,7 +15,7 @@ class SignUpViewModel : ViewModel() {
 
     fun signUp(user: CreateUserRequest) {
         viewModelScope.launch {
-            Project.user.registerUserUseCase.invoke(user).collect {
+            Project.user.registerUserUseCase.invoke(user.apply { userTypeId = "1" }).collect {
                 it.onResult {
                     _signUpState.value = true
                 }

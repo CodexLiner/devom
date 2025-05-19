@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,7 @@ internal fun App() = AppTheme {
     var refreshToken by remember { mutableStateOf(settings.get<String>(ACCESS_TOKEN_KEY)) }
     var uuid by remember { mutableStateOf(settings.get<String>(UUID_KEY)) }
 
-    val isLoggedIn by loginState.collectAsStateWithLifecycle()
+    val isLoggedIn by loginState.collectAsState()
     var initialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(isLoggedIn){

@@ -24,6 +24,7 @@ class NetworkClientConfig {
         prettyPrint = false
         coerceInputValues = true
         isLenient = true
+        encodeDefaults = true
         ignoreUnknownKeys = true
     }
 

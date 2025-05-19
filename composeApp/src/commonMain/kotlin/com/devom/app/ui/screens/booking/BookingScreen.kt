@@ -24,6 +24,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +37,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
@@ -47,7 +47,10 @@ import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.AppBar
 import com.devom.models.slots.GetBookingsResponse
-import com.devom.utils.date.toIsoDate
+import com.devom.utils.date.DD_MMM_yyyy
+import com.devom.utils.date.asDate
+import com.devom.utils.date.convertToISOFormat
+import com.devom.utils.date.formatTo
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_google
@@ -57,7 +60,7 @@ import pandijtapp.composeapp.generated.resources.placeholder
 @Composable
 fun BookingScreen(navHostController: NavHostController) {
     val viewModel : BookingViewModel = viewModel { BookingViewModel() }
-    val bookings = viewModel.bookings.collectAsStateWithLifecycle()
+    val bookings = viewModel.bookings.collectAsState()
     val tabs = listOf("Pending", "Completed", "Cancelled")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -182,7 +185,7 @@ fun BookingCard(
                         style = text_style_lead_text,
                         color = Color.Gray
                     )
-                    Text(booking.bookingDate.toIsoDate().toString(), style = MaterialTheme.typography.bodySmall)
+                    Text(booking.bookingDate.toString(), style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

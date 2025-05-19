@@ -41,7 +41,6 @@ fun EditProfileScreen(navHostController: NavHostController) {
     val viewModel = viewModel<ProfileViewModel> {
         ProfileViewModel()
     }
-    val scrollState = rememberScrollState()
     val user by viewModel.user.collectAsStateWithLifecycle()
 
     user?.let {
@@ -151,7 +150,7 @@ fun EditProfileFormContent(userResponse: UserResponse) {
                 initialValue = userResponse.country.toString(),
                 placeholder = "Address"
             ) {
-                userResponse.country = it
+                userResponse.address = it
             }
 
             TextInputField(

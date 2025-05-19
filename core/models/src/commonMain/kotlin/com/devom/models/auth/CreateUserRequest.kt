@@ -6,20 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateUserRequest(
     @SerialName("fullname") var fullName: String = "",
-
     @SerialName("email") var email: String = "",
-
     @SerialName("mobile_no") var mobileNo: String = "",
-
     @SerialName("city") var city: String = "",
-
     @SerialName("state") var state: String = "",
-
     @SerialName("country") var country: String = "",
-
     @SerialName("date_of_birth") var dateOfBirth: String = "",
-
-    @SerialName("user_type_id") val userTypeId: Int = 0
+    @SerialName("user_type_id") var userTypeId: String = "1",
+    @SerialName("address") var address: String = "",
 )
 
 @Serializable
@@ -42,6 +36,6 @@ data class CreateUserResponse(
 
     @SerialName("created_at") val createdAt: String = "",
 
-    @SerialName("updated_at") val updatedAt: String = ""
+    @SerialName("updated_at") val updatedAt: String = "",
 )
 

@@ -4,18 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.devom.models.auth.CreateUserRequest
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_phone
 import com.devom.app.ui.components.TextInputField
+import com.devom.utils.date.asDate
+import com.devom.utils.date.convertToISOFormat
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -63,6 +61,12 @@ internal fun GeneralMainContent(createUserRequest: CreateUserRequest , onChange 
                 createUserRequest.country = it
                 onChange(createUserRequest)
             }
+            TextInputField(
+                placeholder = "Address"
+            ) {
+                createUserRequest.address = it
+                onChange(createUserRequest)
+            }
 
             TextInputField(
                 placeholder = "Enter date of birth",
@@ -78,16 +82,16 @@ internal fun GeneralMainContent(createUserRequest: CreateUserRequest , onChange 
                 onChange(createUserRequest)
             }
 
-            Text(
-                text = "Referral Code (optional)",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            TextInputField(
-                placeholder = "Enter Code"
-            )
+//            Text(
+//                text = "Referral Code (optional)",
+//                fontSize = 14.sp,
+//                fontWeight = FontWeight.SemiBold,
+//                modifier = Modifier.padding(top = 8.dp)
+//            )
+//
+//            TextInputField(
+//                placeholder = "Enter Code"
+//            )
         }
     }
 }
