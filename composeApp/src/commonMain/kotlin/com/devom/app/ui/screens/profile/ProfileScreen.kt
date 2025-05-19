@@ -31,8 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,11 +48,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import com.devom.app.theme.black_color
-import com.devom.app.theme.primary_color
+import com.devom.app.theme.blackColor
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_text
-import com.devom.app.theme.white_color
+import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.navigation.Screens
 import com.devom.utils.Application
@@ -63,7 +61,6 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
 import pandijtapp.composeapp.generated.resources.ic_google
 import pandijtapp.composeapp.generated.resources.ic_logout
-import pandijtapp.composeapp.generated.resources.ic_menu
 import pandijtapp.composeapp.generated.resources.placeholder
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,7 +120,7 @@ fun ProfileScreen(
                     text = "${progress}% Completed",
                     style = text_style_h5,
                     fontSize = 10.sp,
-                    color = white_color,
+                    color = whiteColor,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
@@ -179,14 +176,14 @@ fun ProfileScreen(
                     Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFBDBDBD))
                 }
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "(${rating}/5)", color = black_color , style = text_style_lead_text)
+                Text(text = "(${rating}/5)", color = blackColor , style = text_style_lead_text)
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Card(
-            colors = CardDefaults.cardColors().copy(containerColor = white_color),
+            colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -212,11 +209,11 @@ fun ProfileScreen(
             "Preferences",
             fontWeight = FontWeight.Bold,
             style = text_style_h5,
-            color = black_color,
+            color = blackColor,
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
         Card(
-            colors = CardDefaults.cardColors().copy(containerColor = white_color),
+            colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -263,7 +260,7 @@ fun PreferenceItem(title: String, isEnabled: Boolean, onToggle: (Boolean) -> Uni
     ) {
         Text(title)
         Switch(
-            colors = SwitchDefaults.colors().copy(checkedTrackColor = primary_color),
+            colors = SwitchDefaults.colors().copy(checkedTrackColor = primaryColor),
             checked = isEnabled,
             onCheckedChange = onToggle
         )

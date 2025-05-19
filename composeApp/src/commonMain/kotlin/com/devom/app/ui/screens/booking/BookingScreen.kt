@@ -40,9 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import com.devom.app.theme.green_color
-import com.devom.app.theme.grey_color
-import com.devom.app.theme.primary_color
+import com.devom.app.theme.greenColor
+import com.devom.app.theme.greyColor
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.AppBar
@@ -116,7 +116,7 @@ fun BookingScreen(navHostController: NavHostController) {
 @Composable
 fun BookingCard(
     booking: GetBookingsResponse,
-    statusColor: Color = green_color
+    statusColor: Color = greenColor
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -157,11 +157,11 @@ fun BookingCard(
             Text(text = booking.mobileNo, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
             Row(verticalAlignment = Alignment.CenterVertically){
                 Text(modifier = Modifier.weight(1f), text = booking.address.ifEmpty { "N/A" }, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-                Text(modifier = Modifier, text = "₹1101", fontSize = 14.sp, style = text_style_h2, color = primary_color)
+                Text(modifier = Modifier, text = "₹1101", fontSize = 14.sp, style = text_style_h2, color = primaryColor)
 
             }
 
-            HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp) , color = grey_color)
+            HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp) , color = greyColor)
 
             Row {
                 Column(modifier = Modifier.weight(1f)) {

@@ -16,9 +16,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.btn_continue
-import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.orangeShadow
 import com.devom.app.theme.text_style_h5
-import com.devom.app.theme.white_color
+import com.devom.app.theme.whiteColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,10 +26,10 @@ fun ButtonPrimary(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(12.dp),
     colors: ButtonColors = ButtonDefaults.buttonColors().copy(
-        containerColor = orange_shadow,
-        contentColor = white_color
+        containerColor = orangeShadow,
+        contentColor = whiteColor
     ),
-    textColor: Color = white_color,
+    textColor: Color = whiteColor,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     buttonText: String = stringResource(Res.string.btn_continue),

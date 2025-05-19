@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.devom.app.theme.grey_color
-import com.devom.app.theme.primary_color
+import com.devom.app.theme.greyColor
+import com.devom.app.theme.primaryColor
 
 
 @Composable
@@ -45,8 +45,8 @@ fun OtpView(
     otpLength: Int = 4,
     modifier: Modifier = Modifier,
     boxColor: Color = Color.White,
-    borderColor: Color = grey_color,
-    selectedBorderColor: Color = primary_color,
+    borderColor: Color = greyColor,
+    selectedBorderColor: Color = primaryColor,
     cornerRadius: Dp = 24.dp,
     textColor: Color = Color.Black,
     textSize: TextUnit = 24.sp,

@@ -29,9 +29,9 @@ import pandijtapp.composeapp.generated.resources.resend_otp
 import pandijtapp.composeapp.generated.resources.resend_otp_message
 import pandijtapp.composeapp.generated.resources.verify_mobile_number
 import pandijtapp.composeapp.generated.resources.we_have_sent_the_verification_code
-import com.devom.app.theme.black_color
-import com.devom.app.theme.grey_color
-import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.blackColor
+import com.devom.app.theme.greyColor
+import com.devom.app.theme.orangeShadow
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.text_style_lead_text
@@ -59,7 +59,7 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
                 text = stringResource(Res.string.verify_mobile_number),
                 style = text_style_h2,
                 textAlign = TextAlign.Start,
-                color = black_color
+                color = blackColor
             )
 
             Text(
@@ -88,7 +88,7 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
                 contentAlignment = Alignment.TopCenter
             ) {
                 val span =
-                    SpanStyle(color = orange_shadow, textDecoration = TextDecoration.Underline)
+                    SpanStyle(color = orangeShadow, textDecoration = TextDecoration.Underline)
                 val spannedText = buildAnnotatedString {
                     append(stringResource(Res.string.resend_otp_message))
                     withStyle(span) {
@@ -96,7 +96,7 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
                     }
                 }
 
-                Text(spannedText, color = grey_color, style = text_style_lead_body_1)
+                Text(spannedText, color = greyColor, style = text_style_lead_body_1)
             }
 
         }

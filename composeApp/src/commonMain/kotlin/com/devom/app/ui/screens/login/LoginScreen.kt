@@ -43,12 +43,12 @@ import pandijtapp.composeapp.generated.resources.text_login_description
 import pandijtapp.composeapp.generated.resources.text_phone_number
 import pandijtapp.composeapp.generated.resources.text_sign_up
 import com.devom.app.EMPTY
-import com.devom.app.theme.grey_color
-import com.devom.app.theme.orange_shadow
+import com.devom.app.theme.greyColor
+import com.devom.app.theme.orangeShadow
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.text_style_lead_text
-import com.devom.app.theme.white_color
+import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.TextInputField
@@ -141,16 +141,16 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(0.5.dp)
-                    .background(grey_color)
+                    .background(greyColor)
             )
             Box(
                 modifier = Modifier
                     .wrapContentSize()
-                    .background(white_color)
+                    .background(whiteColor)
                     .padding(horizontal = 5.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "OR", color = grey_color, style = text_style_lead_text)
+                Text(text = "OR", color = greyColor, style = text_style_lead_text)
             }
         }
 
@@ -172,7 +172,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp) // ➔ Consistent button height
-                .border(1.dp, color = grey_color.copy(0.2f), shape = RoundedCornerShape(12.dp))
+                .border(1.dp, color = greyColor.copy(0.2f), shape = RoundedCornerShape(12.dp))
         ) {}
 
         // --- Sign Up link ---
@@ -185,14 +185,14 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 },
             contentAlignment = Alignment.Center
         ) {
-            val span = SpanStyle(color = orange_shadow, textDecoration = TextDecoration.Underline)
+            val span = SpanStyle(color = orangeShadow, textDecoration = TextDecoration.Underline)
             val spannedText = buildAnnotatedString {
                 append(stringResource(Res.string.text_dont_have_account))
                 withStyle(span) {
                     append(stringResource(Res.string.text_sign_up))
                 }
             }
-            Text(spannedText, color = grey_color, style = text_style_lead_body_1)
+            Text(spannedText, color = greyColor, style = text_style_lead_body_1)
         }
     }
 }

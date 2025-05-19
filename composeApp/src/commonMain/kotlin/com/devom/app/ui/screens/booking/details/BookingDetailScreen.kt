@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.devom.models.slots.GetBookingsResponse
-import com.devom.app.theme.grey_color
-import com.devom.app.theme.text_black_shade
+import com.devom.app.theme.greyColor
+import com.devom.app.theme.textBlackShade
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.text_style_lead_text
 
@@ -39,9 +39,9 @@ fun SamagriItemRow(item: GetBookingsResponse, onCheckedChange: (Boolean) -> Unit
         Text(
             style = text_style_lead_body_1,
             text = "item.name",
-            color = text_black_shade,
+            color = textBlackShade,
             modifier = Modifier.weight(1f)
         )
-        Text(text = "10", fontSize = 12.sp, color = grey_color, style = text_style_lead_text)
+        Text(text = "10", fontSize = 12.sp, color = greyColor, style = text_style_lead_text)
     }
 }
