@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.devom.app.ui.screens.login.LoginScreen
 import com.devom.app.ui.navigation.Screens.BookingDetails
 import com.devom.app.ui.screens.DashboardScreen
+import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
@@ -46,6 +47,11 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(Screens.EditProfile.path) {
             EditProfileScreen(navController)
+        }
+        composable(Screens.CreateSlot.path) {
+            CreateSlotScreen(
+                navController,
+            )
         }
     }
 }

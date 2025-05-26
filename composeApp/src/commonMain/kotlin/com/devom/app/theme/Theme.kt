@@ -1,6 +1,8 @@
 package com.devom.app.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Typography
@@ -93,6 +95,7 @@ private val DarkColorScheme = darkColorScheme(
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AppTheme(
     content: @Composable () -> Unit
@@ -132,11 +135,13 @@ internal fun AppTheme(
     val systemIsDark = isSystemInDarkTheme()
     val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
     CompositionLocalProvider(
-        LocalThemeIsDark provides isDarkState
+        LocalThemeIsDark provides isDarkState,
+        LocalRippleConfiguration provides null
     ) {
         val isDark by isDarkState
         SystemAppearance(!isDark)
         MaterialTheme(
+            typography = customTypography,
             colorScheme = if (isDark) DarkColorScheme else LightColorScheme,
             content = { Surface(content = content) }
         )
