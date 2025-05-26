@@ -82,14 +82,14 @@ kotlin {
 }
 
 android {
-    namespace = "org.company.app"
+    namespace = "com.devom.pandit"
     compileSdk = 35
 
     defaultConfig {
         minSdk = 21
         targetSdk = 35
 
-        applicationId = "org.company.app.androidApp"
+        applicationId = "com.devom.pandit.app"
         versionCode = 1
         versionName = "1.0.0"
 
