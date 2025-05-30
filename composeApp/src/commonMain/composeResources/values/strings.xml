@@ -12,6 +12,7 @@
     <string name="set_availablity">Set Availability</string>
     <string name="add_time_slot"> Add Time Slot</string>
     <string name="text_sign_up">Sign up</string>
+    <string name="text_select_time_slot">Select a time slots</string>
     <string name="verify_mobile_number">Verify Mobile Number</string>
     <string name="resend_otp_message">Didn’t receive a OTP? </string>
     <string name="resend_otp">Resend OTP</string>

@@ -15,15 +15,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import co.touchlab.kermit.Logger
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.DateItem
+import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.add_time_slot
 import pandijtapp.composeapp.generated.resources.set_availablity
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateSlotScreen(
     navController: NavController,
@@ -39,6 +43,11 @@ fun CreateSlotScreen(
         selectedDate.with(DayOfWeek.MONDAY)
     }
 
+    var sheetState = remember {
+        mutableStateOf(false)
+    }
+
+    val scope = rememberCoroutineScope()
     val dates = remember(startOfWeek) {
         List(7) { index -> startOfWeek.plus(index, DateTimeUnit.DAY) }
     }
@@ -62,7 +71,9 @@ fun CreateSlotScreen(
                     .padding(horizontal = horizontalPadding, vertical = buttonBottomPadding)
                     .height(buttonHeight)
             ) {
-                // TODO: Handle add slot
+                scope.launch {
+                    sheetState.value = true
+                }
             }
         },
         containerColor = backgroundColor
@@ -93,6 +104,9 @@ fun CreateSlotScreen(
                         date = date,
                         isSelected = date == selectedDate,
                         onClick = {
+                            scope.launch {
+
+                            }
                             // TODO: Handle date selection
                         }
                     )
@@ -120,50 +134,17 @@ fun CreateSlotScreen(
                     )
                     .background(Color(0xFFF9FCFF), shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState()) // Enable scrolling if content overflows
             ) {
+
+                TimeSlotBottomSheet(sheetState.value , onDismiss = {
+                    sheetState.value = false
+
+                }) {
+                    Logger.d("SELECTED_SLOTS") { "Selected Slots $it" }
+                }
 
             }
         }
-    }
-}
-
-@Composable
-fun DateItem(
-    date: LocalDate,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    val backgroundColor = remember(isSelected) { if (isSelected) Color(0xFFFF6A00) else Color.White }
-    val borderColor = remember(isSelected) { if (isSelected) Color(0xFFFF6A00) else Color.Transparent }
-    val dayCircleColor = remember(isSelected) { if (isSelected) backgroundColor else Color(0xFFF2F3F7) }
-    val dayTextColor = remember(isSelected) { if (isSelected) Color.White else Color.Gray }
-    val weekDayTextColor = remember(isSelected) { if (isSelected) Color.White else Color.Gray }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .border(1.dp, borderColor, shape = RoundedCornerShape(50))
-            .background(backgroundColor, shape = RoundedCornerShape(50))
-            .padding(13.dp)
-    ) {
-        Box(
-            modifier = Modifier.clip(CircleShape).background(dayCircleColor),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                style = text_style_lead_body_1,
-                modifier = Modifier.padding(2.dp),
-                text = date.dayOfMonth.toString(),
-                color = dayTextColor,
-            )
-        }
-        Text(
-            style = text_style_lead_body_1,
-            text = date.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.uppercase() },
-            color = weekDayTextColor,
-        )
     }
 }
 

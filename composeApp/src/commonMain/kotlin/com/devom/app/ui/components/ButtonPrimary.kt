@@ -34,10 +34,11 @@ fun ButtonPrimary(
     trailingIcon: @Composable (() -> Unit)? = null,
     buttonText: String = stringResource(Res.string.btn_continue),
     fontStyle: TextStyle = text_style_h5,
-    onClick: () -> Unit,
+    enabled: Boolean = true,
+    onClick: () -> Unit = {},
 ) {
 
-    Button(modifier = modifier, colors = colors, shape = shape, onClick = onClick) {
+    Button(enabled = enabled , modifier = modifier, colors = colors, shape = shape, onClick = onClick) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
