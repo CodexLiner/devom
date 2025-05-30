@@ -2,13 +2,16 @@ package com.devom.app.utils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.LocalTime.Companion
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toLocalTime
 import kotlin.time.ExperimentalTime
 
 fun LocalTime.to12HourTime(): String {
@@ -57,6 +60,17 @@ fun LocalDateTime.minusHours(hours: Int): LocalDateTime {
     ).toLocalDateTime(TimeZone.currentSystemDefault())
 }
 
+fun String.to12HourTime(): String {
+    return try {
+        val time = LocalTime.parse(this)
+        val hour = if (time.hour % 12 == 0) 12 else time.hour % 12
+        val minute = time.minute.toString().padStart(2, '0')
+        val amPm = if (time.hour < 12) "AM" else "PM"
+        "$hour:$minute $amPm"
+    } catch (e: Exception) {
+        this
+    }
+}
 fun String.to24HourTime(): String {
     val regex = Regex("""(\d{1,2}):(\d{2})\s*(AM|PM)""", RegexOption.IGNORE_CASE)
     val match = regex.matchEntire(this.trim())
@@ -80,7 +94,12 @@ fun String.to24HourTime(): String {
     return ""
 }
 
-
+fun LocalDate.format(pattern: String): String {
+    return pattern
+        .replace("yyyy", year.toString().padStart(4, '0'))
+        .replace("MM", monthNumber.toString().padStart(2, '0'))
+        .replace("dd", dayOfMonth.toString().padStart(2, '0'))
+}
 
 fun format12HourTime(hour: Int, minute: Int): String {
     val ampm = if (hour >= 12) "PM" else "AM"

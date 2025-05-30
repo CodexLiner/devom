@@ -8,11 +8,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.devom.app.utils.to24HourTime
 import com.devom.models.slots.Slot
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeSlotBottomSheet(
     showSheet: Boolean,
+    initialSelectedDate: LocalDate,
     onDismiss: () -> Unit,
     onSlotSelected: (List<Slot>) -> Unit,
 ) {
@@ -29,7 +31,7 @@ fun TimeSlotBottomSheet(
             },
             sheetState = sheetState
         ) {
-            TimeSlotSelectorScreen {
+            TimeSlotSelectorScreen(initialSelectedDate) {
                 scope.launch {
                     onSlotSelected(it.map { slot ->
                         slot.copy(

@@ -2,38 +2,50 @@ package com.devom.app.ui.screens.addslot
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import co.touchlab.kermit.Logger
 import com.devom.app.theme.backgroundColor
-import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
+import com.devom.app.utils.format
+import com.devom.app.utils.to12HourTime
+import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.add_time_slot
 import pandijtapp.composeapp.generated.resources.set_availablity
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateSlotScreen(
     navController: NavController,
-    selectedDate: LocalDate = Clock.System.now()
+    initialSelectedDate: LocalDate = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()).date,
 ) {
+    val viewModel = viewModel { CreateSlotViewModel() }
+    val user = viewModel.user.collectAsState()
+    val availableSlots = viewModel.slots.collectAsState()
+    var selectedDate by remember { mutableStateOf(initialSelectedDate) }
+
+    LaunchedEffect(user.value) {
+        viewModel.getAvailableSlots()
+    }
+
+
     val horizontalPadding = 16.dp
     val verticalSpacing = 16.dp
     val buttonHeight = 58.dp
@@ -48,12 +60,15 @@ fun CreateSlotScreen(
     }
 
     val scope = rememberCoroutineScope()
-    val dates = remember(startOfWeek) {
-        List(7) { index -> startOfWeek.plus(index, DateTimeUnit.DAY) }
+    val startOfList = initialSelectedDate
+    val dates = remember(startOfList) {
+        List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }
     }
 
     val formattedMonthYear = remember(selectedDate) {
-        "${selectedDate.month.name.lowercase().replaceFirstChar(Char::uppercaseChar)} ${selectedDate.year}"
+        "${
+            selectedDate.month.name.lowercase().replaceFirstChar(Char::uppercaseChar)
+        } ${selectedDate.year}"
     }
 
     Scaffold(
@@ -104,10 +119,7 @@ fun CreateSlotScreen(
                         date = date,
                         isSelected = date == selectedDate,
                         onClick = {
-                            scope.launch {
-
-                            }
-                            // TODO: Handle date selection
+                            selectedDate = date
                         }
                     )
                 }
@@ -135,14 +147,21 @@ fun CreateSlotScreen(
                     .background(Color(0xFFF9FCFF), shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
+                LazyColumn {
+                    items(availableSlots.value.filter { it.availableDate == selectedDate.format(yyyy_MM_DD) }) { slot ->
+                        TimeSlotItem(slot = slot.copy(
+                            startTime = slot.startTime.to12HourTime(),
+                            endTime = slot.endTime.to12HourTime()
+                        ), enabled = false)
+                    }
+                }
 
-                TimeSlotBottomSheet(sheetState.value , onDismiss = {
+                TimeSlotBottomSheet(initialSelectedDate = selectedDate , showSheet = sheetState.value, onDismiss = {
                     sheetState.value = false
 
                 }) {
-                    Logger.d("SELECTED_SLOTS") { "Selected Slots $it" }
+                   viewModel.createPanditSlot(it)
                 }
-
             }
         }
     }

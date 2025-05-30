@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.addslot
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,17 +46,20 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
 import com.devom.app.utils.addHours
+import com.devom.app.utils.format
 import com.devom.app.utils.format12HourTime
 import com.devom.app.utils.parse12HourTime
 import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toTimeParts
 import com.devom.models.slots.Slot
+import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
+import kotlinx.datetime.format
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
@@ -83,7 +87,7 @@ fun TimeSlotSelectorScreen(
 
     val startOfList = initialSelectedDate
     val dates = remember(startOfList) {
-        List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }.filter { it > today }
+        List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }
     }
 
 
@@ -133,8 +137,13 @@ fun TimeSlotSelectorScreen(
                     .height(58.dp),
                 enabled = dateSlotMap.values.any { it.isNotEmpty() }
             ) {
-                val allSlots = dateSlotMap.values.flatten()
+                val allSlots = dateSlotMap.flatMap { (date, slots) ->
+                    slots.map { slot ->
+                        slot.copy(availableDate = date.format(yyyy_MM_DD))
+                    }
+                }
                 onSlotSelected(allSlots)
+
             }
         }
     }
@@ -198,9 +207,10 @@ fun TimeSlotListCard(
 @Composable
 fun TimeSlotItem(
     slot: Slot,
-    onStartTimeSelected: (String) -> Unit,
-    onEndTimeSelected: (String) -> Unit,
-    onRemove: () -> Unit,
+    enabled: Boolean = true,
+    onStartTimeSelected: (String) -> Unit = {},
+    onEndTimeSelected: (String) -> Unit = {},
+    onRemove: () -> Unit ={},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -212,6 +222,7 @@ fun TimeSlotItem(
             modifier = Modifier.weight(1f)
         ) {
             TimePickerDialogButton(
+                enabled = enabled,
                 selectedTime = slot.startTime,
                 onTimeSelected = onStartTimeSelected,
                 minTime = slot.startTime,
@@ -230,19 +241,21 @@ fun TimeSlotItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             TimePickerDialogButton(
+                enabled = enabled,
                 selectedTime = slot.endTime,
                 onTimeSelected = onEndTimeSelected,
                 minTime = slot.startTime,
                 modifier = Modifier.weight(1f)
             )
         }
-
-        IconButton(onClick = onRemove, modifier = Modifier.size(40.dp)) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_close),
-                contentDescription = "Remove slot",
-                tint = Color.Gray
-            )
+        AnimatedVisibility(visible = enabled) {
+            IconButton(onClick = onRemove, modifier = Modifier.size(40.dp)) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_close),
+                    contentDescription = "Remove slot",
+                    tint = Color.Gray
+                )
+            }
         }
     }
 }
@@ -253,6 +266,7 @@ fun TimePickerDialogButton(
     selectedTime: String,
     onTimeSelected: (String) -> Unit,
     minTime: String,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     val (hour, minute) = selectedTime.toTimeParts()
@@ -263,12 +277,13 @@ fun TimePickerDialogButton(
     var showPicker by remember { mutableStateOf(false) }
 
     OutlinedButton(
-        onClick = { showPicker = true },
+        onClick = { if (enabled) showPicker = true },
         shape = RoundedCornerShape(12.dp),
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     ) {
         Text(text = selectedTime)
-        Icon(
+        if (enabled) Icon(
             painter = painterResource(Res.drawable.ic_dual_dropdown),
             contentDescription = "Select time"
         )
