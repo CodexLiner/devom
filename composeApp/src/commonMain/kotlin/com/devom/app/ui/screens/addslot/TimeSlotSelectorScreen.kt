@@ -29,6 +29,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -69,22 +70,29 @@ import pandijtapp.composeapp.generated.resources.text_select_time_slot
 
 @Composable
 fun TimeSlotSelectorScreen(
-    selectedDate: LocalDate = Clock.System.now()
+    initialSelectedDate: LocalDate = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
         .plus(1, DateTimeUnit.DAY),
     onSlotSelected: (List<Slot>) -> Unit,
 ) {
-    var timeSlots by remember { mutableStateOf(mutableListOf<Slot>()) }
-    val startOfWeek = remember(selectedDate) {
-        selectedDate.minus(1, DateTimeUnit.DAY)
+    var selectedDate by remember { mutableStateOf(initialSelectedDate) }
+    val dateSlotMap = remember { mutableStateMapOf<LocalDate, MutableList<Slot>>() }
+
+    val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
+
+    val startOfList = initialSelectedDate
+    val dates = remember(startOfList) {
+        List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }.filter { it > today }
     }
 
-    val dates = remember(startOfWeek) {
-        List(7) { index -> startOfWeek.plus(index, DateTimeUnit.DAY) }
-    }
 
-    Column(modifier = Modifier.fillMaxWidth() , verticalArrangement = Arrangement.spacedBy(32.dp)) {
+    val currentSlots = dateSlotMap[selectedDate] ?: mutableListOf()
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
         LazyRow(
             contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -95,12 +103,11 @@ fun TimeSlotSelectorScreen(
                     modifier = Modifier.width(88.dp).aspectRatio(1f),
                     date = date,
                     isSelected = date == selectedDate,
-                    onClick = {
-                        // TODO: Handle date selection
-                    }
+                    onClick = { selectedDate = date }
                 )
             }
         }
+
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
@@ -112,16 +119,22 @@ fun TimeSlotSelectorScreen(
             )
 
             TimeSlotListCard(
-                timeSlots = timeSlots,
-                onTimeSlotsUpdated = { timeSlots = it }
+                timeSlots = currentSlots,
+                onTimeSlotsUpdated = { updatedList ->
+                    dateSlotMap[selectedDate] = updatedList
+                }
             )
 
             ButtonPrimary(
                 buttonText = "Confirm & Save",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(58.dp),
-                enabled = timeSlots.isNotEmpty()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .height(58.dp),
+                enabled = dateSlotMap.values.any { it.isNotEmpty() }
             ) {
-                onSlotSelected(timeSlots)
+                val allSlots = dateSlotMap.values.flatten()
+                onSlotSelected(allSlots)
             }
         }
     }
