@@ -217,6 +217,11 @@ fun Instant.addSeconds(seconds: Int): Instant {
     return plus(seconds, DateTimeUnit.SECOND, defaultTimeZone)
 }
 
+fun LocalDate.toEpochMilli(): Long {
+    return this.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+}
+
+
 /*
 fun Instant.localToUTC(): Instant {
     return Date(this.time + Calendar.getInstance().getTimeZone().getOffset(Date().time))
