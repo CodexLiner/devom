@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,9 @@ fun TextInputField(
 ) {
     var input by remember { mutableStateOf(initialValue) }
 
+    LaunchedEffect(initialValue) {
+        input = initialValue
+    }
     OutlinedTextField(
         value = input,
         onValueChange = {
