@@ -150,6 +150,13 @@ fun EditProfileFormContent(userResponse: UserResponse) {
                 initialValue = userResponse.country.toString(),
                 placeholder = "Address"
             ) {
+                userResponse.country = it
+            }
+
+            TextInputField(
+                initialValue = userResponse.address.toString(),
+                placeholder = "Address"
+            ) {
                 userResponse.address = it
             }
 

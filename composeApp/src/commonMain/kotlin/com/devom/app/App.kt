@@ -97,7 +97,7 @@ fun MainScreen(isLoggedIn: Boolean) {
                     ) { target ->
                         NavigationHost(
                             navController = navController,
-                            startDestination = if (target) Screens.CreateSlot.path else Screens.CreateSlot.path
+                            startDestination = if (target) Screens.Dashboard.path else Screens.Login.path
                         )
                     }
 
