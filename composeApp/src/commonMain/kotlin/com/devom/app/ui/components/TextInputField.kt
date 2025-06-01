@@ -64,7 +64,7 @@ fun TextInputField(
                 modifier = Modifier.background(Color.Transparent)
             )
         },
-        enabled = false,
+        enabled = enabled,
         singleLine = true,
         shape = RoundedCornerShape(cornerRadius),
         leadingIcon = leadingIcon,
