@@ -32,9 +32,9 @@ class CreateSlotViewModel : ViewModel() {
         }
     }
 
-    fun getAvailableSlots() {
+    fun getAvailableSlots(userId: Int) {
         viewModelScope.launch {
-            Project.pandit.getAvailableSlotsUseCase.invoke(user.value?.userId.toString()).collect {
+            Project.pandit.getAvailableSlotsUseCase.invoke(userId.toString()).collect {
                 it.onResult {
                     _slots.value = it.data.map {
                         Slot(
@@ -56,7 +56,7 @@ class CreateSlotViewModel : ViewModel() {
         viewModelScope.launch {
             Project.pandit.createPanditSlotUseCase.invoke(
                 CreatePanditSlotInput(
-                    panditId = user.value?.userId ?: return@launch,
+                    panditId = user.value?.userId ?: -1,
                     slots = slots
                 )
             ).collect {

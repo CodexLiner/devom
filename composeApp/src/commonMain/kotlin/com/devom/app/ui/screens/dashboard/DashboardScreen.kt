@@ -14,10 +14,11 @@ import androidx.navigation.NavHostController
 import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.BottomMenuBar
 import com.devom.app.ui.components.BottomNavigationScreen
+import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.HomeScreen
-import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
+import io.ktor.util.logging.Logger
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_nav_add
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
@@ -46,16 +47,24 @@ fun DashboardScreen(appNavHostController: NavHostController) {
             when (tab) {
                 0 -> HomeScreen(navHostController = appNavHostController)
                 1 -> BookingScreen(navHostController = appNavHostController)
-                2 -> CreateSlotScreen(navController = appNavHostController)
                 4 -> ProfileScreen(navHostController = appNavHostController)
                 else -> HomeScreen(navHostController = appNavHostController)
             }
         }
-        Box(modifier = Modifier.systemBarsPadding().fillMaxSize() , contentAlignment = Alignment.BottomCenter) {
+        Box(
+            modifier = Modifier.systemBarsPadding().fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
             BottomMenuBar(
                 screens = screens,
                 selectedIndex = selectedTab,
-                onNavigateTo = { viewModel.onTabSelected(it) },
+                onNavigateTo = {
+                    if (it == 2) {
+                        appNavHostController.navigate(Screens.CreateSlot.path)
+                        return@BottomMenuBar
+                    }
+                    viewModel.onTabSelected(it)
+                },
             )
         }
     }

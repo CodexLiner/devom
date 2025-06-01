@@ -21,6 +21,7 @@ import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
 import com.devom.app.utils.format
 import com.devom.app.utils.to12HourTime
+import com.devom.utils.date.formatIsoTo
 import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
@@ -42,7 +43,7 @@ fun CreateSlotScreen(
     var selectedDate by remember { mutableStateOf(initialSelectedDate) }
 
     LaunchedEffect(user.value) {
-        viewModel.getAvailableSlots()
+        user.value?.userId?.let { viewModel.getAvailableSlots(it) }
     }
 
 
@@ -148,7 +149,7 @@ fun CreateSlotScreen(
                     .padding(16.dp)
             ) {
                 LazyColumn {
-                    items(availableSlots.value.filter { it.availableDate == selectedDate.format(yyyy_MM_DD) }) { slot ->
+                    items(availableSlots.value.filter { it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD) }) { slot ->
                         TimeSlotItem(slot = slot.copy(
                             startTime = slot.startTime.to12HourTime(),
                             endTime = slot.endTime.to12HourTime()
