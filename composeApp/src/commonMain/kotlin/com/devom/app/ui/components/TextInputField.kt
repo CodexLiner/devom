@@ -27,9 +27,12 @@ fun TextInputField(
     placeholderColor: Color = com.devom.app.theme.inputColor,
     inputColor: Color = textBlackShade,
     cornerRadius: Dp = 12.dp,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
     colors: TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = backgroundColor,
         unfocusedContainerColor = backgroundColor,
+        disabledTextColor = inputColor,
         focusedTextColor = inputColor,
         unfocusedTextColor = inputColor,
         disabledContainerColor = backgroundColor,
@@ -52,6 +55,7 @@ fun TextInputField(
             input = it
             onValueChange(it)
         },
+        readOnly = readOnly,
         label = {
             Text(
                 text = placeholder,
@@ -60,6 +64,7 @@ fun TextInputField(
                 modifier = Modifier.background(Color.Transparent)
             )
         },
+        enabled = false,
         singleLine = true,
         shape = RoundedCornerShape(cornerRadius),
         leadingIcon = leadingIcon,
