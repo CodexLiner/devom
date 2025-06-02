@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.notification
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,10 +30,13 @@ import coil3.compose.AsyncImage
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.textBlackShade
+import com.devom.app.theme.text_style_h3
+import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.ui.components.AppBar
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.img_bell
 
 @Composable
 fun NotificationScreen(navHostController: NavHostController) {
@@ -50,19 +54,23 @@ fun NotificationScreen(navHostController: NavHostController) {
 
 @Composable
 private fun NotificationContent() {
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxSize()) {
         items(100) {
-            NotificationItem()
+//            NotificationItem()
+        }
+        item {
+            NoNotifications()
         }
     }
 }
+
 @Composable
 fun NotificationItem(
     imageUrl: String = "https://picsum.photos/200",
     title: String = "Profile Update",
     message: String = "You have a new booking for 'Ganesh Pooja' on 28th Mar 2025 at 10:00.",
     timestamp: String = "2 days ago",
-    showDivider: Boolean = true
+    showDivider: Boolean = true,
 ) {
     Column(
         modifier = Modifier
@@ -88,7 +96,7 @@ private fun NotificationContent(
     imageUrl: String,
     title: String,
     message: String,
-    timestamp: String
+    timestamp: String,
 ) {
     Row(
         modifier = Modifier.heightIn(max = 200.dp),
@@ -116,7 +124,7 @@ private fun NotificationImage(imageUrl: String) {
 private fun NotificationTextContent(
     title: String,
     message: String,
-    timestamp: String
+    timestamp: String,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
@@ -140,4 +148,32 @@ private fun NotificationTextContent(
             fontWeight = FontWeight.W600
         )
     }
+}
+
+@Composable
+private fun NoNotifications() {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(Res.drawable.img_bell),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 32.dp),
+            text = "No Notifications",
+            style = text_style_h3
+        )
+        Text(
+            modifier = Modifier.padding(top = 16.dp),
+            text = "You haven't received any notifications yet.",
+            color = greyColor,
+            style = text_style_lead_body_1
+        )
+    }
+
 }
