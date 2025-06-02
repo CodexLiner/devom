@@ -1,6 +1,5 @@
 package com.devom.app.ui.screens.notification
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,13 +29,11 @@ import coil3.compose.AsyncImage
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.textBlackShade
-import com.devom.app.theme.text_style_h3
-import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.NoContentView
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
-import pandijtapp.composeapp.generated.resources.img_bell
 
 @Composable
 fun NotificationScreen(navHostController: NavHostController) {
@@ -44,11 +41,9 @@ fun NotificationScreen(navHostController: NavHostController) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Notifications",
-            onNavigationIconClick = { navHostController.popBackStack() })
-
+            onNavigationIconClick = { navHostController.popBackStack() }
+        )
         NotificationContent()
-
-
     }
 }
 
@@ -59,7 +54,7 @@ private fun NotificationContent() {
 //            NotificationItem()
         }
         item {
-            NoNotifications()
+            NoContentView()
         }
     }
 }
@@ -73,16 +68,11 @@ fun NotificationItem(
     showDivider: Boolean = true,
 ) {
     Column(
-        modifier = Modifier
-            .padding(vertical = 16.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         NotificationContent(
-            imageUrl = imageUrl,
-            title = title,
-            message = message,
-            timestamp = timestamp
+            imageUrl = imageUrl, title = title, message = message, timestamp = timestamp
         )
 
         if (showDivider) {
@@ -113,10 +103,8 @@ private fun NotificationImage(imageUrl: String) {
     AsyncImage(
         model = imageUrl,
         contentDescription = null,
-        modifier = Modifier
-            .size(44.dp)
-            .background(color = primaryColor, shape = RoundedCornerShape(16.dp))
-            .padding(10.dp)
+        modifier = Modifier.size(44.dp)
+            .background(color = primaryColor, shape = RoundedCornerShape(16.dp)).padding(10.dp)
     )
 }
 
@@ -136,44 +124,11 @@ private fun NotificationTextContent(
                 withStyle(SpanStyle(fontWeight = FontWeight.W500, fontSize = 14.sp)) {
                     append(message)
                 }
-            },
-            color = textBlackShade,
-            lineHeight = 18.sp
+            }, color = textBlackShade, lineHeight = 18.sp
         )
 
         Text(
-            text = timestamp,
-            color = greyColor,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W600
+            text = timestamp, color = greyColor, fontSize = 12.sp, fontWeight = FontWeight.W600
         )
     }
-}
-
-@Composable
-private fun NoNotifications() {
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(Res.drawable.img_bell),
-            contentDescription = null,
-            modifier = Modifier.size(100.dp)
-        )
-
-        Text(
-            modifier = Modifier.padding(top = 32.dp),
-            text = "No Notifications",
-            style = text_style_h3
-        )
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = "You haven't received any notifications yet.",
-            color = greyColor,
-            style = text_style_lead_body_1
-        )
-    }
-
 }

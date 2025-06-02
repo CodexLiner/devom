@@ -12,6 +12,7 @@ import com.devom.app.ui.navigation.Screens.Notifications
 import com.devom.app.ui.screens.dashboard.DashboardScreen
 import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
+import com.devom.app.ui.screens.document.UploadDocumentScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
@@ -57,6 +58,9 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(Notifications.path) {
             NotificationScreen(navController)
+        }
+        composable(Screens.UploadDocument.path) {
+            UploadDocumentScreen(navController)
         }
     }
 }
