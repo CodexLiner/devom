@@ -6,7 +6,7 @@ import com.devom.Project
 import com.devom.app.models.SupportedFiles
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
-import com.devom.utils.network.withSuccess
+import com.devom.utils.network.onResult
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.extension
 import io.github.vinceglb.filekit.name
@@ -34,7 +34,7 @@ class UploadDocumentViewModel : ViewModel() {
 
                 )
             ).collect {
-                it.withSuccess {
+                it.onResult {
 
                 }
             }
@@ -44,7 +44,7 @@ class UploadDocumentViewModel : ViewModel() {
     fun getDocuments() {
         viewModelScope.launch {
             Project.document.getDocumentsUseCase.invoke(userId = "29").collect {
-                it.withSuccess {
+                it.onResult {
                     _documents.value = it.data
                 }
             }
