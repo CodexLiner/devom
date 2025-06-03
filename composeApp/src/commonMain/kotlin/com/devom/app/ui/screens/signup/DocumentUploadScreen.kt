@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.components.DocumentPicker
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.Stepper
 import com.devom.app.ui.navigation.Screens
-import com.devom.app.ui.screens.signup.fragments.UploadSection
 
 
 @Composable
@@ -52,9 +52,9 @@ fun DocumentUploadScreen(navHostController: NavHostController) {
                         .padding(bottom = 120.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    UploadSection(title = "Aadhaar Card")
-                    UploadSection(title = "PAN Card")
-                    UploadSection(title = "Certificates")
+                    DocumentPicker(title = "Aadhaar Card")
+                    DocumentPicker(title = "PAN Card")
+                    DocumentPicker(title = "Certificates")
                 }
 
                 // Bottom Submit Button

@@ -1,6 +1,7 @@
 package com.devom
 
 import com.devom.category.Category
+import com.devom.document.Document
 import com.devom.models.pooja.GetPoojaItemResponse
 import com.devom.pandit.Pandit
 import com.devom.pooja.Pooja
@@ -32,6 +33,11 @@ object Project {
      * contains all the use cases for poojaItem related operations
      */
     val poojaItem by lazy { PoojaItem() }
+
+    /**
+     * pandit documents
+     */
+    val document by lazy { Document() }
 
 
 }

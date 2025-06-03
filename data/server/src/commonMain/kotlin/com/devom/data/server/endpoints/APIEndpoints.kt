@@ -36,3 +36,10 @@ sealed class CategoryEndpoints(val path: String) {
     object UpdateCategory : AuthEndpoints("/category")
     object CreateCategory : AuthEndpoints("/category")
 }
+
+sealed class DocumentEndpoints(path: String) {
+    object GetDocuments : AuthEndpoints("/document")
+    object UpdateDocument : AuthEndpoints("/document/verify")
+    object RemoveDocument : AuthEndpoints("/document")
+    object CreateDocument : AuthEndpoints("/document/upload")
+}
