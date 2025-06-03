@@ -25,18 +25,18 @@ interface DocumentRemoteDataSource {
 }
 
 class DocumentRemoteDataSourceImpl() : DocumentRemoteDataSource {
-    val ktorClient = NetworkClient.ktorClient
+    private val ktorClient = NetworkClient.ktorClient
     override suspend fun getDocuments(userId: String): Flow<ResponseResult<List<GetDocumentResponse>>> =
-        ktorClient.get(DocumentEndpoints.GetDocuments.path.plus("/$userId")).toResponseResult()
+        ktorClient.get(DocumentEndpoints.GetDocuments.plus("/$userId")).toResponseResult()
 
 
     override suspend fun removeDocument(documentId: String): Flow<ResponseResult<String>> =
-        ktorClient.delete(DocumentEndpoints.RemoveDocument.path.plus("/$documentId"))
+        ktorClient.delete(DocumentEndpoints.RemoveDocument.plus("/$documentId"))
             .toResponseResult()
 
 
     override suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<String>> =
-        ktorClient.post(DocumentEndpoints.CreateDocument.path) {
+        ktorClient.post(DocumentEndpoints.CreateDocument) {
             setBody(
                 MultiPartFormDataContent(
                     formData {
@@ -59,7 +59,7 @@ class DocumentRemoteDataSourceImpl() : DocumentRemoteDataSource {
         id: String,
         input: UpdateDocumentInput,
     ): Flow<ResponseResult<String>> =
-        ktorClient.post(DocumentEndpoints.UpdateDocument.path.plus("/$id")) { setBody(input) }
+        ktorClient.post(DocumentEndpoints.UpdateDocument.plus("/$id")) { setBody(input) }
             .toResponseResult()
 
 }

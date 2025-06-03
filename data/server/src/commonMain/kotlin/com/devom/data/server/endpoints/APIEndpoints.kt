@@ -1,45 +1,49 @@
 package com.devom.data.server.endpoints
-
-sealed class AuthEndpoints(val path: String) {
-    object SignUp : AuthEndpoints("/users/signup")
-    object LoginWithOtp : AuthEndpoints("/users/dologin")
-    object UpdateUserProfile : AuthEndpoints("/users")
-    object GenerateOtp : AuthEndpoints("/users/generate_otp")
-    object GetUser : AuthEndpoints("/app_users")
-    object GetUserProfile : AuthEndpoints("/users")
+object AuthEndpoints {
+    const val SignUp = "/users/signup"
+    const val LoginWithOtp = "/users/dologin"
+    const val UpdateUserProfile = "/users"
+    const val GenerateOtp = "/users/generate_otp"
+    const val GetUser = "/app_users"
+    const val GetUserProfile = "/users"
 }
 
-sealed class PoojaEndPoints(val path: String) {
-    object GetPooja : AuthEndpoints("/pooja")
-    object UpdatePooja : AuthEndpoints("/pooja")
-    object CreatePoojaItemMapping : AuthEndpoints("/pooja/assign_items")
-    object CreatePooja : AuthEndpoints("/pooja")
-    object RemovePooja : AuthEndpoints("/pooja")
+object PoojaEndpoints {
+    const val GetPooja = "/pooja"
+    const val UpdatePooja = "/pooja"
+    const val CreatePoojaItemMapping = "/pooja/assign_items"
+    const val CreatePooja = "/pooja"
+    const val RemovePooja = "/pooja"
 }
 
-sealed class PoojaItemEndPoints(val path: String) {
-    object GetPoojaItems : AuthEndpoints("/poojaitem")
-    object CreatePoojaItem : AuthEndpoints("/poojaitem")
-    object RemovePoojaItem : AuthEndpoints("/poojaitem")
-    object UpdatePoojaItem : AuthEndpoints("/poojaitem")
+object PoojaItemEndpoints {
+    const val GetPoojaItems = "/poojaitem"
+    const val CreatePoojaItem = "/poojaitem"
+    const val RemovePoojaItem = "/poojaitem"
+    const val UpdatePoojaItem = "/poojaitem"
 }
 
-sealed class PanditSlotsEndpoints(val path: String) {
-    object GetAvailableSlots : AuthEndpoints("/pandit/slots")
-    object CreatePanditSlot : AuthEndpoints("/pandit/slots")
-    object BookPanditSlot : AuthEndpoints("/pandit/book-slot")
-    object GetBookings : AuthEndpoints("/pandit/booking")
+object PanditSlotsEndpoints {
+    const val GetAvailableSlots = "/pandit/slots"
+    const val CreatePanditSlot = "/pandit/slots"
+    const val BookPanditSlot = "/pandit/book-slot"
+    const val GetBookings = "/pandit/booking"
 }
 
-sealed class CategoryEndpoints(val path: String) {
-    object GetCategories : AuthEndpoints("/category")
-    object UpdateCategory : AuthEndpoints("/category")
-    object CreateCategory : AuthEndpoints("/category")
+object CategoryEndpoints {
+    const val GetCategories = "/category"
+    const val UpdateCategory = "/category"
+    const val CreateCategory = "/category"
 }
 
-sealed class DocumentEndpoints(path: String) {
-    object GetDocuments : AuthEndpoints("/document")
-    object UpdateDocument : AuthEndpoints("/document/verify")
-    object RemoveDocument : AuthEndpoints("/document")
-    object CreateDocument : AuthEndpoints("/document/upload")
+object DocumentEndpoints {
+    const val GetDocuments = "/document"
+    const val UpdateDocument = "/document/verify"
+    const val RemoveDocument = "/document"
+    const val CreateDocument = "/document/upload"
+}
+
+object ReviewsEndpoints {
+    const val GetReviews = "pandit_profile/review"
+    const val CreateReview = "pandit_profile/review"
 }
