@@ -20,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.components.RatingStars
 import com.devom.models.pandit.GetReviewsResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_no_reviews
 import pandijtapp.composeapp.generated.resources.placeholder
 import pandijtapp.composeapp.generated.resources.vertical_ellipsis
 
@@ -52,6 +54,14 @@ fun ReviewsAndRatingsContent(viewModel: ReviewsAndRatingsViewModel) {
 
 @Composable
 fun ReviewListContent(list: State<List<GetReviewsResponse>>) {
+    if (list.value.isEmpty()) {
+        NoContentView(
+            image = Res.drawable.ic_no_reviews,
+            title = "No Reviews yet",
+            message = "No reviews yet for this booking. Be the first to share your experience!"
+        )
+        return
+    }
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         items(list.value.size) { index ->
             ReviewItem(review = list.value[index])

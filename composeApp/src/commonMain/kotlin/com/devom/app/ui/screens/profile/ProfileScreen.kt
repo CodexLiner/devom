@@ -201,8 +201,8 @@ fun ProfileScreen(
                 ProfileOption("Documents") {
                     navHostController.navigate(Screens.UploadDocument.path)
                 }
-                ProfileOption("Review & Ratings"){
-
+                ProfileOption("Review & Ratings") {
+                    navHostController.navigate(Screens.ReviewsAndRatings.path)
                 }
             }
         }

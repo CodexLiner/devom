@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.text_style_h3
@@ -38,7 +39,7 @@ fun NoContentView(
         )
 
         Text(
-            modifier = Modifier.padding(top = 32.dp),
+            modifier = Modifier.padding(top = 16.dp),
             text = title,
             style = text_style_h3
         )
@@ -46,6 +47,7 @@ fun NoContentView(
             modifier = Modifier.padding(top = 16.dp),
             text = message,
             color = greyColor,
+            textAlign = TextAlign.Center,
             style = text_style_lead_body_1
         )
     }
