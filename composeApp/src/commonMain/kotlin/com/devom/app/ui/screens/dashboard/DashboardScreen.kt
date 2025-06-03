@@ -18,7 +18,6 @@ import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.HomeScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
-import io.ktor.util.logging.Logger
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_nav_add
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
