@@ -51,7 +51,7 @@ const val HH = "HH"
 val defaultTimeZone = TimeZone.currentSystemDefault()
 
 val Long.asDate: Instant
-    get() = Instant.fromEpochSeconds(this)
+    get() = Instant.fromEpochMilliseconds(this)
 
 
 fun Instant.formatTo(requiredFormat: String, timeZone: TimeZone = defaultTimeZone): String? {
@@ -215,6 +215,14 @@ fun Instant.addMinutes(minutes: Int): Instant {
 
 fun Instant.addSeconds(seconds: Int): Instant {
     return plus(seconds, DateTimeUnit.SECOND, defaultTimeZone)
+}
+
+fun LocalDate.toEpochMilli(): Long {
+    return this.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+}
+
+fun LocalDate.toIsoDateTimeString(): String {
+    return this.atTime(LocalTime(0, 0)).toInstant(TimeZone.UTC).toString()
 }
 
 /*

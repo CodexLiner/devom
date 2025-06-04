@@ -55,6 +55,11 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
 
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
+
 
             implementation(project(":devom"))
         }
@@ -72,6 +77,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.client.android)
+            implementation(libs.androidx.appcompat)
         }
 
         iosMain.dependencies {

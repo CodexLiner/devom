@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,9 +28,12 @@ fun TextInputField(
     placeholderColor: Color = com.devom.app.theme.inputColor,
     inputColor: Color = textBlackShade,
     cornerRadius: Dp = 12.dp,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
     colors: TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = backgroundColor,
         unfocusedContainerColor = backgroundColor,
+        disabledTextColor = inputColor,
         focusedTextColor = inputColor,
         unfocusedTextColor = inputColor,
         disabledContainerColor = backgroundColor,
@@ -46,12 +50,16 @@ fun TextInputField(
 ) {
     var input by remember { mutableStateOf(initialValue) }
 
+    LaunchedEffect(initialValue) {
+        input = initialValue
+    }
     OutlinedTextField(
         value = input,
         onValueChange = {
             input = it
             onValueChange(it)
         },
+        readOnly = readOnly,
         label = {
             Text(
                 text = placeholder,
@@ -60,6 +68,7 @@ fun TextInputField(
                 modifier = Modifier.background(Color.Transparent)
             )
         },
+        enabled = enabled,
         singleLine = true,
         shape = RoundedCornerShape(cornerRadius),
         leadingIcon = leadingIcon,

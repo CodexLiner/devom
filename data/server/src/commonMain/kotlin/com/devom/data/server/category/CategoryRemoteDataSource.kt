@@ -25,17 +25,17 @@ class CategoryRemoteDataSourceImpl() : CategoryRemoteDataSource {
     private val ktorClient = NetworkClient.ktorClient
 
     override suspend fun getCategories(): Flow<ResponseResult<List<GetCategoryResponse>>> =
-        ktorClient.get(CategoryEndpoints.GetCategories.path).toResponseResult()
+        ktorClient.get(CategoryEndpoints.GetCategories).toResponseResult()
 
     override suspend fun removeCategory(categoryId: String): Flow<ResponseResult<String>> =
-        ktorClient.delete(CategoryEndpoints.GetCategories.path.plus("/$categoryId"))
+        ktorClient.delete(CategoryEndpoints.GetCategories.plus("/$categoryId"))
             .toResponseResult()
 
     override suspend fun createCategory(
         input: CreateCategoryInput,
-    ): Flow<ResponseResult<String>> = ktorClient.post(CategoryEndpoints.CreateCategory.path) { setBody(input) }.toResponseResult()
+    ): Flow<ResponseResult<String>> = ktorClient.post(CategoryEndpoints.CreateCategory) { setBody(input) }.toResponseResult()
 
     override suspend fun updateCategory(id: String, input: UpdateCategoryInput): Flow<ResponseResult<String>> =
-        ktorClient.put(CategoryEndpoints.UpdateCategory.path.plus("/$id")) { setBody(input) }.toResponseResult()
+        ktorClient.put(CategoryEndpoints.UpdateCategory.plus("/$id")) { setBody(input) }.toResponseResult()
 
 }

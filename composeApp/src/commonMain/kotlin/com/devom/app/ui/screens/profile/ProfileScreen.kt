@@ -198,9 +198,11 @@ fun ProfileScreen(
                     navHostController.navigate(Screens.EditProfile.path)
                 }
                 ProfileOption("Biography")
-                ProfileOption("Documents")
-                ProfileOption("Review & Ratings"){
-
+                ProfileOption("Documents") {
+                    navHostController.navigate(Screens.UploadDocument.path)
+                }
+                ProfileOption("Review & Ratings") {
+                    navHostController.navigate(Screens.ReviewsAndRatings.path)
                 }
             }
         }

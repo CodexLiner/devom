@@ -23,15 +23,15 @@ interface PanditSlotsRemoteDataSource {
 class PanditSlotsRemoteDataSourceImpl() : PanditSlotsRemoteDataSource {
     private val ktorClient = NetworkClient.ktorClient
     override suspend fun getAvailableSlots(panditId: String): Flow<ResponseResult<List<GetAvailableSlotsResponse>>> =
-        ktorClient.get(PanditSlotsEndpoints.GetAvailableSlots.path.plus("/$panditId"))
+        ktorClient.get(PanditSlotsEndpoints.GetAvailableSlots.plus("/$panditId"))
             .toResponseResult()
 
     override suspend fun createPanditSlot(createPanditSlotInput: CreatePanditSlotInput): Flow<ResponseResult<String>> =
-        ktorClient.post(PanditSlotsEndpoints.CreatePanditSlot.path) { setBody(createPanditSlotInput) }.toResponseResult()
+        ktorClient.post(PanditSlotsEndpoints.CreatePanditSlot) { setBody(createPanditSlotInput) }.toResponseResult()
 
     override suspend fun bookPanditSlot(bookPanditSlotRequest: BookPanditSlotInput): Flow<ResponseResult<String>> =
-        ktorClient.post(PanditSlotsEndpoints.BookPanditSlot.path) { setBody(bookPanditSlotRequest) }.toResponseResult()
+        ktorClient.post(PanditSlotsEndpoints.BookPanditSlot) { setBody(bookPanditSlotRequest) }.toResponseResult()
 
     override suspend fun getBookings(): Flow<ResponseResult<List<GetBookingsResponse>>> =
-        ktorClient.get(PanditSlotsEndpoints.GetBookings.path).toResponseResult()
+        ktorClient.get(PanditSlotsEndpoints.GetBookings).toResponseResult()
 }

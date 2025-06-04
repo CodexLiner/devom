@@ -1,6 +1,6 @@
 package com.devom.data.server.poojaItems
 
-import com.devom.data.server.endpoints.PoojaItemEndPoints
+import com.devom.data.server.endpoints.PoojaItemEndpoints
 import com.devom.models.poojaitems.CreatePoojaItemInput
 import com.devom.models.poojaitems.GetPoojaItemsResponse
 import com.devom.network.NetworkClient
@@ -25,14 +25,14 @@ class PoojaItemRemoteDataSourceImpl : PoojaItemRemoteDataSource {
     private val ktorClient = NetworkClient.ktorClient
 
     override suspend fun getPoojaItems(): Flow<ResponseResult<List<GetPoojaItemsResponse>>>  =
-        ktorClient.get(PoojaItemEndPoints.GetPoojaItems.path).toResponseResult()
+        ktorClient.get(PoojaItemEndpoints.GetPoojaItems).toResponseResult()
 
     override suspend fun createPoojaItem(input: CreatePoojaItemInput): Flow<ResponseResult<String>> =
-        ktorClient.post(PoojaItemEndPoints.CreatePoojaItem.path){ setBody(input) }.toResponseResult()
+        ktorClient.post(PoojaItemEndpoints.CreatePoojaItem){ setBody(input) }.toResponseResult()
 
     override suspend fun removePoojaItem(input: Map<String, String>): Flow<ResponseResult<String>> =
-        ktorClient.delete(PoojaItemEndPoints.RemovePoojaItem.path){ setParams(input) }.toResponseResult()
+        ktorClient.delete(PoojaItemEndpoints.RemovePoojaItem){ setParams(input) }.toResponseResult()
 
     override suspend fun updatePoojaItem(poojaItemId: String, input: CreatePoojaItemInput, ): Flow<ResponseResult<String>> =
-        ktorClient.put(PoojaItemEndPoints.UpdatePoojaItem.path.plus("/$poojaItemId")) { setBody(input) }.toResponseResult()
+        ktorClient.put(PoojaItemEndpoints.UpdatePoojaItem.plus("/$poojaItemId")) { setBody(input) }.toResponseResult()
 }

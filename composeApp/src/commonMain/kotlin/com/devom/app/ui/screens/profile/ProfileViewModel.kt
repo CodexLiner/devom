@@ -3,6 +3,7 @@ package com.devom.app.ui.screens.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
+import com.devom.models.auth.CreateUserResponse
 import com.devom.models.auth.UserResponse
 import com.devom.utils.network.onResult
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,5 +35,11 @@ class ProfileViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun setUserResponse(userResponse: UserResponse) {
+       viewModelScope.launch {
+           _user.emit(userResponse.copy())
+       }
     }
 }
