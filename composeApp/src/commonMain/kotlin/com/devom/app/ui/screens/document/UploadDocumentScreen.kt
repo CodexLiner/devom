@@ -1,7 +1,6 @@
 package com.devom.app.ui.screens.document
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.app.models.SupportedFiles
 import com.devom.app.theme.greenColor
-import com.devom.app.theme.greyColor
 import com.devom.app.theme.inputColor
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.warningColor
@@ -37,7 +35,6 @@ import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.DocumentPicker
 import com.devom.models.document.GetDocumentResponse
-import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
@@ -58,7 +55,7 @@ fun UploadDocumentScreen(navController: NavController) {
 }
 
 @Composable
-fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
+private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
     val documents = viewModel.documents.collectAsState()
 
     LaunchedEffect(Unit) {
