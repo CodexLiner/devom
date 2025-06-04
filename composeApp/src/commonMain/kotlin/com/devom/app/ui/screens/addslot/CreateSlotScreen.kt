@@ -43,37 +43,46 @@ fun CreateSlotScreen(
 ) {
     val viewModel = viewModel { CreateSlotViewModel() }
     val user = viewModel.user.collectAsState()
+
     LaunchedEffect(user.value) {
         user.value?.userId?.let { viewModel.getAvailableSlots(it) }
     }
 
-
-    var sheetState = remember {
-        mutableStateOf(false)
-    }
-
+    val sheetState = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                navigationIcon = painterResource(Res.drawable.ic_arrow_left),
-                title = stringResource(Res.string.set_availablity),
-                onNavigationIconClick = { navController.popBackStack() })
-        }, bottomBar = {
-            ButtonPrimary(
-                buttonText = stringResource(Res.string.add_time_slot),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp)
-            ) {
-                scope.launch {
-                    sheetState.value = true
-                }
-            }
-        }, containerColor = backgroundColor
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
     ) {
-        CreateSlotScreenContent(innerPadding = it, initialSelectedDate, viewModel, sheetState)
+
+        AppBar(
+            navigationIcon = painterResource(Res.drawable.ic_arrow_left),
+            title = stringResource(Res.string.set_availablity),
+            onNavigationIconClick = { navController.popBackStack() }
+        )
+
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            CreateSlotScreenContent(
+                innerPadding = PaddingValues(0.dp),
+                initialSelectedDate = initialSelectedDate,
+                viewModel = viewModel,
+                sheetState = sheetState
+            )
+        }
+
+        ButtonPrimary(
+            buttonText = stringResource(Res.string.add_time_slot),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp)
+        ) {
+            scope.launch {
+                sheetState.value = true
+            }
+        }
     }
 }
+
 
 @Composable
 fun CreateSlotScreenContent(
