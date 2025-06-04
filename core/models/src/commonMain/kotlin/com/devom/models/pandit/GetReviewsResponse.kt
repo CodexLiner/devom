@@ -5,6 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetReviewsResponse(
+    @SerialName("average_rating")
+    val averageRating: String = "",
+    val reviews: List<Review> = mutableListOf<Review>()
+)
+
+@Serializable
+data class Review(
     @SerialName("review_id") val reviewId: String,
 
     @SerialName("booking_id") val bookingId: String,

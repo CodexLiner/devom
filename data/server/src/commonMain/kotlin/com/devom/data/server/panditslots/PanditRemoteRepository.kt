@@ -12,13 +12,13 @@ import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
 
 interface PanditRemoteRepository {
-    suspend fun getPanditReviews(panditId: String): Flow<ResponseResult<List<GetReviewsResponse>>>
+    suspend fun getPanditReviews(panditId: String): Flow<ResponseResult<GetReviewsResponse>>
     suspend fun createPanditReview(input: CreateReviewInput): Flow<ResponseResult<String>>
 }
 
 class PanditRemoteRepositoryImpl : PanditRemoteRepository {
     private val ktorClient = NetworkClient.ktorClient
-    override suspend fun getPanditReviews(panditId: String): Flow<ResponseResult<List<GetReviewsResponse>>> =
+    override suspend fun getPanditReviews(panditId: String): Flow<ResponseResult<GetReviewsResponse>> =
         ktorClient.get(ReviewsEndpoints.GetReviews.plus("/$panditId")).toResponseResult()
 
     override suspend fun createPanditReview(input: CreateReviewInput): Flow<ResponseResult<String>> =

@@ -13,7 +13,7 @@ import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
 
 interface PanditRepository {
-    suspend fun getPanditReviews(panditId: String , cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork): Flow<ResponseResult<List<GetReviewsResponse>>>
+    suspend fun getPanditReviews(panditId: String , cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork): Flow<ResponseResult<GetReviewsResponse>>
     suspend fun createPanditReview(input: CreateReviewInput): Flow<ResponseResult<String>>
 }
 
@@ -24,7 +24,7 @@ class PanditRepositoryImpl : PanditRepository {
     override suspend fun getPanditReviews(
         panditId: String,
         cachePolicy: CachePolicy,
-    ): Flow<ResponseResult<List<GetReviewsResponse>>>  = cacheAwareFlow(
+    ): Flow<ResponseResult<GetReviewsResponse>>  = cacheAwareFlow(
         cachePolicy = cachePolicy,
         fetchCache = { panditLocalDataSource.getPanditReviews(panditId) },
         fetchNetwork = { panditRemoteRepository.getPanditReviews(panditId) },

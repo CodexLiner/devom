@@ -11,9 +11,9 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_star
 
 @Composable
-fun RatingStars(modifier: Modifier, rating: Int = 0, tint: Color = Color(0xFF4CAF50)) {
+fun RatingStars(modifier: Modifier = Modifier, rating: Float = 0f, tint: Color = Color(0xFF4CAF50)) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        repeat(rating) {
+        repeat(rating.toInt()) {
             Icon(
                 painter = painterResource(Res.drawable.ic_star),
                 contentDescription = null,
