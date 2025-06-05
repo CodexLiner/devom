@@ -1,4 +1,4 @@
-package com.devom.app.ui.screens.booking
+package com.devom.app.ui.screens.booking.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

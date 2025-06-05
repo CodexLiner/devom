@@ -20,6 +20,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.app.models.STATUS
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
@@ -39,8 +42,9 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
-import com.devom.app.ui.screens.booking.BookingCard
+import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.app.ui.screens.booking.BookingViewModel
+import com.devom.app.ui.screens.booking.components.StartEndPoojaSheet
 import com.devom.app.utils.toColor
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
@@ -51,6 +55,7 @@ import pandijtapp.composeapp.generated.resources.ic_check
 @Composable
 fun BookingDetailScreen(navController: NavController, booking: GetBookingsResponse) {
     val viewModel: BookingViewModel = viewModel { BookingViewModel() }
+    val showSheet = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize().background(backgroundColor)
     ) {
@@ -60,9 +65,24 @@ fun BookingDetailScreen(navController: NavController, booking: GetBookingsRespon
             onNavigationIconClick = { navController.popBackStack() }
         )
         BookingDetailScreenContent(navController, booking , viewModel)
-        ButtonPrimary(
-            modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
+        if (booking.status != STATUS.COMPLETED.status) ButtonPrimary(
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
             buttonText = "Start Pooja"
+        ) {
+            showSheet.value = true
+        }
+
+        StartEndPoojaSheet(
+            showSheet = showSheet.value,
+            title = "Verification for Pooja End",
+            message = "We have sent the verification code to mobile number 40******20.",
+            buttonText = "Submit",
+            onDismiss = {
+
+            },
+            onResendOtp = {},
+            onOtpEntered = {}
         )
     }
 }
