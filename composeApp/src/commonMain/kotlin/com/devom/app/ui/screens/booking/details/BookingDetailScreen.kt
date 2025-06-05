@@ -109,8 +109,7 @@ fun ColumnScope.BookingDetailScreenContent(
 @Composable
 fun SamagriItemRow(modifier: Modifier = Modifier, item: GetBookingsResponse, onCheckedChange: (Boolean) -> Unit) {
     Row(
-        modifier = modifier.fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
