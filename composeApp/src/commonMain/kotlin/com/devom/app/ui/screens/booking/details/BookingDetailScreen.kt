@@ -1,6 +1,8 @@
 package com.devom.app.ui.screens.booking.details
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,21 +12,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.greyColor
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.textBlackShade
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_body_1
@@ -39,6 +46,7 @@ import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_check
 
 @Composable
 fun BookingDetailScreen(navController: NavController, booking: GetBookingsResponse) {
@@ -109,20 +117,42 @@ fun ColumnScope.BookingDetailScreenContent(
 @Composable
 fun SamagriItemRow(modifier: Modifier = Modifier, item: GetBookingsResponse, onCheckedChange: (Boolean) -> Unit) {
     Row(
-        modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = modifier.fillMaxWidth().padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
-            checked = true,
-            onCheckedChange = onCheckedChange
-        )
+        SamagriCheckbox()
         Text(
             style = text_style_lead_body_1,
             text = "item.name",
+            fontWeight = FontWeight.W500,
             color = textBlackShade,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.padding(start = 12.dp).weight(1f)
         )
         Text(text = "10", fontSize = 12.sp, color = greyColor, style = text_style_lead_text)
     }
 }
+
+@Composable
+fun SamagriCheckbox(
+    modifier: Modifier = Modifier,
+    borderColor: Color = primaryColor,
+    checkmarkColor: Color = primaryColor,
+    size: Dp = 20.dp,
+    cornerRadius: Dp = 4.dp
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(cornerRadius)),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.ic_check),
+            contentDescription = null,
+            tint = checkmarkColor,
+            modifier = Modifier.size(size * 0.6f)
+        )
+    }
+}
+
 
