@@ -5,11 +5,13 @@ import com.devom.models.slots.BookPanditSlotInput
 import com.devom.models.slots.CreatePanditSlotInput
 import com.devom.models.slots.GetAvailableSlotsResponse
 import com.devom.models.slots.GetBookingsResponse
+import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.network.NetworkClient
 import com.devom.network.utils.toResponseResult
 import com.devom.utils.network.ResponseResult
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
 
@@ -18,6 +20,7 @@ interface PanditSlotsRemoteDataSource {
     suspend fun createPanditSlot(createPanditSlotInput: CreatePanditSlotInput): Flow<ResponseResult<String>>
     suspend fun bookPanditSlot(bookPanditSlotRequest: BookPanditSlotInput): Flow<ResponseResult<String>>
     suspend fun getBookings(): Flow<ResponseResult<List<GetBookingsResponse>>>
+    suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>>
 }
 
 class PanditSlotsRemoteDataSourceImpl() : PanditSlotsRemoteDataSource {
@@ -34,4 +37,8 @@ class PanditSlotsRemoteDataSourceImpl() : PanditSlotsRemoteDataSource {
 
     override suspend fun getBookings(): Flow<ResponseResult<List<GetBookingsResponse>>> =
         ktorClient.get(PanditSlotsEndpoints.GetBookings).toResponseResult()
+
+    override suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>> =
+        ktorClient.put(PanditSlotsEndpoints.UpdateBookingStatus) { setBody(input) }.toResponseResult()
+
 }

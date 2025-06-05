@@ -57,7 +57,7 @@ internal fun App() = AppTheme {
         }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isLoggedIn) {
         val loggedIn = accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true
         isLoggedIn(loggedIn)
         NetworkClient.configure {

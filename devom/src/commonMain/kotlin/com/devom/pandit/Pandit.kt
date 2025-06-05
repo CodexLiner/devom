@@ -10,4 +10,6 @@ class Pandit {
     val getPanditBookingsUseCase by lazy { com.devom.domain.panditslots.GetPanditBookingsUseCase() }
     val getPanditReviewsUseCase by lazy { GetPanditReviewsUseCase() }
     val createPanditReviewUseCase by lazy { com.devom.domain.pandit.CreatePanditReviewUseCase() }
+    val updateBookingStatusUseCase by lazy { com.devom.domain.panditslots.UpdateBookingStatusUseCase() }
+
 }

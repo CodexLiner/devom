@@ -7,15 +7,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,118 +52,120 @@ fun EditProfileScreen(navHostController: NavHostController) {
         ProfileViewModel()
     }
     val user by viewModel.user.collectAsStateWithLifecycle()
-
-    user?.let {
-
-        Column(
-            modifier = Modifier.fillMaxSize().background(Color.White)
-
-        ) {
-            AppBar(
-                navigationIcon = painterResource(Res.drawable.ic_arrow_left),
-                title = "Edit Profile",
-                onNavigationIconClick = { navHostController.popBackStack() }
-            )
-            Column(modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    AsyncImage(
-                        model = it.profilePictureUrl,
-                        placeholder = painterResource(Res.drawable.placeholder),
-                        error = painterResource(Res.drawable.placeholder),
-                        contentDescription = null,
-                        modifier = Modifier.size(100.dp).clip(CircleShape)
-                            .border(2.dp, Color.White, CircleShape)
-                    )
-                    EditProfileFormContent(it, viewModel)
-                }
-                Column(
-                    modifier = Modifier.fillMaxWidth().background(Color.White)
-                        .padding(top = 24.dp, bottom = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ButtonPrimary(
-                        modifier = Modifier.fillMaxWidth().height(58.dp),
-                        buttonText = "Update",
-                        onClick = {
-                            user?.let {
-                                viewModel.updateUserProfile(it)
-                            }
-                        },
-                        fontStyle = text_style_lead_text
-                    )
-                }
-            }
+    Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        AppBar(
+            navigationIcon = painterResource(Res.drawable.ic_arrow_left),
+            title = "Documents",
+            onNavigationIconClick = { navHostController.popBackStack() }
+        )
+        user?.let {
+            EditProfileScreenContent(viewModel, it)
         }
     }
 }
 
 @Composable
-fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewModel) {
-    val datePickerState = remember {
-        mutableStateOf(false)
+fun ColumnScope.EditProfileScreenContent(viewModel: ProfileViewModel, user: UserResponse) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = Modifier.weight(1f)
+    ) {
+        EditProfileFormContent(user, viewModel)
     }
+    ButtonPrimary(
+        modifier = Modifier.navigationBarsPadding().fillMaxWidth().height(58.dp),
+        buttonText = "Update",
+        onClick = { viewModel.updateUserProfile(user) },
+        fontStyle = text_style_lead_text
+    )
+}
 
-    Column {
-        Column(
-            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextInputField(
-                initialValue = userResponse.fullName, placeholder = "Enter name"
-            ) {
-                userResponse.fullName = it
-
-            }
-            TextInputField(
-                initialValue = userResponse.email, placeholder = "Enter email"
-            ) {
-                userResponse.email = it
-
-            }
-            TextInputField(
-                initialValue = userResponse.mobileNo, placeholder = "Enter phone"
-            ) {
-                userResponse.mobileNo = it
-
-            }
-            TextInputField(
-                initialValue = userResponse.city.toString(), placeholder = "Enter City"
-            ) {
-                userResponse.city = it
-
-            }
-
-            TextInputField(
-                initialValue = userResponse.state.toString(), placeholder = "Enter State"
-            ) {
-                userResponse.state = it
-
-            }
-            TextInputField(
-                initialValue = userResponse.country.toString(), placeholder = "Enter Country"
-            ) {
-                userResponse.country = it
-
-            }
-
-            TextInputField(
-                initialValue = userResponse.country.toString(), placeholder = "Address"
-            ) {
-                userResponse.country = it
-            }
-
-            TextInputField(
-                initialValue = userResponse.address.toString(), placeholder = "Address"
-            ) {
-                userResponse.address = it
-            }
-
+@Composable
+fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewModel) {
+    val datePickerState = remember { mutableStateOf(false) }
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(start = 16.dp , end = 16.dp , top = 16.dp , bottom = 200.dp)
+    ) {
+        item {
             Box(
-                modifier = Modifier.fillMaxWidth().clickable { datePickerState.value = true }) {
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = userResponse.profilePictureUrl,
+                    placeholder = painterResource(Res.drawable.placeholder),
+                    error = painterResource(Res.drawable.placeholder),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp).clip(CircleShape).border(2.dp, Color.White, CircleShape)
+                )
+            }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.fullName,
+                placeholder = "Enter name"
+            ) { userResponse.fullName = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.email,
+                placeholder = "Enter email"
+            ) { userResponse.email = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.mobileNo,
+                placeholder = "Enter phone"
+            ) { userResponse.mobileNo = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.city.toString(),
+                placeholder = "Enter City"
+            ) { userResponse.city = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.state.toString(),
+                placeholder = "Enter State"
+            ) { userResponse.state = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.country.toString(),
+                placeholder = "Enter Country"
+            ) { userResponse.country = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.country.toString(),
+                placeholder = "Address"
+            ) { userResponse.country = it }
+        }
+
+        item {
+            TextInputField(
+                initialValue = userResponse.address.toString(),
+                placeholder = "Address"
+            ) { userResponse.address = it }
+        }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { datePickerState.value = true }
+            ) {
                 TextInputField(
                     readOnly = true,
                     enabled = false,
@@ -174,20 +178,30 @@ fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewMod
                             contentDescription = "Calendar",
                             modifier = Modifier.size(24.dp)
                         )
-                    })
+                    }
+                )
             }
-
         }
     }
 
+    showDatePicker(datePickerState, viewModel, userResponse)
+}
+
+
+@Composable
+fun showDatePicker(
+    state: MutableState<Boolean>,
+    viewModel: ProfileViewModel,
+    userResponse: UserResponse,
+) {
     DatePickerDialog(
-        onDismiss = { datePickerState.value = false },
+        onDismiss = { state.value = false },
         onDateSelected = {
-            datePickerState.value = false
+            state.value = false
             userResponse.dateOfBirth = it.toIsoDateTimeString()
             viewModel.setUserResponse(userResponse.copy())
         },
-        showPicker = datePickerState.value,
+        showPicker = state.value,
         selectedDate = userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date,
     )
 }

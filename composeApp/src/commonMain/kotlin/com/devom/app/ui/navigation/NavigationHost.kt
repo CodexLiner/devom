@@ -21,6 +21,8 @@ import com.devom.app.ui.screens.reviews.ReviewsAndRatingsScreen
 import com.devom.app.ui.screens.signup.DocumentUploadScreen
 import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
+import com.devom.models.slots.GetBookingsResponse
+import com.devom.network.NetworkClient
 
 @Composable
 fun NavigationHost(startDestination: String = Screens.Login.path, navController: NavHostController) {
@@ -44,8 +46,14 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         composable(Screens.Document.path) {
             DocumentUploadScreen(navController)
         }
-        composable(BookingDetails.path) {
-            BookingDetailScreen(navController)
+        composable(
+            route = BookingDetails.path.plus("/{booking}"),
+            arguments = listOf(navArgument("booking") { type = NavType.StringType })
+        ) {
+            BookingDetailScreen(
+                navController = navController,
+                booking = NetworkClient.config.jsonConfig.decodeFromString<GetBookingsResponse>(it.arguments?.getString("booking").toString())
+            )
         }
         composable(Screens.Dashboard.path) {
             DashboardScreen(navController)
