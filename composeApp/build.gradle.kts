@@ -55,6 +55,11 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
 
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
+            implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.coil)
+
 
             implementation(project(":devom"))
         }
@@ -72,6 +77,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.client.android)
+            implementation(libs.androidx.appcompat)
         }
 
         iosMain.dependencies {
@@ -82,14 +88,14 @@ kotlin {
 }
 
 android {
-    namespace = "org.company.app"
+    namespace = "com.devom.pandit"
     compileSdk = 35
 
     defaultConfig {
         minSdk = 21
         targetSdk = 35
 
-        applicationId = "org.company.app.androidApp"
+        applicationId = "com.devom.pandit.app"
         versionCode = 1
         versionName = "1.0.0"
 

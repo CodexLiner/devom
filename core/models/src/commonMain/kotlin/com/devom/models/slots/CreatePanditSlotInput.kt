@@ -12,6 +12,6 @@ data class CreatePanditSlotInput(
 @Serializable
 data class Slot(
     @SerialName("available_date") val availableDate: String = "",
-    @SerialName("start_time") val startTime: String = "",
-    @SerialName("end_time") val endTime: String = ""
+    @SerialName("start_time") var startTime: String = "",
+    @SerialName("end_time") var endTime: String = ""
 )
