@@ -9,6 +9,7 @@ import com.devom.models.slots.BookPanditSlotInput
 import com.devom.models.slots.CreatePanditSlotInput
 import com.devom.models.slots.GetAvailableSlotsResponse
 import com.devom.models.slots.GetBookingsResponse
+import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.utils.flow.apiFlow
 import com.devom.utils.flow.cacheAwareFlow
 import com.devom.utils.network.ResponseResult
@@ -19,6 +20,7 @@ interface PanditSlotsRemoteRepository {
     suspend fun createPanditSlot(createPanditSlotInput: CreatePanditSlotInput): Flow<ResponseResult<String>>
     suspend fun bookPanditSlot(bookPanditSlotRequest: BookPanditSlotInput): Flow<ResponseResult<String>>
     suspend fun getBookings(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork): Flow<ResponseResult<List<GetBookingsResponse>>>
+    suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>>
 }
 
 class PanditSlotsRemoteRepositoryImpl : PanditSlotsRemoteRepository {
@@ -47,6 +49,10 @@ class PanditSlotsRemoteRepositoryImpl : PanditSlotsRemoteRepository {
         }, saveCache = {
             panditSlotsLocalDataSource.saveBookings(it)
         })
+
+    override suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>> = apiFlow {
+        panditSlotsRemoteDataSource.updateBookingStatus(input)
+    }
 
     override suspend fun createPanditSlot(createPanditSlotInput: CreatePanditSlotInput): Flow<ResponseResult<String>> =
         apiFlow {

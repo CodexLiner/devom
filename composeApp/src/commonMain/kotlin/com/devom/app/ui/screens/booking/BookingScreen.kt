@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.booking
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,14 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,17 +43,22 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import com.devom.app.models.STATUS
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.greenColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
+import com.devom.app.theme.secondaryColor
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.models.slots.GetBookingsResponse
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_check
+import pandijtapp.composeapp.generated.resources.ic_close
 import pandijtapp.composeapp.generated.resources.ic_google
 import pandijtapp.composeapp.generated.resources.placeholder
 
@@ -80,7 +85,7 @@ fun BookingScreen(navHostController: NavHostController) {
             modifier = Modifier.fillMaxSize()
         ) {
             items(bookings.value) { booking ->
-                BookingCard(booking) {
+                BookingCard(booking , viewModel = viewModel) {
 
                 }
             }
@@ -121,8 +126,8 @@ fun BookingStatusTab(selectedTabIndex: MutableState<Int>, tabs: List<String>) {
 @Composable
 fun BookingCard(
     booking: GetBookingsResponse,
-    statusColor: Color = greenColor,
-    onClick : () -> Unit = {}
+    viewModel: BookingViewModel,
+    onClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -138,7 +143,7 @@ fun BookingCard(
             modifier = Modifier.size(112.dp, 139.dp).clip(RoundedCornerShape(12.dp)),
         )
         Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
-            BookingUserDetail(booking, statusColor = statusColor)
+            BookingUserDetail(booking, viewModel)
             BookingUserContactDetail(booking = booking)
             HorizontalDivider(
                 thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp), color = greyColor
@@ -150,7 +155,7 @@ fun BookingCard(
 
 
 @Composable
-fun BookingUserDetail(booking: GetBookingsResponse, statusColor: Color) {
+fun BookingUserDetail(booking: GetBookingsResponse ,viewModel: BookingViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -161,13 +166,11 @@ fun BookingUserDetail(booking: GetBookingsResponse, statusColor: Color) {
             modifier = Modifier.weight(1f)
         )
 
-        Box(
-            modifier = Modifier.background(Color(0x1AFFC107), shape = RoundedCornerShape(50))
-                .padding(horizontal = 8.dp, vertical = 2.dp)
-        ) {
+        if (booking.status == STATUS.PENDING.status) BookingConfirmationButton(booking , viewModel)
+        else Box(modifier = Modifier.background(Color(0x1AFFC107), shape = RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 2.dp)) {
             Text(
                 booking.status,
-                color = statusColor,
+                color = greenColor,
                 fontWeight = FontWeight.W500,
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
@@ -175,6 +178,48 @@ fun BookingUserDetail(booking: GetBookingsResponse, statusColor: Color) {
         }
     }
 }
+
+@Composable
+fun RowScope.BookingConfirmationButton(booking: GetBookingsResponse, viewModel: BookingViewModel) {
+    ConfirmationIcon(
+        iconRes = Res.drawable.ic_check,
+        tintColor = greenColor,
+        backgroundColor = greenColor.copy(alpha = 0.08f)
+    ) {
+        viewModel.updateBookingStatus(booking.bookingId, STATUS.CONFIRMED)
+    }
+    ConfirmationIcon(
+        iconRes = Res.drawable.ic_close,
+        tintColor = secondaryColor,
+        backgroundColor = secondaryColor.copy(alpha = 0.08f)
+    ) {
+        viewModel.updateBookingStatus(booking.bookingId, STATUS.REJECTED)
+    }
+}
+
+@Composable
+private fun RowScope.ConfirmationIcon(
+    iconRes: DrawableResource,
+    tintColor: Color,
+    backgroundColor: Color,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier
+            .padding(start = 6.dp).clickable(onClick = onClick)
+            .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+            .padding(6.dp)
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(tintColor),
+            modifier = Modifier.size(14.dp)
+        )
+    }
+}
+
+
 
 @Composable
 fun BookingUserContactDetail(booking: GetBookingsResponse) {
