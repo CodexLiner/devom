@@ -23,32 +23,38 @@ import pandijtapp.composeapp.generated.resources.img_bell
 @Composable
 fun NoContentView(
     modifier: Modifier = Modifier,
-    title: String = "No Notifications",
-    message: String = "You haven't received any notifications yet.",
-    image: DrawableResource = Res.drawable.img_bell
+    title: String? = "No Notifications",
+    message: String? = "You haven't received any notifications yet.",
+    image: DrawableResource? = Res.drawable.img_bell
 ) {
     Column(
         modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(image),
-            contentDescription = null,
-            modifier = Modifier.size(100.dp)
-        )
+        image?.let {
+            Image(
+                painter = painterResource(image),
+                contentDescription = null,
+                modifier = Modifier.size(100.dp)
+            )
+        }
 
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = title,
-            style = text_style_h3
-        )
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = message,
-            color = greyColor,
-            textAlign = TextAlign.Center,
-            style = text_style_lead_body_1
-        )
+        title?.let {
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = title,
+                style = text_style_h3
+            )
+        }
+        message?.let {
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = message,
+                color = greyColor,
+                textAlign = TextAlign.Center,
+                style = text_style_lead_body_1
+            )
+        }
     }
 }
