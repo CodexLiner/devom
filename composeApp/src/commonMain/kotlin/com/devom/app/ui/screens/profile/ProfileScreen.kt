@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil3.compose.AsyncImage
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.primaryColor
@@ -57,7 +56,9 @@ import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.navigation.Screens
+import com.devom.app.utils.toDevomImage
 import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -136,11 +137,7 @@ fun ProfileScreen(
             Box(contentAlignment = Alignment.BottomEnd) {
 
                 AsyncImage(
-                    error = painterResource(Res.drawable.placeholder),
-                    placeholder = painterResource(Res.drawable.ic_google),
-                    model = user?.profilePictureUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    model = user?.profilePictureUrl.toDevomImage(),
                     modifier = Modifier.padding(top = 32.dp).size(115.dp).clip(CircleShape),
                 )
 
