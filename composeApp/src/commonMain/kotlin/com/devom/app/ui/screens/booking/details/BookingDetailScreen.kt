@@ -74,17 +74,19 @@ fun BookingDetailScreen(navController: NavController, booking: GetBookingsRespon
             showSheet.value = true
         }
 
-        StartEndPoojaSheet(
-            showSheet = showSheet.value,
-            title = "Verification for Pooja End",
-            message = "We have sent the verification code to mobile number 40******20.",
-            buttonText = "Submit",
-            onDismiss = {
-
-            },
-            onResendOtp = {},
-            onOtpEntered = {}
-        )
+        if (showSheet.value) {
+            StartEndPoojaSheet(
+                showSheet = showSheet.value,
+                title = "Verification for Pooja End",
+                message = "We have sent the verification code to mobile number 40******20.",
+                buttonText = "Submit",
+                onDismiss = {
+                    showSheet.value = false
+                },
+                onResendOtp = {},
+                onOtpEntered = {}
+            )
+        }
     }
 }
 
