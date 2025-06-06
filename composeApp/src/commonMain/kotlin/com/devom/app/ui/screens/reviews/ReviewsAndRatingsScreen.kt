@@ -28,8 +28,10 @@ import androidx.navigation.NavController
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.components.RatingStars
+import com.devom.app.utils.toDevomImage
 import com.devom.models.pandit.GetReviewsResponse
 import com.devom.models.pandit.Review
 import org.jetbrains.compose.resources.painterResource
@@ -83,7 +85,6 @@ fun ReviewItem(review: Review) {
     Column(modifier = Modifier.padding(top = 24.dp)) {
         ReviewerDetailRow(review)
         Text(
-
             style = text_style_lead_body_1,
             text = review.reviewText,
             color = greyColor,
@@ -99,17 +100,16 @@ fun ReviewerDetailRow(review: Review) {
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier.size(38.dp).clip(CircleShape),
-            painter = painterResource(Res.drawable.placeholder),
-            contentDescription = "Reviewer Image",
+            model = review.userImage.toDevomImage(),
         )
         Column(
             modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = review.userId.toString())
-            RatingStars(rating = review.rating.toFloat())
+            Text(text = review.userName.ifEmpty { "user_${review.userId}" }.toString())
+            RatingStars(modifier = Modifier.padding(top = 4.dp), rating = review.rating.toFloat())
         }
 
         Image(

@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import coil3.util.Logger
 import com.devom.app.models.STATUS
 import com.devom.app.theme.greenColor
 import com.devom.app.theme.greyColor
@@ -34,8 +34,10 @@ import com.devom.app.theme.textBlackShade
 import com.devom.app.theme.text_style_h2
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
+import com.devom.app.ui.components.AsyncImage
 import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toColor
+import com.devom.app.utils.toDevomImage
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toLocalDateTime
@@ -61,11 +63,10 @@ fun BookingCard(
     ) {
 
         AsyncImage(
-            error = painterResource(Res.drawable.placeholder),
-            placeholder = painterResource(Res.drawable.ic_google),
-            model = booking.userImage,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+            onError = {
+                co.touchlab.kermit.Logger.d("KermitLogger $it")
+            },
+            model = booking.userImage.toDevomImage(),
             modifier = Modifier.size(112.dp, 139.dp).clip(RoundedCornerShape(12.dp)),
         )
         Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
@@ -76,7 +77,6 @@ fun BookingCard(
         }
     }
 }
-
 
 @Composable
 fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (STATUS) -> Unit) {
