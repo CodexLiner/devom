@@ -25,6 +25,8 @@ sealed class Screens(val path: String) {
     data object UploadDocument : Screens(path = "upload_document")
     data object UploadDocumentSuccess : Screens(path = "upload_document_success")
     data object ReviewsAndRatings : Screens(path = "reviews_and_ratings")
+    data object Biography : Screens(path = "biography")
+    data object Rituals : Screens(path = "rituals")
 
 
 }

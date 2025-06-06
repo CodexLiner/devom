@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -29,12 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil3.compose.AsyncImage
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DatePickerDialog
 import com.devom.app.ui.components.TextInputField
+import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserResponse
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toIsoDateTimeString
@@ -55,7 +57,7 @@ fun EditProfileScreen(navHostController: NavHostController) {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
-            title = "Documents",
+            title = "Edit Profile",
             onNavigationIconClick = { navHostController.popBackStack() }
         )
         user?.let {
@@ -74,7 +76,7 @@ fun ColumnScope.EditProfileScreenContent(viewModel: ProfileViewModel, user: User
         EditProfileFormContent(user, viewModel)
     }
     ButtonPrimary(
-        modifier = Modifier.navigationBarsPadding().fillMaxWidth().height(58.dp),
+        modifier = Modifier.navigationBarsPadding().fillMaxWidth().padding(horizontal = 16.dp).height(58.dp),
         buttonText = "Update",
         onClick = { viewModel.updateUserProfile(user) },
         fontStyle = text_style_lead_text
@@ -95,10 +97,7 @@ fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewMod
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = userResponse.profilePictureUrl,
-                    placeholder = painterResource(Res.drawable.placeholder),
-                    error = painterResource(Res.drawable.placeholder),
-                    contentDescription = null,
+                    model = userResponse.profilePictureUrl.toDevomImage(),
                     modifier = Modifier.size(100.dp).clip(CircleShape).border(2.dp, Color.White, CircleShape)
                 )
             }

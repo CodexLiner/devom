@@ -15,6 +15,7 @@
     <string name="text_select_time_slot">Select a time slots</string>
     <string name="verify_mobile_number">Verify Mobile Number</string>
     <string name="resend_otp_message">Didn’t receive a OTP? </string>
+    <string name="no_slots_available">No Slots Available</string>
     <string name="resend_otp">Resend OTP</string>
     <string name="we_have_sent_the_verification_code">We have sent the verification code to your mobile number %1$s.</string>
     <string name="sign_in_with_google">Sign in with Google</string>

@@ -31,7 +31,9 @@ import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.navigation.Screens
+import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.network.NetworkClient
+import io.ktor.http.encodeURLPath
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

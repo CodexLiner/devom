@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class GetReviewsResponse(
     @SerialName("average_rating")
     val averageRating: String = "",
-    val reviews: List<Review> = mutableListOf<Review>()
+    val reviews: List<Review> = mutableListOf<Review>(),
 )
 
 @Serializable
@@ -29,4 +29,8 @@ data class Review(
     @SerialName("created_at") val createdAt: String,
 
     @SerialName("updated_at") val updatedAt: String,
+
+    @SerialName("fullname") val userName: String = "",
+
+    @SerialName("profile_picture_url") val userImage: String = "",
 )
