@@ -9,7 +9,7 @@ data class GetBookingsResponse(
     @SerialName("booking_code") val bookingCode: String = "",
     @SerialName("status") val status: String = "",
     @SerialName("booking_date") val bookingDate: String = "",
-    @SerialName("item_ids") val itemIds: List<Int> = emptyList(),
+    @SerialName("item_ids") val bookingItems: List<BookingItem> = listOf(),
     @SerialName("user_name") val userName: String = "",
     @SerialName("address") val address: String = "",
     @SerialName("mobile_no") val mobileNo: String = "",
@@ -22,5 +22,12 @@ data class GetBookingsResponse(
     @SerialName("pooja_image") val poojaImage: String? = null,
     @SerialName("available_date") val availableDate: String = "",
     @SerialName("start_time") val startTime: String = "",
-    @SerialName("end_time") val endTime: String = ""
+    @SerialName("end_time") val endTime: String = "",
+)
+
+@Serializable
+data class BookingItem(
+    val name: String = "",
+    val description: String = "",
+//    var image: String = "",
 )

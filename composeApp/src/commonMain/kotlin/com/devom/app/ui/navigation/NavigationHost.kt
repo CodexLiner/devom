@@ -6,23 +6,27 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.devom.app.ui.navigation.Screens.Biography
 import com.devom.app.ui.screens.login.LoginScreen
 import com.devom.app.ui.navigation.Screens.BookingDetails
 import com.devom.app.ui.navigation.Screens.Notifications
 import com.devom.app.ui.navigation.Screens.ReviewsAndRatings
 import com.devom.app.ui.screens.dashboard.DashboardScreen
 import com.devom.app.ui.screens.addslot.CreateSlotScreen
+import com.devom.app.ui.screens.biography.BiographyScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
 import com.devom.app.ui.screens.document.UploadDocumentScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
 import com.devom.app.ui.screens.reviews.ReviewsAndRatingsScreen
+import com.devom.app.ui.screens.rituals.RitualsScreen
 import com.devom.app.ui.screens.signup.DocumentUploadScreen
 import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.network.NetworkClient
+import io.ktor.http.decodeURLPart
 
 @Composable
 fun NavigationHost(startDestination: String = Screens.Login.path, navController: NavHostController) {
@@ -52,7 +56,7 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         ) {
             BookingDetailScreen(
                 navController = navController,
-                booking = NetworkClient.config.jsonConfig.decodeFromString<GetBookingsResponse>(it.arguments?.getString("booking").toString())
+                booking = NetworkClient.config.jsonConfig.decodeFromString<GetBookingsResponse>(it.arguments?.getString("booking").toString().decodeURLPart())
             )
         }
         composable(Screens.Dashboard.path) {
@@ -74,6 +78,12 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(ReviewsAndRatings.path) {
             ReviewsAndRatingsScreen(navController = navController)
+        }
+        composable(Biography.path) {
+            BiographyScreen(navController = navController)
+        }
+        composable(Screens.Rituals.path) {
+            RitualsScreen(navController = navController)
         }
     }
 }

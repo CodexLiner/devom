@@ -3,6 +3,7 @@ package com.devom.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -30,6 +31,7 @@ fun TextInputField(
     cornerRadius: Dp = 12.dp,
     readOnly: Boolean = false,
     enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     colors: TextFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = backgroundColor,
         unfocusedContainerColor = backgroundColor,
@@ -55,6 +57,7 @@ fun TextInputField(
     }
     OutlinedTextField(
         value = input,
+        keyboardOptions = keyboardOptions,
         onValueChange = {
             input = it
             onValueChange(it)

@@ -1,24 +1,53 @@
 package com.devom.app.ui.screens.biography
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.app.theme.textBlackShade
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.AsyncImage
+import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DocumentPicker
-import com.devom.app.ui.screens.document.DocumentItem
+import com.devom.app.ui.components.TagInputField
+import com.devom.app.ui.components.TextInputField
+import com.devom.app.ui.navigation.Screens
+import com.devom.app.utils.toDevomImage
+import com.devom.models.pandit.UpdateBiographyInput
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_video_camera
 
 @Composable
 fun BiographyScreen(navController: NavController) {
@@ -28,24 +57,111 @@ fun BiographyScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
-            title = "Documents",
+            title = "Biography",
             onNavigationIconClick = { navController.popBackStack() })
-        BiographyScreenScreenContent(viewModel)
+        BiographyScreenScreenContent(viewModel , navController)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserProfile()
     }
 }
 
 @Composable
-fun BiographyScreenScreenContent(viewModel: BiographyViewModel) {
+fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: NavController) {
+    val biographyInput = remember {
+        mutableStateOf(UpdateBiographyInput())
+    }
+    val biography = viewModel.biography.collectAsState()
 
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(modifier = Modifier.weight(1f)) {
+            BiographyForm(viewModel, biographyInput) {
+                navController.navigate(Screens.Rituals.path)
+            }
 
-    Column (verticalArrangement = Arrangement.spacedBy(16.dp)){
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
-//            items(documents.value) {
-//                DocumentItem(document = it)
-//            }
+            LazyVerticalGrid(
+                contentPadding = PaddingValues(16.dp),
+                columns = GridCells.Fixed(3),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(biography.value?.media.orEmpty()) {
+                    MediaItem(model = it.documentUrl, it.documentType)
+                }
+            }
+
+            DocumentPicker(title = "Media Gallery") { platformFile, supportedFiles ->
+                viewModel.uploadDocument("29", platformFile, supportedFiles)
+            }
         }
-        DocumentPicker(title = "Media Gallery") { platformFile, supportedFiles ->
-            viewModel.uploadDocument("29", platformFile, supportedFiles)
+        ButtonPrimary(
+            buttonText = "Update",
+            modifier = Modifier.navigationBarsPadding()
+                .padding(top = 48.dp, start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
+            onClick = {
+                viewModel.updateBiography(biographyInput.value)
+            }
+        )
+    }
+}
+
+@Composable
+fun MediaItem(model: String, type: String) {
+    Box(modifier = Modifier.height(124.dp).aspectRatio(1f)) {
+        AsyncImage(model = model.toDevomImage())
+        if (type.lowercase() == "video") Image(
+            painter = painterResource(Res.drawable.ic_video_camera),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Composable
+fun BiographyForm(
+    viewModel: BiographyViewModel,
+    biographyInput: MutableState<UpdateBiographyInput>,
+    onRitualsClicked: () -> Unit = {},
+) {
+    val biography = viewModel.biography.collectAsState()
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
+    ) {
+        TextInputField(
+            initialValue = biographyInput.value.experienceYears.toString(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            placeholder = "Years of Experience"
+        ) {
+            biographyInput.value = biographyInput.value.copy(experienceYears = it)
         }
+
+        TagInputField(
+            initialTags = biography.value?.specialty?.split(",").orEmpty(),
+            placeholder = "Expertise",
+            onTagsChanged = {
+                biographyInput.value.specialty = it.joinToString()
+            }
+        )
+        TagInputField(
+            initialTags = biography.value?.languages?.split(",").orEmpty(),
+            placeholder = "Languages Spoken",
+            onTagsChanged = {
+                biographyInput.value.languages = it.joinToString()
+            }
+        )
+
+        Text(
+            text = "Preferred Rituals/Poojas",
+            modifier = Modifier.fillMaxWidth().clickable {
+                onRitualsClicked()
+            },
+            textDecoration = TextDecoration.Underline,
+            textAlign = TextAlign.End,
+            color = textBlackShade,
+            fontWeight = FontWeight.W500,
+            fontSize = 16.sp
+        )
     }
 }

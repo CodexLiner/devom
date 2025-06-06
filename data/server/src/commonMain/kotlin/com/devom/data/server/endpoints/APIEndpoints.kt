@@ -44,7 +44,11 @@ object DocumentEndpoints {
     const val CreateDocument = "/document/upload"
 }
 
-object ReviewsEndpoints {
+object PanditEndpoints {
     const val GetReviews = "pandit_profile/review"
     const val CreateReview = "pandit_profile/review"
+    const val UpdateBiography = "pandit_profile"
+    const val GetBiography = "pandit_profile/get_biography"
+    const val MapPanditPoojaItem = "pandit_profile/map_pandit_pooja"
+    const val GetPanditPooja = "pandit_profile"
 }

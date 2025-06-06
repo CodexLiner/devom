@@ -46,6 +46,7 @@ import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.app.ui.screens.booking.BookingViewModel
 import com.devom.app.ui.screens.booking.components.StartEndPoojaSheet
 import com.devom.app.utils.toColor
+import com.devom.models.slots.BookingItem
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -115,14 +116,14 @@ fun ColumnScope.BookingDetailScreenContent(
             )
         }
 
-        itemsIndexed(List(10) { it }) { index, _ ->
+        itemsIndexed(booking.bookingItems) { index, item ->
             val shape = when (index) {
                 0 -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 9 -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
                 else -> RoundedCornerShape(0.dp)
             }
             SamagriItemRow(
-                item = booking,
+                item = item,
                 modifier = Modifier.background(color = whiteColor, shape = shape).padding(horizontal = 16.dp)
             ) {
                 // Handle checkbox state change here
@@ -135,7 +136,7 @@ fun ColumnScope.BookingDetailScreenContent(
 
 
 @Composable
-fun SamagriItemRow(modifier: Modifier = Modifier, item: GetBookingsResponse, onCheckedChange: (Boolean) -> Unit) {
+fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -143,12 +144,12 @@ fun SamagriItemRow(modifier: Modifier = Modifier, item: GetBookingsResponse, onC
         SamagriCheckbox()
         Text(
             style = text_style_lead_body_1,
-            text = "item.name",
+            text = item.name,
             fontWeight = FontWeight.W500,
             color = textBlackShade,
             modifier = Modifier.padding(start = 12.dp).weight(1f)
         )
-        Text(text = "10", fontSize = 12.sp, color = greyColor, style = text_style_lead_text)
+        Text(text = item.description, fontSize = 12.sp, color = greyColor, style = text_style_lead_text)
     }
 }
 
