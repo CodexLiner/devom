@@ -23,4 +23,5 @@
         <item>item 1</item>
         <item> item 2</item>
     </string-array>
+    <string name="all_field_required">All fields are required</string>
 </resources>

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetPanditPoojaResponse(
     @SerialName("id")
-    val id: Int = 0,
+    var id: Int = 0,
 
     @SerialName("pandit_id")
     val panditId: Int = 0,
@@ -15,10 +15,10 @@ data class GetPanditPoojaResponse(
     val poojaId: Int = 0,
 
     @SerialName("with_item_price")
-    val withItemPrice: String = "",
+    var withItemPrice: String = "",
 
     @SerialName("without_item_price")
-    val withoutItemPrice: String = "",
+    var withoutItemPrice: String = "",
 
     @SerialName("estimated_time_minutes")
     val estimatedTimeMinutes: Int = 0,
@@ -36,7 +36,7 @@ data class GetPanditPoojaResponse(
     val updatedAt: String = "",
 
     @SerialName("pooja_name")
-    val poojaName: String = "",
+    var poojaName: String = "",
 
     @SerialName("description")
     val description: String = ""

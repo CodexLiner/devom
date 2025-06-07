@@ -2,7 +2,6 @@ package com.devom
 
 import com.devom.category.Category
 import com.devom.document.Document
-import com.devom.models.pooja.GetPoojaItemResponse
 import com.devom.pandit.Pandit
 import com.devom.pooja.Pooja
 import com.devom.poojaitem.PoojaItem

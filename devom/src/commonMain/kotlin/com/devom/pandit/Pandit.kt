@@ -14,4 +14,5 @@ class Pandit {
     val getBiographyUseCase by lazy { com.devom.domain.pandit.GetBiographyUseCase() }
     val updateBiographyUseCase by lazy { com.devom.domain.pandit.UpdateBiographyUseCase() }
     val getPanditPoojaUseCase by lazy { com.devom.domain.pandit.GetPanditPoojaUseCase() }
+    val mapPanditPoojaItemUseCase by lazy { com.devom.domain.pandit.MapPanditPoojaItemUseCase() }
 }

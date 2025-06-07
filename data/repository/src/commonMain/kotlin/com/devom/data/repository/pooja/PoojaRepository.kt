@@ -3,14 +3,14 @@ package com.devom.data.repository.pooja
 import com.devom.data.server.pooja.PoojaRemoteDataSource
 import com.devom.data.server.pooja.PoojaRemoteDataSourceImpl
 import com.devom.models.pooja.CreatePoojaInput
-import com.devom.models.pooja.GetPoojaItemResponse
+import com.devom.models.pooja.GetPoojaResponse
 import com.devom.models.pooja.PoojaItemMappingInput
 import com.devom.utils.flow.apiFlow
 import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
 
 interface PoojaRepository {
-    suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaItemResponse>>>
+    suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaResponse>>>
     suspend fun removePooja(poojaId: String): Flow<ResponseResult<String>>
     suspend fun createPooja(input: CreatePoojaInput): Flow<ResponseResult<String>>
     suspend fun updatePooja(poojaId: String, input: CreatePoojaInput): Flow<ResponseResult<String>>

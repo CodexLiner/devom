@@ -5,12 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.models.auth.UserResponse
 import com.devom.models.pandit.GetPanditPoojaResponse
-import com.devom.models.pooja.GetPoojaItemResponse
+import com.devom.models.pandit.MapPanditPoojaItemInput
+import com.devom.models.pooja.GetPoojaResponse
 import com.devom.utils.network.onResult
+import com.devom.utils.network.withSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class RitualsViewModel : ViewModel() {
+    private val _getPoojaItems = MutableStateFlow<List<GetPoojaResponse>>(listOf())
+    val getPoojaItems = _getPoojaItems
+
     private val _user = MutableStateFlow<UserResponse?>(null)
     val user = _user
 
@@ -20,9 +25,10 @@ class RitualsViewModel : ViewModel() {
     fun getUserProfile() {
         viewModelScope.launch {
             Project.user.getUserProfileUseCase.invoke().collect {
-                it.onResult {
+                it.withSuccess {
                     _user.value = it.data
                     getRituals()
+                    getPoojaList()
                 }
             }
         }
@@ -33,6 +39,26 @@ class RitualsViewModel : ViewModel() {
             Project.pandit.getPanditPoojaUseCase.invoke(user.value?.userId.toString()).collect {
                 it.onResult {
                     _rituals.value = it.data
+                }
+            }
+        }
+    }
+
+    fun getPoojaList() {
+        viewModelScope.launch {
+            Project.pooja.getPoojaUseCase.invoke().collect {
+                it.onResult {
+                    _getPoojaItems.value = it.data
+                }
+            }
+        }
+    }
+
+    fun mapPoojaItem(input: MapPanditPoojaItemInput) {
+        viewModelScope.launch {
+            Project.pandit.mapPanditPoojaItemUseCase.invoke(input.copy(panditId = user.value?.userId)).collect {
+                it.withSuccess {
+                    getRituals()
                 }
             }
         }

@@ -2,7 +2,7 @@ package com.devom.data.server.pooja
 
 import com.devom.data.server.endpoints.PoojaEndpoints
 import com.devom.models.pooja.CreatePoojaInput
-import com.devom.models.pooja.GetPoojaItemResponse
+import com.devom.models.pooja.GetPoojaResponse
 import com.devom.models.pooja.PoojaItemMappingInput
 import com.devom.network.NetworkClient
 import com.devom.network.utils.toResponseResult
@@ -15,7 +15,7 @@ import io.ktor.client.request.setBody
 import kotlinx.coroutines.flow.Flow
 
 interface PoojaRemoteDataSource {
-    suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaItemResponse>>>
+    suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaResponse>>>
     suspend fun removePooja(poojaId: String): Flow<ResponseResult<String>>
     suspend fun createPooja(input: CreatePoojaInput): Flow<ResponseResult<String>>
     suspend fun updatePooja(poojaId: String, input: CreatePoojaInput): Flow<ResponseResult<String>>
@@ -26,7 +26,7 @@ interface PoojaRemoteDataSource {
 class PoojaRemoteDataSourceImpl() : PoojaRemoteDataSource {
     private val ktorClient = NetworkClient.ktorClient
 
-    override suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaItemResponse>>> =
+    override suspend fun getPooja(): Flow<ResponseResult<List<GetPoojaResponse>>> =
         ktorClient.get(PoojaEndpoints.GetPooja).toResponseResult()
 
     override suspend fun removePooja(poojaId: String): Flow<ResponseResult<String>> =
