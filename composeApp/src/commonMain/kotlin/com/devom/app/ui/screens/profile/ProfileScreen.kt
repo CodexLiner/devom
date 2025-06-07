@@ -73,6 +73,7 @@ fun ProfileScreen(
     navHostController: NavHostController,
     rating: Float = 4.0f,
     progress: Int = 50,
+    onNavigationIconClick: () -> Unit = {},
     onNotificationToggle: (Boolean) -> Unit = {},
     onAvailabilityToggle: (Boolean) -> Unit = {}
 ) {
@@ -92,9 +93,7 @@ fun ProfileScreen(
 
         AppBar(
             title = "Profile",
-            onNavigationIconClick = {
-                navHostController.popBackStack()
-            },
+            onNavigationIconClick = onNavigationIconClick,
             actions = {
                 IconButton(onClick = {
                     Application.logout()
@@ -194,7 +193,9 @@ fun ProfileScreen(
                 ProfileOption("Update Profile") {
                     navHostController.navigate(Screens.EditProfile.path)
                 }
-                ProfileOption("Biography")
+                ProfileOption("Biography") {
+                    navHostController.navigate(Screens.Biography.path)
+                }
                 ProfileOption("Documents") {
                     navHostController.navigate(Screens.UploadDocument.path)
                 }

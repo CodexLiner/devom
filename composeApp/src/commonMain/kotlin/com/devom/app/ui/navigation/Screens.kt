@@ -27,6 +27,9 @@ sealed class Screens(val path: String) {
     data object ReviewsAndRatings : Screens(path = "reviews_and_ratings")
     data object Biography : Screens(path = "biography")
     data object Rituals : Screens(path = "rituals")
+    data object HelpAndSupport : Screens(path = "help_and_support")
+    data object ReferAndEarn : Screens(path = "refer_and_earn")
+
 
 
 }

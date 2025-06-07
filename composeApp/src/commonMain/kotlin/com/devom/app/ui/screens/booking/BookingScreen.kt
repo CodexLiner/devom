@@ -37,7 +37,7 @@ import io.ktor.http.encodeURLPath
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingScreen(navHostController: NavHostController) {
+fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: () -> Unit) {
     val viewModel: BookingViewModel = viewModel { BookingViewModel() }
     val bookings = viewModel.bookings.collectAsState()
     val tabs = listOf("Pending", "Completed", "Rejected")
@@ -50,7 +50,7 @@ fun BookingScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize().background(backgroundColor)
     ) {
-        AppBar(title = "Bookings")
+        AppBar(title = "Bookings" , onNavigationIconClick = onNavigationIconClick)
         BookingStatusTab(selectedTabIndex, tabs)
 
         val filteredBookings =

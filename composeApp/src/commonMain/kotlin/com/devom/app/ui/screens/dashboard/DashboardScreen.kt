@@ -5,8 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,6 +23,9 @@ import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.home.HomeScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
+import com.devom.models.auth.UserResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_nav_add
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
@@ -29,6 +37,8 @@ import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 fun DashboardScreen(appNavHostController: NavHostController) {
     val viewModel = viewModel { DashboardViewModel() }
     var selectedTab = viewModel.selectedTab.collectAsState().value
+    val user = viewModel.user.collectAsState().value
+    val scope = rememberCoroutineScope()
 
     val screens = listOf(
         BottomNavigationScreen("home", "Home", Res.drawable.ic_nav_home, false),
@@ -37,34 +47,87 @@ fun DashboardScreen(appNavHostController: NavHostController) {
         BottomNavigationScreen("wallet", "Wallet", Res.drawable.ic_nav_wallet, false),
         BottomNavigationScreen("profile", "Profile", Res.drawable.ic_nav_profile, false),
     )
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel,) }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Crossfade(
+                targetState = selectedTab,
+                modifier = Modifier.fillMaxSize().background(backgroundColor)
+            ) { tab ->
+                when (tab) {
+                    0 -> HomeScreen(navHostController = appNavHostController) {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Crossfade(
-            targetState = selectedTab,
-            modifier = Modifier.fillMaxSize().background(backgroundColor)
-        ) { tab ->
-            when (tab) {
-                0 -> HomeScreen(navHostController = appNavHostController)
-                1 -> BookingScreen(navHostController = appNavHostController)
-                4 -> ProfileScreen(navHostController = appNavHostController)
-                else -> HomeScreen(navHostController = appNavHostController)
+                    1 -> BookingScreen(navHostController = appNavHostController) {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+
+                    4 -> ProfileScreen(navHostController = appNavHostController) {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+
+                    else -> HomeScreen(navHostController = appNavHostController) {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier.systemBarsPadding().fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BottomMenuBar(
+                    screens = screens,
+                    selectedIndex = selectedTab,
+                    onNavigateTo = {
+                        if (it == 2) {
+                            appNavHostController.navigate(Screens.CreateSlot.path)
+                            return@BottomMenuBar
+                        }
+                        viewModel.onTabSelected(it)
+                    },
+                )
             }
         }
-        Box(
-            modifier = Modifier.systemBarsPadding().fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            BottomMenuBar(
-                screens = screens,
-                selectedIndex = selectedTab,
-                onNavigateTo = {
-                    if (it == 2) {
-                        appNavHostController.navigate(Screens.CreateSlot.path)
-                        return@BottomMenuBar
-                    }
-                    viewModel.onTabSelected(it)
-                },
-            )
-        }
     }
+}
+
+@Composable
+fun DrawerContent(
+    user: UserResponse?,
+    appNavHostController: NavHostController,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    viewModel: DashboardViewModel
+) {
+    NavigationDrawerContent(
+        user = user,
+        appNavHostController = appNavHostController,
+        onWalletClick = {
+            viewModel.onTabSelected(3)
+            scope.launch {
+                drawerState.close()
+            }
+        },
+        onBookings = {
+            viewModel.onTabSelected(1)
+            scope.launch {
+                drawerState.close()
+            }
+        }, onDismiss = {
+            scope.launch {
+                drawerState.close()
+            }
+        })
 }

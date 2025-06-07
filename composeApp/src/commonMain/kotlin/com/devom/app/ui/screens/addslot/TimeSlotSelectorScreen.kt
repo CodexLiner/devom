@@ -2,6 +2,7 @@ package com.devom.app.ui.screens.addslot
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -354,10 +355,9 @@ fun AddTimeSlotButton(
         })
 
     }) {
-        Icon(
+        Image(
             painter = painterResource(Res.drawable.ic_plus),
             contentDescription = "Add Time Slot",
-            tint = Color(0xFFFD8C31)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text("Add More Time On This Date", fontWeight = FontWeight.Medium)

@@ -25,7 +25,7 @@ import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.network.NetworkClient
 
 @Composable
-fun HomeScreen(navHostController: NavHostController) {
+fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () -> Unit) {
     val viewModel: HomeScreenViewModel = viewModel {
         HomeScreenViewModel()
     }
@@ -33,7 +33,7 @@ fun HomeScreen(navHostController: NavHostController) {
         viewModel.getBookings()
     }
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
-        AppBar(title = "Dashboard", onNavigationIconClick = {})
+        AppBar(title = "Dashboard", onNavigationIconClick = onNavigationIconClick)
         HomeScreenContent(viewModel, navHostController)
     }
 }

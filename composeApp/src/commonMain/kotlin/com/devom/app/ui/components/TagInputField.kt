@@ -1,5 +1,6 @@
 package com.devom.app.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.InteractionSource
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -41,8 +45,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devom.app.theme.bgColor
+import com.devom.app.theme.greyColor
 import com.devom.app.theme.textBlackShade
 import com.devom.app.theme.text_style_lead_text
+import com.devom.app.theme.whiteColor
+import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_close
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +69,7 @@ fun TagInputField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     placeholder: String = "Enter tag",
-    label: String = "Tags",
+    label: String = placeholder,
     onTagsChanged: (List<String>) -> Unit = {},
 ) {
     var textValue by remember { mutableStateOf("") }
@@ -115,7 +124,7 @@ fun TagInputField(
         decorationBox = { innerTextField ->
             TagDecorationBox(
                 tags = tags,
-                textValue = textValue,
+                textValue = if (tags.isNotEmpty()) " " else textValue,
                 onTagRemoved = {
                     tags = tags - it
                     onTagsChanged(tags)
@@ -207,19 +216,21 @@ private fun TagDecorationBox(
 private fun TagItem(tag: String, onRemove: () -> Unit) {
     Box(
         modifier = Modifier
-            .background(Color(0xFFE4E7EC), RoundedCornerShape(12.dp))
-            .padding(horizontal = 10.dp, vertical = 6.dp)
+            .background(greyColor.copy(.16f), RoundedCornerShape(4.dp))
+            .padding(horizontal = 4.dp, vertical = 2.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(tag, color = Color(0xFF101828), fontWeight = FontWeight.Medium)
+            Text(text = tag, color = textBlackShade, fontWeight = FontWeight.W600 , fontSize = 14.sp)
             Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                "×",
-                fontSize = 12.sp,
-                color = Color(0xFF667085),
+            Image(
+                painter = painterResource(Res.drawable.ic_close),
                 modifier = Modifier
-                    .clickable(onClick = onRemove)
                     .padding(start = 4.dp)
+                    .size(14.dp)
+                    .background(color = whiteColor , CircleShape)
+                    .clickable(onClick = onRemove),
+                colorFilter = ColorFilter.tint(greyColor),
+                contentDescription = null
             )
         }
     }

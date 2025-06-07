@@ -16,9 +16,11 @@ import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.biography.BiographyScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
 import com.devom.app.ui.screens.document.UploadDocumentScreen
+import com.devom.app.ui.screens.helpandsupport.HelpAndSupportScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
+import com.devom.app.ui.screens.referandearn.ReferAndEarnScreen
 import com.devom.app.ui.screens.reviews.ReviewsAndRatingsScreen
 import com.devom.app.ui.screens.rituals.RitualsScreen
 import com.devom.app.ui.screens.signup.DocumentUploadScreen
@@ -84,6 +86,12 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(Screens.Rituals.path) {
             RitualsScreen(navController = navController)
+        }
+        composable(Screens.HelpAndSupport.path) {
+            HelpAndSupportScreen(navController = navController)
+        }
+        composable(Screens.ReferAndEarn.path) {
+            ReferAndEarnScreen(navController = navController)
         }
     }
 }
