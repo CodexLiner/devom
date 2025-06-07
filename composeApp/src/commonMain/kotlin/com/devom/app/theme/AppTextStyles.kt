@@ -51,3 +51,10 @@ internal val text_style_lead_body_1 = TextStyle.Default.copy(
     letterSpacing = 0.sp,
 )
 
+internal val textStyleBody2 = TextStyle.Default.copy(
+    fontWeight = FontWeight.W400,
+    fontSize = 12.sp,
+    lineHeight = 16.sp,
+    letterSpacing = 0.sp,
+)
+

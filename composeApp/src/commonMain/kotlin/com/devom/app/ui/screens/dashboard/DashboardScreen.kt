@@ -23,6 +23,7 @@ import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.home.HomeScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
+import com.devom.app.ui.screens.wallet.WalletScreen
 import com.devom.models.auth.UserResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
     val viewModel = viewModel { DashboardViewModel() }
     var selectedTab = viewModel.selectedTab.collectAsState().value
     val user = viewModel.user.collectAsState().value
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val screens = listOf(
@@ -47,7 +49,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
         BottomNavigationScreen("wallet", "Wallet", Res.drawable.ic_nav_wallet, false),
         BottomNavigationScreen("profile", "Profile", Res.drawable.ic_nav_profile, false),
     )
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel,) }
@@ -65,6 +67,12 @@ fun DashboardScreen(appNavHostController: NavHostController) {
                     }
 
                     1 -> BookingScreen(navHostController = appNavHostController) {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+
+                    3 -> WalletScreen(navHostController = appNavHostController) {
                         scope.launch {
                             drawerState.open()
                         }
@@ -129,5 +137,6 @@ fun DrawerContent(
             scope.launch {
                 drawerState.close()
             }
-        })
+        }
+    )
 }
