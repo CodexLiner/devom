@@ -47,7 +47,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
         BottomNavigationScreen("wallet", "Wallet", Res.drawable.ic_nav_wallet, false),
         BottomNavigationScreen("profile", "Profile", Res.drawable.ic_nav_profile, false),
     )
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel,) }
