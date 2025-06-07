@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -58,6 +59,11 @@ fun OtpView(
     val interactionSource = remember { MutableInteractionSource() }
 
     var parentWidth by remember { mutableStateOf(0) }
+
+    val focusManager  = LocalFocusManager.current
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus()
+    }
 
     Box(
         modifier = modifier.fillMaxWidth().wrapContentHeight().onSizeChanged { size ->
@@ -121,9 +127,5 @@ fun OtpView(
                     innerTextField()
                 }
             })
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
     }
 }

@@ -66,7 +66,7 @@ fun BookingDetailScreen(navController: NavController, booking: GetBookingsRespon
             onNavigationIconClick = { navController.popBackStack() }
         )
         BookingDetailScreenContent(navController, booking , viewModel)
-        if (booking.status != STATUS.COMPLETED.status) ButtonPrimary(
+        if (booking.status !in listOf(STATUS.COMPLETED.status , STATUS.REJECTED.status , STATUS.CANCELLED.status)) ButtonPrimary(
             modifier = Modifier.fillMaxWidth().navigationBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
             buttonText = "Start Pooja"
