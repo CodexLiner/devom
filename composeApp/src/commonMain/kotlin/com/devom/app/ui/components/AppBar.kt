@@ -10,6 +10,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import com.devom.app.theme.bgColor
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.whiteColor
 import org.jetbrains.compose.resources.painterResource
@@ -32,6 +34,6 @@ fun AppBar(
             }
         },
         actions = actions,
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE66B1E))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor)
     )
 }
