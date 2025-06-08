@@ -17,10 +17,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.devom.app.theme.backgroundColor
+import com.devom.app.theme.bgColor
+import com.devom.app.theme.inputColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
 import com.devom.app.ui.components.NoContentView
+import com.devom.app.utils.dashedBorder
 import com.devom.app.utils.format
 import com.devom.app.utils.to12HourTime
 import com.devom.models.slots.Slot
@@ -33,6 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.add_time_slot
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_no_slots
 import pandijtapp.composeapp.generated.resources.no_slots_available
 import pandijtapp.composeapp.generated.resources.set_availablity
 
@@ -137,20 +141,37 @@ fun ColumnScope.SlotsSections(
             width = 1.dp,
             color = Color.LightGray.copy(alpha = 0.5f),
             shape = RoundedCornerShape(16.dp)
-        ).background(Color(0xFFF9FCFF), shape = RoundedCornerShape(16.dp)).padding(16.dp)
+        ).dashedBorder(
+            dashLength = 3.dp,
+            gapLength = 1.dp,
+            color = inputColor,
+            shape = RoundedCornerShape(16.dp)
+        ).background(bgColor, shape = RoundedCornerShape(16.dp)).padding(16.dp)
     ) {
-        if (availableSlots.value.isNotEmpty()){
+        val filteredSlots = availableSlots.value.filter {
+            it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD)
+        }
+        if (filteredSlots.isNotEmpty()) {
             LazyColumn {
-                items(availableSlots.value.filter {
-                    it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD)
-                }) { slot ->
-                    TimeSlotItem(slot = slot.copy(slot.startTime.to12HourTime(),slot.endTime.to12HourTime()), true)
+                items(filteredSlots) { slot ->
+                    TimeSlotItem(
+                        slot = slot.copy(
+                            slot.startTime.to12HourTime(),
+                            slot.endTime.to12HourTime()
+                        ), true
+                    )
                 }
             }
-        } else NoContentView(message = stringResource(Res.string.no_slots_available) , image = null , title =  null)
+        } else NoContentView(
+            message = "No slots have been added yet. Please add time slots for your availability.",
+            image = Res.drawable.ic_no_slots,
+            title = "No Slots Added"
+        )
 
         TimeSlotBottomSheet(
-            initialSelectedDate = selectedDate, showSheet = sheetState.value, onDismiss = { sheetState.value = false }) {
+            initialSelectedDate = selectedDate,
+            showSheet = sheetState.value,
+            onDismiss = { sheetState.value = false }) {
             viewModel.createPanditSlot(it)
         }
     }
