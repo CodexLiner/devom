@@ -3,14 +3,15 @@ package com.devom.app.ui.screens.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
-import com.devom.models.auth.CreateUserResponse
 import com.devom.models.auth.UserResponse
+import com.devom.utils.date.convertIsoToDate
+import com.devom.utils.date.toLocalDateTime
 import com.devom.utils.network.onResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
-    private val _user = MutableStateFlow<UserResponse?>(null)
+    private val _user = MutableStateFlow<UserResponse>(UserResponse())
     val user = _user
 
     init {
@@ -29,7 +30,11 @@ class ProfileViewModel : ViewModel() {
 
     fun updateUserProfile(userResponse: UserResponse) {
         viewModelScope.launch {
-            Project.user.updateUserProfileUseCase.invoke(userResponse).collect {
+            Project.user.updateUserProfileUseCase.invoke(
+                userResponse.copy(dateOfBirth = userResponse.dateOfBirth.convertIsoToDate()
+                        ?.toLocalDateTime()?.date.toString(),
+                    )
+            ).collect {
                 it.onResult {
                     _user.value = it.data
                 }
@@ -38,8 +43,8 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun setUserResponse(userResponse: UserResponse) {
-       viewModelScope.launch {
-           _user.emit(userResponse.copy())
-       }
+        viewModelScope.launch {
+            _user.emit(userResponse.copy())
+        }
     }
 }

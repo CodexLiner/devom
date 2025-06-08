@@ -139,10 +139,10 @@ internal fun AppTheme(
         LocalRippleConfiguration provides null
     ) {
         val isDark by isDarkState
-        SystemAppearance(!isDark)
+        SystemAppearance(false)
         MaterialTheme(
             typography = customTypography,
-            colorScheme = if (isDark) DarkColorScheme else LightColorScheme,
+            colorScheme = /*if (isDark) DarkColorScheme else*/ LightColorScheme,
             content = { Surface(content = content) }
         )
     }

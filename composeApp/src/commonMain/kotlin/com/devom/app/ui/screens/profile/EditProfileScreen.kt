@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import co.touchlab.kermit.Logger
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.AsyncImage
@@ -45,7 +47,6 @@ import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.calendar_linear
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
-import pandijtapp.composeapp.generated.resources.placeholder
 
 @Composable
 fun EditProfileScreen(navHostController: NavHostController) {
@@ -53,15 +54,18 @@ fun EditProfileScreen(navHostController: NavHostController) {
     val viewModel = viewModel<ProfileViewModel> {
         ProfileViewModel()
     }
-    val user by viewModel.user.collectAsStateWithLifecycle()
+    val user by viewModel.user.collectAsState()
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Edit Profile",
             onNavigationIconClick = { navHostController.popBackStack() }
         )
-        user?.let {
-            EditProfileScreenContent(viewModel, it)
+
+        EditProfileScreenContent(viewModel, user)
+
+        LaunchedEffect(user) {
+            Logger.d("DATE_OF_ BIRTH $user")
         }
     }
 }
@@ -168,9 +172,8 @@ fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewMod
                 TextInputField(
                     readOnly = true,
                     enabled = false,
-                    initialValue = userResponse.dateOfBirth.convertIsoToDate()
-                        ?.toLocalDateTime()?.date.toString(),
-                    placeholder = "Enter date of birth",
+                    initialValue = if (userResponse.dateOfBirth.contains("T")) userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date.toString() else userResponse.dateOfBirth,
+                    placeholder = "Date of birth",
                     trailingIcon = {
                         Image(
                             painter = painterResource(Res.drawable.calendar_linear),
@@ -197,8 +200,8 @@ fun showDatePicker(
         onDismiss = { state.value = false },
         onDateSelected = {
             state.value = false
-            userResponse.dateOfBirth = it.toIsoDateTimeString()
-            viewModel.setUserResponse(userResponse.copy())
+            val updatedUser = userResponse.copy(dateOfBirth = it.toIsoDateTimeString())
+            viewModel.setUserResponse(updatedUser)
         },
         showPicker = state.value,
         selectedDate = userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date,
