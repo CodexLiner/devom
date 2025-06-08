@@ -30,6 +30,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,13 +47,15 @@ import com.devom.app.theme.text_style_h4
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
-import com.devom.app.utils.addHours
+import com.devom.app.utils.dashedBorder
 import com.devom.app.utils.format
 import com.devom.app.utils.format12HourTime
 import com.devom.app.utils.parse12HourTime
 import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toTimeParts
+import com.devom.app.utils.updateSlotTimeAndShiftFollowingSlots
 import com.devom.models.slots.Slot
+import com.devom.network.utils.toMap
 import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -75,6 +78,7 @@ import pandijtapp.composeapp.generated.resources.text_select_time_slot
 
 @Composable
 fun TimeSlotSelectorScreen(
+    initialSelectedSlots: List<Slot> = listOf(),
     initialSelectedDate: LocalDate = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
@@ -84,13 +88,14 @@ fun TimeSlotSelectorScreen(
     var selectedDate by remember { mutableStateOf(initialSelectedDate) }
     val dateSlotMap = remember { mutableStateMapOf<LocalDate, MutableList<Slot>>() }
 
-    val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
-
     val startOfList = initialSelectedDate
     val dates = remember(startOfList) {
         List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }
     }
 
+    LaunchedEffect(Unit) {
+//       dateSlotMap[selectedDate] = initialSelectedSlots.toMutableList()
+    }
 
     val currentSlots = dateSlotMap[selectedDate] ?: mutableListOf()
 
@@ -157,7 +162,13 @@ fun TimeSlotListCard(
     onTimeSlotsUpdated: (MutableList<Slot>) -> Unit,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+            .dashedBorder(
+                dashLength = 3.dp,
+                gapLength = 1.dp,
+                color = inputColor,
+                shape = RoundedCornerShape(16.dp)
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF2F7FF)),
         border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.3f))
@@ -173,16 +184,14 @@ fun TimeSlotListCard(
                 TimeSlotItem(
                     slot = slot,
                     onStartTimeSelected = { newStartTime ->
-                        val updated = updateSlotTimeAndShiftFollowingSlots(
-                            slots = timeSlots,
+                        val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
                             indexToUpdate = index,
                             newStartTime = newStartTime
                         )
                         onTimeSlotsUpdated(updated)
                     },
                     onEndTimeSelected = { newEndTime ->
-                        val updated = updateSlotTimeAndShiftFollowingSlots(
-                            slots = timeSlots,
+                        val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
                             indexToUpdate = index,
                             newEndTime = newEndTime
                         )
@@ -208,14 +217,16 @@ fun TimeSlotListCard(
 @Composable
 fun TimeSlotItem(
     slot: Slot,
+    modifier: Modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
     enabled: Boolean = true,
+    datePickerEnable : Boolean = true,
     onStartTimeSelected: (String) -> Unit = {},
     onEndTimeSelected: (String) -> Unit = {},
     onRemove: () -> Unit ={},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
@@ -223,11 +234,12 @@ fun TimeSlotItem(
             modifier = Modifier.weight(1f)
         ) {
             TimePickerDialogButton(
-                enabled = enabled,
                 selectedTime = slot.startTime,
                 onTimeSelected = onStartTimeSelected,
                 minTime = slot.startTime,
-                modifier = Modifier.weight(1f)
+                enabled = enabled,
+                modifier = Modifier.weight(1f),
+                datePickerEnable = datePickerEnable
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -242,6 +254,7 @@ fun TimeSlotItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             TimePickerDialogButton(
+                datePickerEnable = datePickerEnable,
                 enabled = enabled,
                 selectedTime = slot.endTime,
                 onTimeSelected = onEndTimeSelected,
@@ -269,6 +282,7 @@ fun TimePickerDialogButton(
     minTime: String,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
+    datePickerEnable: Boolean,
 ) {
     val (hour, minute) = selectedTime.toTimeParts()
     val timePickerState = remember(selectedTime) {
@@ -290,7 +304,7 @@ fun TimePickerDialogButton(
         )
     }
 
-    if (showPicker) {
+    if (showPicker && datePickerEnable) {
         val selectedLocalTime = LocalTime(timePickerState.hour, timePickerState.minute)
         val isValid = selectedLocalTime >= parse12HourTime(minTime)
 
@@ -362,57 +376,4 @@ fun AddTimeSlotButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text("Add More Time On This Date", fontWeight = FontWeight.Medium)
     }
-}
-
-fun updateSlotTimeAndShiftFollowingSlots(
-    slots: List<Slot>,
-    indexToUpdate: Int,
-    newStartTime: String? = null,
-    newEndTime: String? = null,
-): MutableList<Slot> {
-    val updatedSlots = slots.map { it.copy() }.toMutableList()
-    val slot = updatedSlots[indexToUpdate]
-    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-    // Parse original times
-    val originalStart = parse12HourTime(slot.startTime)
-    val originalEnd = parse12HourTime(slot.endTime)
-
-    // Apply changes
-    val startTime = newStartTime?.let { parse12HourTime(it) } ?: originalStart
-    val endTime = newEndTime?.let { parse12HourTime(it) } ?: originalEnd
-
-    // Convert to LocalDateTime
-    val startDT = today.atTime(startTime)
-    var endDT = today.atTime(endTime)
-
-    // Calculate gap in minutes
-    val gapInMinutes = endDT.toInstant(TimeZone.currentSystemDefault())
-        .minus(startDT.toInstant(TimeZone.currentSystemDefault()), DateTimeUnit.MINUTE)
-
-    // If gap less than 2 hours (120 mins), update endDT to startDT + 2 hours
-    if (gapInMinutes < 120) {
-        endDT = startDT.addHours(2)
-    }
-
-    // Update the selected slot
-    slot.startTime = startDT.time.to12HourTime()
-    slot.endTime = endDT.time.to12HourTime()
-
-    // Start shifting from updated end time
-    var nextStart = endDT
-    val slotGapHours = 2
-
-    for (i in indexToUpdate + 1 until updatedSlots.size) {
-        val s = updatedSlots[i]
-        val newStartDT = nextStart
-        val newEndDT = newStartDT.addHours(slotGapHours)
-
-        s.startTime = newStartDT.time.to12HourTime()
-        s.endTime = newEndDT.time.to12HourTime()
-
-        nextStart = newEndDT
-    }
-
-    return updatedSlots
 }

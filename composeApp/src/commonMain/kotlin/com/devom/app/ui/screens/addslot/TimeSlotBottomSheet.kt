@@ -13,6 +13,7 @@ import kotlinx.datetime.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeSlotBottomSheet(
+    initialSelectedSlots: List<Slot> = listOf(),
     showSheet: Boolean,
     initialSelectedDate: LocalDate,
     onDismiss: () -> Unit,
@@ -31,7 +32,7 @@ fun TimeSlotBottomSheet(
             },
             sheetState = sheetState
         ) {
-            TimeSlotSelectorScreen(initialSelectedDate) {
+            TimeSlotSelectorScreen(initialSelectedDate = initialSelectedDate , initialSelectedSlots = initialSelectedSlots) {
                 scope.launch {
                     onSlotSelected(it.map { slot ->
                         slot.copy(

@@ -21,6 +21,7 @@ interface PanditSlotsRemoteRepository {
     suspend fun bookPanditSlot(bookPanditSlotRequest: BookPanditSlotInput): Flow<ResponseResult<String>>
     suspend fun getBookings(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork): Flow<ResponseResult<List<GetBookingsResponse>>>
     suspend fun getBookingById(bookingId: String): Flow<ResponseResult<GetBookingsResponse>>
+    suspend fun removePanditSlot(slotId: String): Flow<ResponseResult<List<GetAvailableSlotsResponse>>>
     suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>>
 }
 
@@ -53,6 +54,10 @@ class PanditSlotsRemoteRepositoryImpl : PanditSlotsRemoteRepository {
 
     override suspend fun getBookingById(bookingId: String): Flow<ResponseResult<GetBookingsResponse>> = apiFlow {
             panditSlotsRemoteDataSource.getBookingById(bookingId)
+    }
+
+    override suspend fun removePanditSlot(slotId: String): Flow<ResponseResult<List<GetAvailableSlotsResponse>>> = apiFlow {
+        panditSlotsRemoteDataSource.removePanditSlot(slotId)
     }
 
     override suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>> = apiFlow {

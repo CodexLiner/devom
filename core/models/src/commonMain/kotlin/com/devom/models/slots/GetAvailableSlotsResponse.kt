@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetAvailableSlotsResponse(
-    @SerialName("id") val id: Int = 0,
+    @SerialName("id") val id: String = "",
     @SerialName("pandit_id") val panditId: Int = 0,
     @SerialName("available_date") val availableDate: String = "",
     @SerialName("start_time") val startTime: String = "",

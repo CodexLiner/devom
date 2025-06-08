@@ -37,7 +37,6 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.add_time_slot
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_no_slots
-import pandijtapp.composeapp.generated.resources.no_slots_available
 import pandijtapp.composeapp.generated.resources.set_availablity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +48,8 @@ fun CreateSlotScreen(
 ) {
     val viewModel = viewModel { CreateSlotViewModel() }
     val user = viewModel.user.collectAsState()
+
+    val buttonText = remember { mutableStateOf("Update Time Slot") }
 
     LaunchedEffect(user.value) {
         user.value?.userId?.let { viewModel.getAvailableSlots(it) }
@@ -75,7 +76,9 @@ fun CreateSlotScreen(
                 initialSelectedDate = initialSelectedDate,
                 viewModel = viewModel,
                 sheetState = sheetState
-            )
+            ) {
+                buttonText.value = it
+            }
         }
 
         ButtonPrimary(
@@ -96,6 +99,8 @@ fun CreateSlotScreenContent(
     initialSelectedDate: LocalDate,
     viewModel: CreateSlotViewModel,
     sheetState: MutableState<Boolean>,
+    buttonTextChange : (String) -> Unit = {}
+
 ) {
 
     val availableSlots = viewModel.slots.collectAsState()
@@ -106,6 +111,11 @@ fun CreateSlotScreenContent(
     val startOfList = initialSelectedDate
     val dates = remember(startOfList) {
         List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }
+    }
+    LaunchedEffect(selectedDate) {
+        val isSlotsAvailable = availableSlots.value.any { it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD) }
+        val buttonText = if (isSlotsAvailable)  "Update Time Slot" else  "Add Time Slot"
+        buttonTextChange(buttonText)
     }
 
     Column(
@@ -155,10 +165,15 @@ fun ColumnScope.SlotsSections(
             LazyColumn {
                 items(filteredSlots) { slot ->
                     TimeSlotItem(
+                        datePickerEnable = false,
+                        modifier = Modifier.fillMaxWidth().animateItem(),
                         slot = slot.copy(
                             slot.startTime.to12HourTime(),
                             slot.endTime.to12HourTime()
-                        ), true
+                        ),
+                        onRemove = {
+                            viewModel.removePanditSlot(slot)
+                        }
                     )
                 }
             }
@@ -169,6 +184,7 @@ fun ColumnScope.SlotsSections(
         )
 
         TimeSlotBottomSheet(
+            initialSelectedSlots = filteredSlots,
             initialSelectedDate = selectedDate,
             showSheet = sheetState.value,
             onDismiss = { sheetState.value = false }) {

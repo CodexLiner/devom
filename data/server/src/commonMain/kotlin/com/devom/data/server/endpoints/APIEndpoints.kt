@@ -30,6 +30,8 @@ object PanditSlotsEndpoints {
     const val GetBookings = "/pandit/booking"
     const val UpdateBookingStatus = "/pandit/booking_status_change"
     const val GetBookingById = "/pandit/booking"
+    const val RemovePanditSlot = "/pandit/slot"
+
 }
 
 object CategoryEndpoints {
