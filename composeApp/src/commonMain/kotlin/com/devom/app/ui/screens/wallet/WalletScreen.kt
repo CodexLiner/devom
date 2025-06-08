@@ -41,6 +41,7 @@ import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
+import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_transactions
 
 @Composable
@@ -68,7 +69,7 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
     }
     WalletBreakdownRow(balance)
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp , Alignment.CenterVertically),
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         WalletActionItem(
@@ -80,7 +81,7 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
         }
 
         WalletActionItem(
-            painter = painterResource(Res.drawable.ic_transactions),
+            painter = painterResource(Res.drawable.ic_refer),
             text = "Invite & Collect",
             description = "Bring your friends on DevOM and earn rewards"
         ) {
@@ -217,7 +218,7 @@ fun WalletActionItem(
             .padding(horizontal = 16.dp, vertical = 16.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(painter = painter, contentDescription = null)
             Column(
