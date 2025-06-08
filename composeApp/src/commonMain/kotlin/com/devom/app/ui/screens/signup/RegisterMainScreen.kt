@@ -2,6 +2,7 @@ package com.devom.app.ui.screens.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.clipScrollableContainer
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -37,9 +38,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.devom.models.auth.CreateUserRequest
-import pandijtapp.composeapp.generated.resources.Res
-import pandijtapp.composeapp.generated.resources.ic_left
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.orangeShadow
 import com.devom.app.theme.text_style_h4
@@ -52,12 +50,10 @@ import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.signup.fragments.GeneralMainContent
 import com.devom.app.ui.screens.signup.fragments.SkillsMainContent
 import com.devom.app.ui.screens.signup.fragments.UploadDocumentMainContent
-import com.devom.utils.date.DD_MMM_yyyy
-import com.devom.utils.date.asDate
-import com.devom.utils.date.convertToISOFormat
-import com.devom.utils.date.convertToIso8601
-import kotlinx.datetime.Instant
+import com.devom.models.auth.CreateUserRequest
 import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_left
 
 @Composable
 fun RegisterMainScreen(navController: NavHostController , viewModel: SignUpViewModel = SignUpViewModel()) {
@@ -139,7 +135,9 @@ fun RegisterMainScreen(navController: NavHostController , viewModel: SignUpViewM
                             }
                         }
 
-                        Text(spannedText, color = greyColor, style = text_style_lead_body_1)
+                        Text(spannedText, color = greyColor, style = text_style_lead_body_1 , modifier = Modifier.clickable {
+                            navController.popBackStack(Screens.Login.path , false)
+                        })
                     }
                 }
             }

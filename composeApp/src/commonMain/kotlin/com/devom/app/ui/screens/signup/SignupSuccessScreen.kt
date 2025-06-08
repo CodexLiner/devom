@@ -27,6 +27,7 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.Stepper
+import com.devom.app.ui.navigation.Screens
 
 @Composable
 fun SignupSuccessScreen(navHostController: NavHostController) {
@@ -95,7 +96,7 @@ fun SignupSuccessScreen(navHostController: NavHostController) {
                         .height(58.dp),
                     buttonText = "Login Now",
                     onClick = {
-
+                        navHostController.popBackStack(Screens.Login.path , false)
                     },
                     fontStyle = text_style_lead_text
                 )

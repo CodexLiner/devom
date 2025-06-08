@@ -57,7 +57,7 @@ internal fun NavigationDrawerContent(
     Column(
         modifier = Modifier.fillMaxWidth(.8f).fillMaxHeight().background(whiteColor),
     ) {
-        UserDetailsContent(user)
+        UserDetailsContent(user , appNavHostController , onDismiss)
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_wallet),
             text = "My Wallet"
@@ -104,7 +104,9 @@ internal fun NavigationDrawerContent(
 }
 
 @Composable
-fun UserDetailsContent(user: UserResponse?) {
+fun UserDetailsContent(
+    user: UserResponse?, appNavHostController: NavHostController, onDismiss: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().background(color = primaryColor).systemBarsPadding()
@@ -155,6 +157,10 @@ fun UserDetailsContent(user: UserResponse?) {
             }
             Text(text = accountBalance, style = text_style_h5, color = whiteColor)
             Text(
+                modifier = Modifier.clickable {
+                    appNavHostController.navigate(Screens.EditProfile.path)
+                    onDismiss()
+                },
                 text = "Edit Profile",
                 fontWeight = FontWeight.W500,
                 fontSize = 12.sp,

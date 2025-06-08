@@ -55,3 +55,8 @@ object PanditEndpoints {
     const val MapPanditPoojaItem = "pandit_profile/map_pandit_pooja"
     const val GetPanditPooja = "pandit_profile"
 }
+
+object  PaymentEndpoints {
+    const val GetWalletBalance = "/payment/get_wallet"
+    const val GetTransactions = "/payment"
+}

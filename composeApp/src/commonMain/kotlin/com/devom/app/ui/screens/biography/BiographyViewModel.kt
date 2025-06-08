@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.app.models.SupportedFiles
+import com.devom.app.utils.videoExtensions
 import com.devom.models.auth.UserResponse
 import com.devom.models.document.CreateDocumentInput
-import com.devom.models.document.GetDocumentResponse
 import com.devom.models.pandit.GetBiographyResponse
 import com.devom.models.pandit.UpdateBiographyInput
 import com.devom.utils.network.onResult
@@ -31,8 +31,8 @@ class BiographyViewModel : ViewModel() {
             Project.document.createDocumentUseCase.invoke(
                 input = CreateDocumentInput(
                     userId = userId,
-                    mimeType = "image/${platformFile.extension}",
-                    documentType = supportedFiles.type,
+                    mimeType = "*/*",
+                    documentType =  if (platformFile.extension.lowercase() in videoExtensions) "video" else "image",
                     description = supportedFiles.document,
                     documentName = platformFile.name,
                     file = platformFile.source().buffered().readByteArray()

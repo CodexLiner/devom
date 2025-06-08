@@ -86,7 +86,7 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
             if (showSheet.value) {
                 StartEndPoojaSheet(
                     showSheet = showSheet.value,
-                    title = "Verification for Pooja End",
+                    title = "Verification for Pooja Start",
                     message = "We have sent the verification code to mobile number 40******20.",
                     buttonText = "Submit",
                     onDismiss = {

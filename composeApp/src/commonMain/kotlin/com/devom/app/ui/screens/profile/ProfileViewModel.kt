@@ -31,9 +31,10 @@ class ProfileViewModel : ViewModel() {
     fun updateUserProfile(userResponse: UserResponse) {
         viewModelScope.launch {
             Project.user.updateUserProfileUseCase.invoke(
-                userResponse.copy(dateOfBirth = userResponse.dateOfBirth.convertIsoToDate()
-                        ?.toLocalDateTime()?.date.toString(),
-                    )
+                userResponse.copy(
+                    dateOfBirth = if (userResponse.dateOfBirth.contains("T")) userResponse.dateOfBirth.convertIsoToDate()
+                        ?.toLocalDateTime()?.date.toString() else userResponse.dateOfBirth
+                )
             ).collect {
                 it.onResult {
                     _user.value = it.data

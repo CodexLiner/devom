@@ -9,6 +9,7 @@ import com.devom.models.pandit.MapPanditPoojaItemInput
 import com.devom.models.pooja.GetPoojaResponse
 import com.devom.utils.network.onResult
 import com.devom.utils.network.withSuccess
+import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -58,6 +59,9 @@ class RitualsViewModel : ViewModel() {
         viewModelScope.launch {
             Project.pandit.mapPanditPoojaItemUseCase.invoke(input.copy(panditId = user.value?.userId)).collect {
                 it.withSuccess {
+                    getRituals()
+                }
+                it.withSuccessWithoutData {
                     getRituals()
                 }
             }

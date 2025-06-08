@@ -3,6 +3,7 @@ package com.devom
 import com.devom.category.Category
 import com.devom.document.Document
 import com.devom.pandit.Pandit
+import com.devom.payment.Payment
 import com.devom.pooja.Pooja
 import com.devom.poojaitem.PoojaItem
 import com.devom.user.User
@@ -37,6 +38,11 @@ object Project {
      * pandit documents
      */
     val document by lazy { Document() }
+
+    /**
+     * wallet
+     */
+    val payment by lazy { Payment() }
 
 
 }

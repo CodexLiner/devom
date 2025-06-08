@@ -55,7 +55,7 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
 
         val filteredBookings = when (selectedTabIndex.value) {
             1 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
-            2 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
+            2 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.REJECTED.status }
             else -> bookings.value
         }
 
@@ -64,7 +64,7 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
         if (filteredBookings.isNotEmpty()) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp , bottom = 200.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(filteredBookings) { booking ->

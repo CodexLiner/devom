@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.bgColor
@@ -35,6 +36,7 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.utils.toColor
+import com.devom.models.payment.WalletBalance
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
@@ -43,24 +45,28 @@ import pandijtapp.composeapp.generated.resources.ic_transactions
 
 @Composable
 fun WalletScreen(navHostController: NavHostController, onNavigationIconClick: () -> Unit) {
+    val viewModel: WalletViewModel = viewModel {
+        WalletViewModel()
+    }
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
         AppBar(title = "My Wallet", onNavigationIconClick = onNavigationIconClick)
-        WalletScreenContent(navHostController)
+        WalletScreenContent(navHostController , viewModel)
     }
 }
 
 @Composable
-fun WalletScreenContent(navHostController: NavHostController) {
-    WalletDetailsContent(navHostController)
-
+fun WalletScreenContent(navHostController: NavHostController, viewModel: WalletViewModel) {
+    WalletDetailsContent(navHostController , viewModel)
 }
 
 @Composable
-fun WalletDetailsContent(navController: NavHostController) {
+fun WalletDetailsContent(navController: NavHostController, viewModel: WalletViewModel) {
+    val balance = viewModel.walletBalances.value.balance
+
     Box(modifier = Modifier.fillMaxWidth().background(primaryColor)) {
-        WalletHeader()
+        WalletHeader(balance)
     }
-    WalletBreakdownRow()
+    WalletBreakdownRow(balance)
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
@@ -84,7 +90,7 @@ fun WalletDetailsContent(navController: NavHostController) {
 }
 
 @Composable
-private fun WalletHeader() {
+private fun WalletHeader(balance: WalletBalance) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -101,7 +107,7 @@ private fun WalletHeader() {
             .padding(16.dp)
     ) {
         WalletIcon()
-        WalletBalanceInfo()
+        WalletBalanceInfo(balance)
         WithdrawButton()
     }
 }
@@ -118,7 +124,7 @@ private fun WalletIcon() {
 }
 
 @Composable
-private fun RowScope.WalletBalanceInfo() {
+private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
     Column(modifier = Modifier.weight(1f)) {
         Text(
             text = "Current Balance",
@@ -126,9 +132,10 @@ private fun RowScope.WalletBalanceInfo() {
             fontWeight = FontWeight.W400,
             fontSize = 14.sp
         )
+        val currentBalance = (balance.cashWallet.toIntOrNull() ?: 0) + (balance.bonusWallet.toIntOrNull() ?: 0)
 
         Text(
-            text = "₹1500",
+            text = "₹${currentBalance}",
             color = blackColor,
             style = text_style_h4
         )
@@ -153,7 +160,7 @@ private fun WithdrawButton() {
 }
 
 @Composable
-private fun WalletBreakdownRow() {
+private fun WalletBreakdownRow(balance: WalletBalance) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,8 +172,10 @@ private fun WalletBreakdownRow() {
                 shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
             )
     ) {
-        AvailableCashTypeItem(title = "Cash Amount", amount = "₹1450")
-        AvailableCashTypeItem(title = "Cash Bonus ", amount = "₹50")
+        val cashBalance = if (balance.cashWallet.isEmpty()) "-" else "₹${balance.cashWallet}"
+        val bonusBalance = if (balance.bonusWallet.isEmpty()) "-" else "₹${balance.bonusWallet}"
+        AvailableCashTypeItem(title = "Cash Amount", amount = cashBalance)
+        AvailableCashTypeItem(title = "Cash Bonus ", amount = bonusBalance)
     }
 }
 

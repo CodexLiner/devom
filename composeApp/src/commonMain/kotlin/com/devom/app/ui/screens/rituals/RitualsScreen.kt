@@ -195,7 +195,7 @@ fun AddEditPoojaBottomSheet(
     poojaItem: GetPanditPoojaResponse?,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val poojaItemMappingInput by remember { mutableStateOf(poojaItem) }
+    val poojaItemMappingInput by remember { mutableStateOf(poojaItem ?: GetPanditPoojaResponse()) }
     val selectedDropDownItem = remember {
         mutableStateOf<DropDownItem?>(
             DropDownItem(

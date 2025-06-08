@@ -38,6 +38,8 @@ import com.devom.models.document.GetDocumentResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_document_aadhaar
+import pandijtapp.composeapp.generated.resources.ic_document_pan
 import pandijtapp.composeapp.generated.resources.ic_upload
 
 @Composable
@@ -63,13 +65,15 @@ private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
     }
 
     Column (verticalArrangement = Arrangement.spacedBy(16.dp)){
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
             items(documents.value) {
-                DocumentItem(document = it)
+                DocumentItem(modifier = Modifier.padding(horizontal = 16.dp), document = it)
             }
-        }
-        DocumentPicker(title = "Certificates") { platformFile, supportedFiles ->
-            viewModel.uploadDocument(viewModel.user.value?.userId.toString(), platformFile, supportedFiles)
+            item {
+                DocumentPicker(title = "Certificates") { platformFile, supportedFiles ->
+                    viewModel.uploadDocument(viewModel.user.value?.userId.toString(), platformFile, supportedFiles)
+                }
+            }
         }
     }
 }
@@ -87,7 +91,7 @@ fun DocumentItem(
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            DocumentIcon()
+            DocumentIcon(document)
 
             DocumentTexts(
                 documentName = getDocumentName(document.documentType),
@@ -104,14 +108,19 @@ fun DocumentItem(
 
 
 @Composable
-private fun DocumentIcon() {
+private fun DocumentIcon(document: GetDocumentResponse) {
+    val icon = when(document.documentType) {
+        SupportedFiles.AADHAAR_CARD.type -> painterResource(Res.drawable.ic_document_aadhaar )
+        SupportedFiles.PAN_CARD.type -> painterResource(Res.drawable.ic_document_pan)
+        else -> painterResource(Res.drawable.ic_document_pan)
+    }
     Icon(
-        painter = painterResource(Res.drawable.ic_upload),
+        painter = icon,
         contentDescription = null,
         tint = Color.Gray,
         modifier = Modifier
-            .size(32.dp)
             .padding(end = 12.dp)
+            .size(32.dp)
     )
 }
 

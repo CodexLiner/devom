@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +46,7 @@ import com.devom.app.ui.components.DocumentPicker
 import com.devom.app.ui.components.TagInputField
 import com.devom.app.ui.components.TextInputField
 import com.devom.app.ui.navigation.Screens
+import com.devom.app.utils.toDevomDocument
 import com.devom.app.utils.toDevomImage
 import com.devom.models.pandit.UpdateBiographyInput
 import org.jetbrains.compose.resources.painterResource
@@ -118,8 +120,8 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
 
 @Composable
 fun MediaItem(model: String, type: String) {
-    Box(modifier = Modifier.height(124.dp).aspectRatio(1f).clip(RoundedCornerShape(8.dp))) {
-        AsyncImage(model = model.toDevomImage())
+    Box(modifier = Modifier.height(124.dp).clip(RoundedCornerShape(8.dp))) {
+        AsyncImage(model = model.toDevomDocument() , contentScale = ContentScale.Crop , modifier = Modifier.fillMaxSize())
         if (type.lowercase() == "video") Image(
             painter = painterResource(Res.drawable.ic_video_camera),
             contentDescription = null,

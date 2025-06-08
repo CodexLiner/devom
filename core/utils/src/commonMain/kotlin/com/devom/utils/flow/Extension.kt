@@ -11,9 +11,12 @@ import kotlinx.coroutines.flow.flowOn
 
 fun <T> apiFlow(call: suspend () -> Flow<ResponseResult<T>>): Flow<ResponseResult<T>> = flow {
     emit(ResponseResult.Loading)
-    emitAll(call())
+    try {
+        emitAll(call())
+    } catch (e: Exception) {
+        emit(ResponseResult.Error(e.message ?: "Unknown error", -1))
+    }
 }.flowOn(Dispatchers.IO)
-
 
 inline fun <T> cacheAwareFlow(
     cachePolicy: CachePolicy,

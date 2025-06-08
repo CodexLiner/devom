@@ -113,12 +113,12 @@ private fun BottomSheetContent(
                 .padding(horizontal = 16.dp).padding(top = 24.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = spannedText,
-                color = greyColor,
-                style = text_style_lead_body_1,
-                modifier = Modifier.clickable { onResendOtp() }
-            )
+//            Text(
+//                text = spannedText,
+//                color = greyColor,
+//                style = text_style_lead_body_1,
+//                modifier = Modifier.clickable { onResendOtp() }
+//            )
         }
     }
 }

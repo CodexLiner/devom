@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -57,7 +58,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(
                 targetState = selectedTab,
-                modifier = Modifier.fillMaxSize().background(backgroundColor)
+                modifier = Modifier.fillMaxSize().navigationBarsPadding().background(backgroundColor)
             ) { tab ->
                 when (tab) {
                     0 -> HomeScreen(navHostController = appNavHostController) {

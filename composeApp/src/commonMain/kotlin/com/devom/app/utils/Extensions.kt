@@ -1,6 +1,7 @@
 package com.devom.app.utils
 
 import androidx.compose.ui.graphics.Color
+import com.devom.app.DOCUMENT_BASE_URL
 import com.devom.app.IMAGE_BASE_URL
 import com.devom.models.slots.Slot
 import io.ktor.http.encodeURLPath
@@ -21,6 +22,12 @@ fun String?.toDevomImage(): String? {
     val encodedPath = this?.encodeURLPath()
     return IMAGE_BASE_URL + encodedPath
 }
+
+fun String?.toDevomDocument(): String? {
+    val encodedPath = this?.encodeURLPath()
+    return DOCUMENT_BASE_URL + encodedPath
+}
+
 
 
 fun List<Slot>.updateSlotTimeAndShiftFollowingSlots(
@@ -74,4 +81,7 @@ fun List<Slot>.updateSlotTimeAndShiftFollowingSlots(
 
     return updatedSlots
 }
+
+val videoExtensions = listOf("mp4", "mov", "avi", "mkv", "webm", "flv", "wmv", "3gp", "mpeg")
+
 

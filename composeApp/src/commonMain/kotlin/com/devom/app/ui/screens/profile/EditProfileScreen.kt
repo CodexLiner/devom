@@ -151,13 +151,6 @@ fun EditProfileFormContent(userResponse: UserResponse, viewModel: ProfileViewMod
 
         item {
             TextInputField(
-                initialValue = userResponse.country.toString(),
-                placeholder = "Address"
-            ) { userResponse.country = it }
-        }
-
-        item {
-            TextInputField(
                 initialValue = userResponse.address.toString(),
                 placeholder = "Address"
             ) { userResponse.address = it }

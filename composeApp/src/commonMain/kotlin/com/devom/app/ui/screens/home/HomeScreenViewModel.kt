@@ -8,6 +8,7 @@ import com.devom.models.slots.GetBookingsResponse
 import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.network.onResult
+import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -36,6 +37,9 @@ class HomeScreenViewModel : ViewModel(){
                     status = applicationStatus.status
                 )
             ).collect {
+                it.withSuccessWithoutData {
+                    getBookings()
+                }
                 it.onResult {
                     getBookings()
                 }
