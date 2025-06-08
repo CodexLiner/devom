@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -55,7 +56,7 @@ fun TextInputField(
     LaunchedEffect(initialValue) {
         input = initialValue
     }
-    OutlinedTextField(
+    TextField(
         value = input,
         keyboardOptions = keyboardOptions,
         onValueChange = {

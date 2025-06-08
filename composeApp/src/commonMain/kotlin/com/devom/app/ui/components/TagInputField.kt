@@ -163,7 +163,7 @@ private fun TagDecorationBox(
     trailingIcon: @Composable (() -> Unit)? = null,
     cornerRadius: Dp
 ) {
-    OutlinedTextFieldDefaults.DecorationBox(
+    TextFieldDefaults.DecorationBox(
         value = textValue,
         innerTextField = {
             FlowRow(
