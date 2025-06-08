@@ -35,14 +35,18 @@ import com.devom.app.theme.text_style_h4
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toColor
 import com.devom.models.payment.WalletBalance
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_transactions
+import pandijtapp.composeapp.generated.resources.my_transactions
+import pandijtapp.composeapp.generated.resources.view_and_track_your_payments_and_transactions
 
 @Composable
 fun WalletScreen(navHostController: NavHostController, onNavigationIconClick: () -> Unit) {
@@ -74,10 +78,10 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
     ) {
         WalletActionItem(
             painter = painterResource(Res.drawable.ic_transactions),
-            text = "My Transactions",
-            description = "View and track your payments and transactions."
+            text = stringResource(Res.string.my_transactions),
+            description = stringResource(Res.string.view_and_track_your_payments_and_transactions)
         ) {
-
+            navController.navigate(Screens.Transactions.path)
         }
 
         WalletActionItem(

@@ -28,6 +28,10 @@ fun String?.toDevomDocument(): String? {
     return DOCUMENT_BASE_URL + encodedPath
 }
 
+fun String?.toRupay(): String {
+    return "₹$this"
+}
+
 
 
 fun List<Slot>.updateSlotTimeAndShiftFollowingSlots(

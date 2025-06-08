@@ -24,6 +24,18 @@
     <string name="verification_pooja_end">Verification for Pooja End</string>
     <string name="submit">Submit</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="my_transactions">My Transactions</string>
+    <string name="earnings">Earnings</string>
+    <string name="withdrawals">Withdrawals</string>
+    <string name="bonus_added">Bonus Added</string>
+    <string name="payment_received">Payment Received</string>
+    <string name="no_transactions_found">No Transactions Found</string>
+    <string name="successful">Successful</string>
+    <string name="bonus_wallet">Bonus Wallet</string>
+    <string name="view_and_track_your_payments_and_transactions">"View and track your payments and transactions.</string>
+
+
+
     <string-array name="arr">
         <item>item 1</item>
         <item> item 2</item>

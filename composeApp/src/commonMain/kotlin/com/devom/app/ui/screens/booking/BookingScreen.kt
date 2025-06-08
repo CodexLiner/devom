@@ -31,6 +31,7 @@ import com.devom.app.models.ApplicationStatus
 import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.NoContentView
+import com.devom.app.ui.components.StatusTabRow
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.network.NetworkClient
@@ -51,7 +52,7 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
         modifier = Modifier.fillMaxSize().background(backgroundColor)
     ) {
         AppBar(title = "Bookings" , onNavigationIconClick = onNavigationIconClick)
-        BookingStatusTab(selectedTabIndex, tabs)
+        StatusTabRow(selectedTabIndex, tabs)
 
         val filteredBookings = when (selectedTabIndex.value) {
             0 -> bookings.value.filter { it.status.lowercase() != ApplicationStatus.COMPLETED.status && it.status.lowercase() != ApplicationStatus.REJECTED.status }
@@ -81,35 +82,5 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
                 }
             }
         } else NoContentView(message = "No Bookings Found", title = null, image = null)
-    }
-}
-
-@Composable
-fun BookingStatusTab(selectedTabIndex: MutableState<Int>, tabs: List<String>) {
-    TabRow(
-        modifier = Modifier.fillMaxWidth(),
-        selectedTabIndex = selectedTabIndex.value,
-        contentColor = Color.Black,
-        indicator = { tabPositions ->
-            SecondaryIndicator(
-                Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex.value]).height(3.dp),
-                color = Color(0xFFFF6F00)
-            )
-        },
-        containerColor = Color.White
-    ) {
-        tabs.forEachIndexed { index, title ->
-            Tab(
-                selected = selectedTabIndex.value == index,
-                onClick = { selectedTabIndex.value = index },
-                text = {
-                    Text(
-                        title,
-                        color = if (selectedTabIndex.value == index) Color(0xFFFF6F00) else Color.Gray,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                })
-        }
     }
 }

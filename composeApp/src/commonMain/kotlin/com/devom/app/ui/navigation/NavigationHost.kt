@@ -26,9 +26,14 @@ import com.devom.app.ui.screens.rituals.RitualsScreen
 import com.devom.app.ui.screens.signup.DocumentUploadScreen
 import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
+import com.devom.app.ui.screens.transactions.TransactionDetailsScreen
+import com.devom.app.ui.screens.transactions.TransactionsScreen
 
 @Composable
-fun NavigationHost(startDestination: String = Screens.Login.path, navController: NavHostController) {
+fun NavigationHost(
+    startDestination: String = Screens.Login.path,
+    navController: NavHostController,
+) {
     NavHost(
         navController = navController, startDestination = startDestination
     ) {
@@ -37,8 +42,12 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(
             route = Screens.OtpScreen.path.plus("/{mobileNumber}"),
-            arguments = listOf(navArgument("mobileNumber") { type = NavType.StringType })) {
-            VerifyOtpScreen(navController = navController, mobileNumber = it.arguments?.getString("mobileNumber"))
+            arguments = listOf(navArgument("mobileNumber") { type = NavType.StringType })
+        ) {
+            VerifyOtpScreen(
+                navController = navController,
+                mobileNumber = it.arguments?.getString("mobileNumber")
+            )
         }
         composable(Screens.SignUpSuccess.path) {
             SignupSuccessScreen(navHostController = navController)
@@ -89,6 +98,14 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         }
         composable(Screens.ReferAndEarn.path) {
             ReferAndEarnScreen(navController = navController)
+        }
+        composable(Screens.Transactions.path) {
+            TransactionsScreen(navController = navController)
+        }
+        composable(Screens.TransactionsDetails.path) {
+            TransactionDetailsScreen(
+                navController = navController,
+            )
         }
     }
 }
