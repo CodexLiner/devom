@@ -78,11 +78,11 @@ fun DashboardScreen(appNavHostController: NavHostController) {
                         }
                     }
 
-                    4 -> ProfileScreen(navHostController = appNavHostController) {
+                    4 -> ProfileScreen(navHostController = appNavHostController , onNavigationIconClick = {
                         scope.launch {
                             drawerState.open()
                         }
-                    }
+                    })
 
                     else -> HomeScreen(navHostController = appNavHostController) {
                         scope.launch {
