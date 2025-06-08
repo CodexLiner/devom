@@ -11,6 +11,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
 import com.devom.app.ui.screens.wallet.WalletScreen
 import com.devom.models.auth.UserResponse
+import com.devom.models.payment.GetWalletBalanceResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pandijtapp.composeapp.generated.resources.Res
@@ -40,6 +42,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
     val viewModel = viewModel { DashboardViewModel() }
     var selectedTab = viewModel.selectedTab.collectAsState().value
     val user = viewModel.user.collectAsState().value
+    val balance = viewModel.walletBalances.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -53,7 +56,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel,) }
+        drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel, balance = balance) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(
@@ -118,9 +121,11 @@ fun DrawerContent(
     appNavHostController: NavHostController,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    viewModel: DashboardViewModel
+    viewModel: DashboardViewModel,
+    balance: State<GetWalletBalanceResponse>
 ) {
     NavigationDrawerContent(
+        balance = balance,
         user = user,
         appNavHostController = appNavHostController,
         onWalletClick = {

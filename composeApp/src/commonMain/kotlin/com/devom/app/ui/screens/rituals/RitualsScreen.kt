@@ -90,6 +90,7 @@ fun ColumnScope.RitualsScreenScreenContent(
     val selectedDropDownItem = remember { mutableStateOf<GetPanditPoojaResponse?>(null) }
     LazyColumn(
         modifier = Modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp)
     ) {
         items(poojaList.value.orEmpty()) {
@@ -237,7 +238,7 @@ fun AddEditPoojaBottomSheet(
 
                     TextInputField(
                         keyboardOptions = numberKeyboardOptions,
-                        initialValue = poojaItemMappingInput?.withItemPrice.orEmpty(),
+                        initialValue = poojaItemMappingInput.withItemPrice,
                         placeholder = "Cost with Samagri (₹)"
                     ) {
                         poojaItemMappingInput?.withItemPrice = it
@@ -247,7 +248,7 @@ fun AddEditPoojaBottomSheet(
 
                     TextInputField(
                         keyboardOptions = numberKeyboardOptions,
-                        initialValue = poojaItemMappingInput?.withoutItemPrice.orEmpty(),
+                        initialValue = poojaItemMappingInput.withoutItemPrice,
                         placeholder = "Cost without Samagri (₹)"
                     ) {
                         poojaItemMappingInput?.withoutItemPrice = it
@@ -266,8 +267,8 @@ fun AddEditPoojaBottomSheet(
                         onClick(
                             MapPanditPoojaItemInput(
                                 poojaId = selectedDropDownItem.value?.id?.toIntOrNull() ?: 0,
-                                withItemPrice = poojaItemMappingInput?.withItemPrice.orEmpty(),
-                                withoutItemPrice = poojaItemMappingInput?.withoutItemPrice.orEmpty()
+                                withItemPrice = poojaItemMappingInput.withItemPrice,
+                                withoutItemPrice = poojaItemMappingInput.withoutItemPrice
                             )
                         )
                     } else errorState.value = true

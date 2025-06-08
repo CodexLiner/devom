@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +39,7 @@ import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserResponse
+import com.devom.models.payment.GetWalletBalanceResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
@@ -53,11 +57,13 @@ internal fun NavigationDrawerContent(
     onWalletClick: () -> Unit,
     onBookings: () -> Unit,
     onDismiss: () -> Unit,
+    balance: State<GetWalletBalanceResponse>,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(.8f).fillMaxHeight().background(whiteColor),
     ) {
-        UserDetailsContent(user , appNavHostController , onDismiss)
+        UserDetailsContent(user, appNavHostController, balance , onDismiss)
+        Spacer(modifier = Modifier.height(8.dp))
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_wallet),
             text = "My Wallet"
@@ -105,8 +111,13 @@ internal fun NavigationDrawerContent(
 
 @Composable
 fun UserDetailsContent(
-    user: UserResponse?, appNavHostController: NavHostController, onDismiss: () -> Unit,
+    user: UserResponse?,
+    appNavHostController: NavHostController,
+    balance: State<GetWalletBalanceResponse>,
+    onDismiss: () -> Unit,
 ) {
+    val currentBalance = (balance.value.balance.cashWallet.toIntOrNull() ?: 0) + (balance.value.balance.bonusWallet.toIntOrNull() ?: 0)
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().background(color = primaryColor).systemBarsPadding()
@@ -152,7 +163,7 @@ fun UserDetailsContent(
                         color = whiteColor
                     )
                 ) {
-                    append(" ₹ 2200")
+                    append(" ₹$currentBalance")
                 }
             }
             Text(text = accountBalance, style = text_style_h5, color = whiteColor)
@@ -174,7 +185,7 @@ fun UserDetailsContent(
 fun DrawerItem(painter: Painter, text: String, onClick: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp , vertical = 18.dp),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp , vertical = 9.dp),
     ) {
         Row(
             verticalAlignment = Alignment.Top

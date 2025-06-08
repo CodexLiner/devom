@@ -54,6 +54,7 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
         BookingStatusTab(selectedTabIndex, tabs)
 
         val filteredBookings = when (selectedTabIndex.value) {
+            0 -> bookings.value.filter { it.status.lowercase() != ApplicationStatus.COMPLETED.status && it.status.lowercase() != ApplicationStatus.REJECTED.status }
             1 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
             2 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.REJECTED.status }
             else -> bookings.value
