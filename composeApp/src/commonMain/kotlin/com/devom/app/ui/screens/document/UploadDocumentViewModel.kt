@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.app.models.SupportedFiles
+import com.devom.models.auth.UserResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
 import com.devom.utils.network.onResult
@@ -20,6 +21,23 @@ class UploadDocumentViewModel : ViewModel() {
     private val _documents = MutableStateFlow<List<GetDocumentResponse>>(emptyList())
     val documents = _documents
 
+    private val _user = MutableStateFlow<UserResponse?>(null)
+    val user = _user
+
+    init {
+        getUserProfile()
+    }
+
+    fun getUserProfile() {
+        viewModelScope.launch {
+            Project.user.getUserProfileUseCase.invoke().collect {
+                it.onResult {
+                    _user.value = it.data
+                    getDocuments(user.value?.userId.toString())
+                }
+            }
+        }
+    }
     fun uploadDocument(userId: String, platformFile: PlatformFile, supportedFiles: SupportedFiles) {
         viewModelScope.launch {
             Project.document.createDocumentUseCase.invoke(
@@ -41,9 +59,9 @@ class UploadDocumentViewModel : ViewModel() {
         }
     }
 
-    fun getDocuments() {
+    fun getDocuments(userId: String) {
         viewModelScope.launch {
-            Project.document.getDocumentsUseCase.invoke(userId = "29").collect {
+            Project.document.getDocumentsUseCase.invoke(userId = userId).collect {
                 it.onResult {
                     _documents.value = it.data
                 }

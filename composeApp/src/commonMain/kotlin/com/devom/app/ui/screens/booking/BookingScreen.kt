@@ -27,13 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.devom.app.models.ApplicationStatus
 import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.network.NetworkClient
-import io.ktor.http.encodeURLPath
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,8 +53,14 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
         AppBar(title = "Bookings" , onNavigationIconClick = onNavigationIconClick)
         BookingStatusTab(selectedTabIndex, tabs)
 
-        val filteredBookings =
-            bookings.value.filter { it.status == tabs[selectedTabIndex.value].lowercase() }
+        val filteredBookings = when (selectedTabIndex.value) {
+            1 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
+            2 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
+            else -> bookings.value
+        }
+
+
+
         if (filteredBookings.isNotEmpty()) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -62,17 +68,15 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(filteredBookings) { booking ->
-                    BookingCard(booking, onBookingUpdate = {
-                        viewModel.updateBookingStatus(booking.bookingId, it)
-                    }, onClick = {
-                        navHostController.navigate(
-                            Screens.BookingDetails.path + "/${
-                                NetworkClient.config.jsonConfig.encodeToString(
-                                    booking
-                                )
-                            }"
-                        )
-                    })
+                    BookingCard(
+                        booking = booking,
+                        onBookingUpdate = {
+                            viewModel.updateBookingStatus(booking.bookingId, it)
+                        },
+                        onClick = {
+                            navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
+                        }
+                    )
                 }
             }
         } else NoContentView(message = "No Bookings Found", title = null, image = null)

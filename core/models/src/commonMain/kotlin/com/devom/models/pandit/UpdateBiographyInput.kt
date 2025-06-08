@@ -21,5 +21,7 @@ data class UpdateBiographyInput(
     val experienceYears: String = "",
 
     @SerialName("services_offered")
-    val servicesOffered: String = ""
+    val servicesOffered: String = "",
+
+    val isChanged : Boolean = false
 )

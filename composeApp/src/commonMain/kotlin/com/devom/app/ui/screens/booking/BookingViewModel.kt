@@ -3,7 +3,7 @@ package com.devom.app.ui.screens.booking
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
-import com.devom.app.models.STATUS
+import com.devom.app.models.ApplicationStatus
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.utils.cachepolicy.CachePolicy
@@ -17,6 +17,9 @@ class BookingViewModel : ViewModel() {
     private val _bookings = MutableStateFlow<List<GetBookingsResponse>>(listOf())
     val bookings: StateFlow<List<GetBookingsResponse>> = _bookings
 
+    private val _bookingDetailItem =  MutableStateFlow<GetBookingsResponse?>(null)
+    val bookingDetailItem : StateFlow<GetBookingsResponse?> = _bookingDetailItem
+
 
     fun getBookings() {
         viewModelScope.launch {
@@ -28,12 +31,22 @@ class BookingViewModel : ViewModel() {
         }
     }
 
-    fun updateBookingStatus(id: Int, status: STATUS) {
+    fun getBookingById(bookingId: String) {
+        viewModelScope.launch {
+            Project.pandit.getPanditBookingById.invoke(bookingId).collect {
+                it.onResult {
+                    _bookingDetailItem.value = it.data
+                }
+            }
+        }
+    }
+
+    fun updateBookingStatus(id: Int, applicationStatus: ApplicationStatus) {
         viewModelScope.launch {
             Project.pandit.updateBookingStatusUseCase.invoke(
                 UpdateBookingStatusInput(
                     id = id,
-                    status = status.status
+                    status = applicationStatus.status
                 )
             ).collect {
                 it.onResult {

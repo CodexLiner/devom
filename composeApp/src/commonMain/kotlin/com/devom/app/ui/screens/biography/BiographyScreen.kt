@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.app.models.SupportedFiles
 import com.devom.app.theme.textBlackShade
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.AsyncImage
@@ -59,7 +62,7 @@ fun BiographyScreen(navController: NavController) {
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Biography",
             onNavigationIconClick = { navController.popBackStack() })
-        BiographyScreenScreenContent(viewModel , navController)
+        BiographyScreenScreenContent(viewModel, navController)
     }
 
     LaunchedEffect(Unit) {
@@ -80,8 +83,19 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
                 navController.navigate(Screens.Rituals.path)
             }
 
+            DocumentPicker(
+                addIconOnly = biography.value?.media.isNullOrEmpty().not(),
+                title = "Media Gallery", allowedDocs = listOf(SupportedFiles.IMAGE_AND_VIDEO)
+            ) { platformFile, supportedFiles ->
+                viewModel.uploadDocument(
+                    viewModel.user.value?.userId.toString(),
+                    platformFile,
+                    supportedFiles
+                )
+            }
+
             LazyVerticalGrid(
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp),
                 columns = GridCells.Fixed(3),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -89,10 +103,6 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
                 items(biography.value?.media.orEmpty()) {
                     MediaItem(model = it.documentUrl, it.documentType)
                 }
-            }
-
-            DocumentPicker(title = "Media Gallery") { platformFile, supportedFiles ->
-                viewModel.uploadDocument("29", platformFile, supportedFiles)
             }
         }
         ButtonPrimary(
@@ -108,7 +118,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
 
 @Composable
 fun MediaItem(model: String, type: String) {
-    Box(modifier = Modifier.height(124.dp).aspectRatio(1f)) {
+    Box(modifier = Modifier.height(124.dp).aspectRatio(1f).clip(RoundedCornerShape(8.dp))) {
         AsyncImage(model = model.toDevomImage())
         if (type.lowercase() == "video") Image(
             painter = painterResource(Res.drawable.ic_video_camera),
@@ -130,7 +140,7 @@ fun BiographyForm(
         modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
     ) {
         TextInputField(
-            initialValue = biographyInput.value.experienceYears.toString(),
+            initialValue = biography.value?.experienceYears.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             placeholder = "Years of Experience"
         ) {

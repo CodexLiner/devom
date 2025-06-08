@@ -20,6 +20,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.devom.app.models.STATUS
+import com.devom.app.models.ApplicationStatus
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
@@ -54,9 +56,15 @@ import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_check
 
 @Composable
-fun BookingDetailScreen(navController: NavController, booking: GetBookingsResponse) {
+fun BookingDetailScreen(navController: NavController, bookingId: String?) {
     val viewModel: BookingViewModel = viewModel { BookingViewModel() }
+    val booking = viewModel.bookingDetailItem.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getBookingById(bookingId.orEmpty())
+    }
+
     Column(
         modifier = Modifier.fillMaxSize().background(backgroundColor)
     ) {
@@ -65,27 +73,29 @@ fun BookingDetailScreen(navController: NavController, booking: GetBookingsRespon
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             onNavigationIconClick = { navController.popBackStack() }
         )
-        BookingDetailScreenContent(navController, booking , viewModel)
-        if (booking.status !in listOf(STATUS.COMPLETED.status , STATUS.REJECTED.status , STATUS.CANCELLED.status)) ButtonPrimary(
-            modifier = Modifier.fillMaxWidth().navigationBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
-            buttonText = "Start Pooja"
-        ) {
-            showSheet.value = true
-        }
+        booking.value?.let {
+            BookingDetailScreenContent(navController, it , viewModel)
+            if (booking.value?.status !in listOf(ApplicationStatus.COMPLETED.status , ApplicationStatus.REJECTED.status , ApplicationStatus.CANCELLED.status)) ButtonPrimary(
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
+                buttonText = "Start Pooja"
+            ) {
+                showSheet.value = true
+            }
 
-        if (showSheet.value) {
-            StartEndPoojaSheet(
-                showSheet = showSheet.value,
-                title = "Verification for Pooja End",
-                message = "We have sent the verification code to mobile number 40******20.",
-                buttonText = "Submit",
-                onDismiss = {
-                    showSheet.value = false
-                },
-                onResendOtp = {},
-                onOtpEntered = {}
-            )
+            if (showSheet.value) {
+                StartEndPoojaSheet(
+                    showSheet = showSheet.value,
+                    title = "Verification for Pooja End",
+                    message = "We have sent the verification code to mobile number 40******20.",
+                    buttonText = "Submit",
+                    onDismiss = {
+                        showSheet.value = false
+                    },
+                    onResendOtp = {},
+                    onOtpEntered = {}
+                )
+            }
         }
     }
 }

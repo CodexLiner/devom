@@ -59,7 +59,7 @@ private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
     val documents = viewModel.documents.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getDocuments()
+        viewModel.getUserProfile()
     }
 
     Column (verticalArrangement = Arrangement.spacedBy(16.dp)){
@@ -69,7 +69,7 @@ private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
             }
         }
         DocumentPicker(title = "Certificates") { platformFile, supportedFiles ->
-            viewModel.uploadDocument("29", platformFile, supportedFiles)
+            viewModel.uploadDocument(viewModel.user.value?.userId.toString(), platformFile, supportedFiles)
         }
     }
 }

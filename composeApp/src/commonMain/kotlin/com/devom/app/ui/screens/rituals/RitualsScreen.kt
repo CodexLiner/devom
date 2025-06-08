@@ -196,7 +196,14 @@ fun AddEditPoojaBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val poojaItemMappingInput by remember { mutableStateOf(poojaItem) }
-    val selectedDropDownItem = remember { mutableStateOf<DropDownItem?>(null) }
+    val selectedDropDownItem = remember {
+        mutableStateOf<DropDownItem?>(
+            DropDownItem(
+                poojaItemMappingInput?.poojaName.orEmpty(),
+                poojaItemMappingInput?.poojaId.toString()
+            )
+        )
+    }
     val scope = rememberCoroutineScope()
     val numberKeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
     val errorState = remember { mutableStateOf(false) }
@@ -222,10 +229,7 @@ fun AddEditPoojaBottomSheet(
                     ExposedDropdown(
                         placeholder = "Ritual/Pooja Name",
                         options = poojaList.map { DropDownItem(it.name, it.id.toString()) },
-                        selectedOption = DropDownItem(
-                            poojaItemMappingInput?.poojaName.orEmpty(),
-                            poojaItemMappingInput?.poojaId.toString()
-                        )
+                        selectedOption = selectedDropDownItem.value
                     ) {
                         selectedDropDownItem.value = it
                         errorState.value = false

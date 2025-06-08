@@ -2,7 +2,6 @@ package com.devom.data.server.document
 
 import com.devom.data.server.endpoints.DocumentEndpoints
 import com.devom.models.document.CreateDocumentInput
-import com.devom.models.document.CreateDocumentResponse
 import com.devom.models.document.GetDocumentResponse
 import com.devom.models.document.UpdateDocumentInput
 import com.devom.network.NetworkClient
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 interface DocumentRemoteDataSource {
     suspend fun getDocuments(userId: String): Flow<ResponseResult<List<GetDocumentResponse>>>
     suspend fun removeDocument(documentId: String): Flow<ResponseResult<String>>
-    suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<CreateDocumentResponse>>
+    suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<String>>
     suspend fun updateDocument(id: String, input: UpdateDocumentInput): Flow<ResponseResult<String>>
 }
 
@@ -36,7 +35,7 @@ class DocumentRemoteDataSourceImpl() : DocumentRemoteDataSource {
             .toResponseResult()
 
 
-    override suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<CreateDocumentResponse>> =
+    override suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<String>> =
         ktorClient.post(DocumentEndpoints.CreateDocument) {
             setBody(
                 MultiPartFormDataContent(

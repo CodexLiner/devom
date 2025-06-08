@@ -67,13 +67,7 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
                 BookingCard(booking, onBookingUpdate = {
                     viewModel.updateBookingStatus(booking.bookingId, it)
                 }, onClick = {
-                    navHostController.navigate(
-                        Screens.BookingDetails.path + "/${
-                            NetworkClient.config.jsonConfig.encodeToString(
-                                booking
-                            )
-                        }"
-                    )
+                    navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
                 })
             }
         }

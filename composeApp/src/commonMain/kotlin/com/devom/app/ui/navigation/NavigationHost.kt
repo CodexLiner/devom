@@ -26,9 +26,6 @@ import com.devom.app.ui.screens.rituals.RitualsScreen
 import com.devom.app.ui.screens.signup.DocumentUploadScreen
 import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
-import com.devom.models.slots.GetBookingsResponse
-import com.devom.network.NetworkClient
-import io.ktor.http.decodeURLPart
 
 @Composable
 fun NavigationHost(startDestination: String = Screens.Login.path, navController: NavHostController) {
@@ -58,7 +55,7 @@ fun NavigationHost(startDestination: String = Screens.Login.path, navController:
         ) {
             BookingDetailScreen(
                 navController = navController,
-                booking = NetworkClient.config.jsonConfig.decodeFromString<GetBookingsResponse>(it.arguments?.getString("booking").toString().decodeURLPart())
+                bookingId = it.arguments?.getString("booking")
             )
         }
         composable(Screens.Dashboard.path) {

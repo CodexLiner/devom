@@ -45,7 +45,7 @@ import pandijtapp.composeapp.generated.resources.vertical_ellipsis
 fun ReviewsAndRatingsScreen(navController: NavController) {
     val viewModel = viewModel { ReviewsAndRatingsViewModel() }
     LaunchedEffect(Unit) {
-        viewModel.getReviews()
+        viewModel.getUserProfile()
     }
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(

@@ -3,7 +3,7 @@ package com.devom.app.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
-import com.devom.app.models.STATUS
+import com.devom.app.models.ApplicationStatus
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.utils.cachepolicy.CachePolicy
@@ -28,12 +28,12 @@ class HomeScreenViewModel : ViewModel(){
         }
     }
 
-    fun updateBookingStatus(id: Int, status: STATUS) {
+    fun updateBookingStatus(id: Int, applicationStatus: ApplicationStatus) {
         viewModelScope.launch {
             Project.pandit.updateBookingStatusUseCase.invoke(
                 UpdateBookingStatusInput(
                     id = id,
-                    status = status.status
+                    status = applicationStatus.status
                 )
             ).collect {
                 it.onResult {

@@ -1,6 +1,6 @@
 package com.devom.app.models
 
-enum class STATUS(val status: String) {
+enum class ApplicationStatus(val status: String) {
     PENDING("pending"),
     ACCEPTED("accepted"),
     REJECTED("rejected"),

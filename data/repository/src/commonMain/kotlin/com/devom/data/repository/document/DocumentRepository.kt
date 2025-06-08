@@ -5,7 +5,6 @@ import com.devom.data.cache.document.DocumentLocalDataSourceImpl
 import com.devom.data.server.document.DocumentRemoteDataSource
 import com.devom.data.server.document.DocumentRemoteDataSourceImpl
 import com.devom.models.document.CreateDocumentInput
-import com.devom.models.document.CreateDocumentResponse
 import com.devom.models.document.GetDocumentResponse
 import com.devom.models.document.UpdateDocumentInput
 import com.devom.utils.cachepolicy.CachePolicy
@@ -20,7 +19,7 @@ interface DocumentRepository {
     ): Flow<ResponseResult<List<GetDocumentResponse>>>
 
     suspend fun removeDocument(documentId: String): Flow<ResponseResult<String>>
-    suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<CreateDocumentResponse>>
+    suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<String>>
     suspend fun updateDocument(id: String, input: UpdateDocumentInput): Flow<ResponseResult<String>>
 }
 
@@ -40,7 +39,7 @@ class DocumentRepositoryImpl() : DocumentRepository {
     override suspend fun removeDocument(documentId: String): Flow<ResponseResult<String>> =
         apiFlow { documentRemoteDataSource.removeDocument(documentId) }
 
-    override suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<CreateDocumentResponse>> = apiFlow { documentRemoteDataSource.createDocument(input) }
+    override suspend fun createDocument(input: CreateDocumentInput): Flow<ResponseResult<String>> = apiFlow { documentRemoteDataSource.createDocument(input) }
 
     override suspend fun updateDocument(id: String, input: UpdateDocumentInput, ): Flow<ResponseResult<String>> = apiFlow {
         documentRemoteDataSource.updateDocument(id, input)

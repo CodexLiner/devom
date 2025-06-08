@@ -80,6 +80,7 @@ fun TagInputField(
 
     LaunchedEffect(initialTags) {
         tags = initialTags
+        onTagsChanged(initialTags)
     }
 
     BasicTextField(

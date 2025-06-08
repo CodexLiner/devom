@@ -20,6 +20,7 @@ interface PanditSlotsRemoteDataSource {
     suspend fun createPanditSlot(createPanditSlotInput: CreatePanditSlotInput): Flow<ResponseResult<String>>
     suspend fun bookPanditSlot(bookPanditSlotRequest: BookPanditSlotInput): Flow<ResponseResult<String>>
     suspend fun getBookings(): Flow<ResponseResult<List<GetBookingsResponse>>>
+    suspend fun getBookingById(bookingId: String): Flow<ResponseResult<GetBookingsResponse>>
     suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>>
 }
 
@@ -37,6 +38,9 @@ class PanditSlotsRemoteDataSourceImpl() : PanditSlotsRemoteDataSource {
 
     override suspend fun getBookings(): Flow<ResponseResult<List<GetBookingsResponse>>> =
         ktorClient.get(PanditSlotsEndpoints.GetBookings).toResponseResult()
+
+    override suspend fun getBookingById(bookingId: String): Flow<ResponseResult<GetBookingsResponse>> =
+        ktorClient.get(PanditSlotsEndpoints.GetBookingById.plus("/$bookingId")).toResponseResult()
 
     override suspend fun updateBookingStatus(input: UpdateBookingStatusInput): Flow<ResponseResult<String>> =
         ktorClient.put(PanditSlotsEndpoints.UpdateBookingStatus) { setBody(input) }.toResponseResult()

@@ -1,4 +1,5 @@
 package com.devom.app.ui.screens.booking.components
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,12 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.util.Logger
-import com.devom.app.models.STATUS
+import com.devom.app.models.ApplicationStatus
 import com.devom.app.theme.greenColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
@@ -46,16 +45,12 @@ import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_check
 import pandijtapp.composeapp.generated.resources.ic_close
-import pandijtapp.composeapp.generated.resources.ic_google
-import pandijtapp.composeapp.generated.resources.placeholder
-
 
 @Composable
 fun BookingCard(
     booking: GetBookingsResponse,
-    onBookingUpdate: (STATUS) -> Unit ={},
-    onClick: () -> Unit = {},
-
+    onBookingUpdate: (ApplicationStatus) -> Unit ={},
+    onClick: () -> Unit = {}
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -79,7 +74,7 @@ fun BookingCard(
 }
 
 @Composable
-fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (STATUS) -> Unit) {
+fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (ApplicationStatus) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -90,7 +85,7 @@ fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (STATUS) -
             modifier = Modifier.weight(1f)
         )
 
-        if (booking.status == STATUS.PENDING.status) BookingConfirmationButton(onBookingUpdate)
+        if (booking.status == ApplicationStatus.PENDING.status) BookingConfirmationButton(onBookingUpdate)
         else Box(modifier = Modifier.padding(end = 8.dp).background(Color(0x1AFFC107), shape = RoundedCornerShape(50))) {
             Text(
                 modifier = Modifier.padding(4.dp),
@@ -105,20 +100,20 @@ fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (STATUS) -
 }
 
 @Composable
-fun RowScope.BookingConfirmationButton(onBookingUpdate : (STATUS) -> Unit) {
+fun RowScope.BookingConfirmationButton(onBookingUpdate : (ApplicationStatus) -> Unit) {
     ConfirmationIcon(
         iconRes = Res.drawable.ic_check,
         tintColor = greenColor,
         backgroundColor = greenColor.copy(alpha = 0.08f)
     ) {
-        onBookingUpdate(STATUS.CONFIRMED)
+        onBookingUpdate(ApplicationStatus.CONFIRMED)
     }
     ConfirmationIcon(
         iconRes = Res.drawable.ic_close,
         tintColor = secondaryColor,
         backgroundColor = secondaryColor.copy(alpha = 0.08f)
     ) {
-        onBookingUpdate(STATUS.REJECTED)
+        onBookingUpdate(ApplicationStatus.REJECTED)
     }
 }
 
@@ -163,7 +158,7 @@ fun BookingUserContactDetail(booking: GetBookingsResponse) {
             color = greyColor,
         )
 
-        if (booking.status == STATUS.COMPLETED.status) Text(
+        if (booking.status == ApplicationStatus.COMPLETED.status) Text(
             modifier = Modifier,
             text = "₹1101",
             fontSize = 14.sp,
@@ -206,7 +201,7 @@ fun BookingPoojaDetails(booking: GetBookingsResponse) {
             val time = booking.bookingDate.convertIsoToDate()?.toLocalDateTime()?.time?.to12HourTime()
             Text(
                 text = date.plus(" $time"),
-                fontWeight = FontWeight.W600,
+                fontWeight = FontWeight.W500,
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
                 color = greyColor
