@@ -39,7 +39,7 @@ class BiographyViewModel : ViewModel() {
                 )
             ).collect {
                 it.onResult {
-
+                    getBiography(userId)
                 }
             }
         }
