@@ -85,16 +85,21 @@ fun BookingUserDetail(booking: GetBookingsResponse ,onBookingUpdate : (Applicati
             modifier = Modifier.weight(1f)
         )
 
-        if (booking.status == ApplicationStatus.PENDING.status) BookingConfirmationButton(onBookingUpdate)
-        else Box(modifier = Modifier.padding(end = 8.dp).background(Color(0x1AFFC107), shape = RoundedCornerShape(50))) {
-            Text(
-                modifier = Modifier.padding(4.dp),
-                text = booking.status.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
-                color = greenColor,
-                fontWeight = FontWeight.W600,
-                fontSize = 12.sp,
-                lineHeight = 18.sp,
-            )
+        if (booking.status == ApplicationStatus.PENDING.status) Row(modifier = Modifier.padding(end = 8.dp) , horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            BookingConfirmationButton(onBookingUpdate)
+        }
+        else {
+            val contentColor = if (booking.status == ApplicationStatus.CONFIRMED.status) greenColor else secondaryColor
+            Box(modifier = Modifier.padding(end = 8.dp).background(contentColor.copy(0.08f), shape = RoundedCornerShape(50))) {
+                Text(
+                    modifier = Modifier.padding(vertical = 4.dp , horizontal = 8.dp),
+                    text = booking.status.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
+                    color = contentColor,
+                    fontWeight = FontWeight.W600,
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                )
+            }
         }
     }
 }
