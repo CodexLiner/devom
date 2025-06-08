@@ -58,5 +58,5 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
         ktorClient.get(AuthEndpoints.GetUserProfile).toResponseResult()
 
     override suspend fun updateUserProfile(user: UserResponse): Flow<ResponseResult<UserResponse>> =
-        ktorClient.put(AuthEndpoints.UpdateUserProfile.plus("/${user.userId}")) { setBody(user) }.toResponseResult()
+        ktorClient.put(AuthEndpoints.UpdateUserProfile) { setBody(user) }.toResponseResult()
 }
