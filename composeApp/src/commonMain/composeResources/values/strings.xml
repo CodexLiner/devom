@@ -18,6 +18,11 @@
     <string name="no_slots_available">No Slots Available</string>
     <string name="resend_otp">Resend OTP</string>
     <string name="we_have_sent_the_verification_code">We have sent the verification code to your mobile number %1$s.</string>
+    <string name="enter_pin_visible_on_customer_app">PIN is displayed on the customer screen. Please enter it.</string>
+    <string name="please_enter_pin">Please enter pin</string>
+    <string name="verification_pooja_start">Verification for Pooja Start</string>
+    <string name="verification_pooja_end">Verification for Pooja End</string>
+    <string name="submit">Submit</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string-array name="arr">
         <item>item 1</item>

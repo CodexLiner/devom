@@ -51,9 +51,13 @@ import com.devom.app.utils.toColor
 import com.devom.models.slots.BookingItem
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.enter_pin_visible_on_customer_app
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_check
+import pandijtapp.composeapp.generated.resources.submit
+import pandijtapp.composeapp.generated.resources.verification_pooja_start
 
 @Composable
 fun BookingDetailScreen(navController: NavController, bookingId: String?) {
@@ -86,9 +90,9 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
             if (showSheet.value) {
                 StartEndPoojaSheet(
                     showSheet = showSheet.value,
-                    title = "Verification for Pooja Start",
-                    message = "We have sent the verification code to mobile number 40******20.",
-                    buttonText = "Submit",
+                    title = stringResource(Res.string.verification_pooja_start),
+                    message = stringResource(Res.string.enter_pin_visible_on_customer_app),
+                    buttonText = stringResource(Res.string.submit),
                     onDismiss = {
                         showSheet.value = false
                     },

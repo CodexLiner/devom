@@ -39,7 +39,6 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.BackButton
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.OtpView
-import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
