@@ -18,6 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,14 +41,17 @@ import com.devom.app.utils.toColor
 import com.devom.models.payment.WalletBalance
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import pandijtapp.composeapp.generated.resources.Add_Account
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
 import pandijtapp.composeapp.generated.resources.bring_your_friends_on_devom_and_earn_rewards
+import pandijtapp.composeapp.generated.resources.current_balance
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_transactions
 import pandijtapp.composeapp.generated.resources.invite_and_collect
 import pandijtapp.composeapp.generated.resources.my_transactions
+import pandijtapp.composeapp.generated.resources.my_wallet
 import pandijtapp.composeapp.generated.resources.view_and_track_your_payments_and_transactions
 
 @Composable
@@ -56,7 +60,7 @@ fun WalletScreen(navHostController: NavHostController, onNavigationIconClick: ()
         WalletViewModel()
     }
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
-        AppBar(title = "My Wallet", onNavigationIconClick = onNavigationIconClick)
+        AppBar(title = stringResource(Res.string.my_wallet), onNavigationIconClick = onNavigationIconClick)
         WalletScreenContent(navHostController , viewModel)
     }
 }
@@ -134,7 +138,7 @@ private fun WalletIcon() {
 private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
     Column(modifier = Modifier.weight(1f)) {
         Text(
-            text = "Current Balance",
+            text = stringResource(Res.string.current_balance),
             color = greyColor,
             fontWeight = FontWeight.W400,
             fontSize = 14.sp
@@ -158,7 +162,7 @@ private fun WithdrawButton() {
                 modifier = Modifier
                     .background(blackColor, RoundedCornerShape(12.dp))
                     .padding(vertical = 10.dp, horizontal = 16.dp),
-                text = "Add Account",
+                text = stringResource(Res.string.Add_Account),
                 color = whiteColor,
                 style = text_style_lead_text,
             )
@@ -174,8 +178,8 @@ private fun WalletBreakdownRow(balance: WalletBalance) {
             .padding(horizontal = 16.dp)
             .background(whiteColor, RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             .border(
-                width = 1.dp,
-                color = "#6469823D".toColor().copy(.24f),
+                width = 0.5f.dp,
+                color = greyColor.copy(.24f),
                 shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
             )
     ) {
@@ -226,7 +230,7 @@ fun WalletActionItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(painter = painter, contentDescription = null)
+            Image(painter = painter, contentDescription = null , colorFilter = ColorFilter.tint(greyColor))
             Column(
                 modifier = Modifier.padding(start = 16.dp).weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)

@@ -124,7 +124,9 @@ fun ProfileScreen(
                 ProfileCompletionProgressIndicator(user.profileCompletion.toFloat().coerceIn(0.1f, 100f))
             }
             item {
-                ProfileUserImageAndRatingsContent(user, user.reviewRating.toFloat())
+                ProfileUserImageAndRatingsContent(user, user.reviewRating.toFloat()) {
+                    navHostController.navigate(Screens.EditProfile.path)
+                }
                 Spacer(modifier = Modifier.height(16.dp))
             }
             item {
@@ -204,7 +206,7 @@ fun ProfileActionOptionsCard(navHostController: NavHostController) {
 }
 
 @Composable
-fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float) {
+fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float , onClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -216,7 +218,7 @@ fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float) {
 
             Box(
                 modifier = Modifier.offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape)
-                    .background(Color(0xFFFFC107)), contentAlignment = Alignment.Center
+                    .background(Color(0xFFFFC107)).clickable(onClick = onClick), contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_edit),
