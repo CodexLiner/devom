@@ -7,6 +7,7 @@ import com.devom.app.models.SupportedFiles
 import com.devom.models.auth.UserResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
+import com.devom.utils.Application
 import com.devom.utils.network.onResult
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.extension
@@ -53,7 +54,8 @@ class UploadDocumentViewModel : ViewModel() {
                 )
             ).collect {
                 it.onResult {
-
+                    getDocuments(user.value?.userId.toString())
+                    Application.showToast("Document uploaded successfully")
                 }
             }
         }
