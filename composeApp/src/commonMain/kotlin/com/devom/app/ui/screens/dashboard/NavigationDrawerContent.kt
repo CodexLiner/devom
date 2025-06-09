@@ -39,14 +39,21 @@ import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserResponse
 import com.devom.models.payment.GetWalletBalanceResponse
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import pandijtapp.composeapp.generated.resources.Biography
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.Review_and_Ratings
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
+import pandijtapp.composeapp.generated.resources.help_support
 import pandijtapp.composeapp.generated.resources.ic_badge_verified
 import pandijtapp.composeapp.generated.resources.ic_help_support
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_review
+import pandijtapp.composeapp.generated.resources.my_booking
+import pandijtapp.composeapp.generated.resources.my_wallet
+import pandijtapp.composeapp.generated.resources.refer_earn
 
 @Composable
 internal fun NavigationDrawerContent(
@@ -58,53 +65,61 @@ internal fun NavigationDrawerContent(
     balance: State<GetWalletBalanceResponse>,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(.8f).fillMaxHeight().background(whiteColor),
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight()
+            .background(whiteColor),
     ) {
-        UserDetailsContent(user, appNavHostController, balance , onDismiss)
+        UserDetailsContent(user, appNavHostController, balance, onDismiss)
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_wallet),
-            text = "My Wallet"
+            text = stringResource(Res.string.my_wallet)
         ) {
             onWalletClick()
         }
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_bookings),
-            text = "My Booking"
+            text = stringResource(Res.string.my_booking)
         ) {
             onBookings()
         }
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_wallet),
-            text = "Biography"
+            text = stringResource(Res.string.Biography)
         ) {
             appNavHostController.navigate(Screens.Biography.path)
             onDismiss()
         }
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_review),
-            text = "Review & Ratings"
+            text = stringResource(Res.string.Review_and_Ratings)
         ) {
             appNavHostController.navigate(Screens.ReviewsAndRatings.path)
             onDismiss()
-
         }
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_help_support),
-            text = "Help & Support"
+            text = stringResource(Res.string.help_support)
         ) {
             appNavHostController.navigate(Screens.HelpAndSupport.path)
             onDismiss()
-
         }
+
         DrawerItem(
             painter = painterResource(Res.drawable.ic_refer),
-            text = "Refer & Earn"
+            text = stringResource(Res.string.refer_earn)
         ) {
             appNavHostController.navigate(Screens.ReferAndEarn.path)
             onDismiss()
         }
     }
 }
+
 
 @Composable
 fun UserDetailsContent(
@@ -113,11 +128,13 @@ fun UserDetailsContent(
     balance: State<GetWalletBalanceResponse>,
     onDismiss: () -> Unit,
 ) {
-    val currentBalance = (balance.value.balance.cashWallet.toIntOrNull() ?: 0) + (balance.value.balance.bonusWallet.toIntOrNull() ?: 0)
+    val currentBalance = (balance.value.balance.cashWallet.toIntOrNull()
+        ?: 0) + (balance.value.balance.bonusWallet.toIntOrNull() ?: 0)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().background(color = primaryColor).padding(16.dp).statusBarsPadding(),
+        modifier = Modifier.fillMaxWidth().background(color = primaryColor).padding(16.dp)
+            .statusBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(contentAlignment = Alignment.BottomEnd) {
@@ -181,7 +198,8 @@ fun UserDetailsContent(
 fun DrawerItem(painter: Painter, text: String, onClick: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp).padding(top = 18.dp),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp)
+            .padding(top = 18.dp),
     ) {
         Row(
             verticalAlignment = Alignment.Top

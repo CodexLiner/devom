@@ -56,6 +56,8 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.enter_pin_visible_on_customer_app
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_check
+import pandijtapp.composeapp.generated.resources.pooja_samgri_list
+import pandijtapp.composeapp.generated.resources.start_pooja
 import pandijtapp.composeapp.generated.resources.submit
 import pandijtapp.composeapp.generated.resources.verification_pooja_start
 
@@ -79,10 +81,16 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
         )
         booking.value?.let {
             BookingDetailScreenContent(navController, it , viewModel)
-            if (booking.value?.status !in listOf(ApplicationStatus.COMPLETED.status , ApplicationStatus.REJECTED.status , ApplicationStatus.CANCELLED.status)) ButtonPrimary(
+            if (booking.value?.status !in listOf(
+                    ApplicationStatus.COMPLETED.status,
+                    ApplicationStatus.REJECTED.status,
+                    ApplicationStatus.CANCELLED.status,
+                    ApplicationStatus.PENDING.status
+                )
+            ) ButtonPrimary(
                 modifier = Modifier.fillMaxWidth().navigationBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
-                buttonText = "Start Pooja"
+                buttonText = stringResource(Res.string.start_pooja)
             ) {
                 showSheet.value = true
             }
@@ -125,7 +133,7 @@ fun ColumnScope.BookingDetailScreenContent(
 
         item {
             Text(
-                text = "Pooja Samagri List",
+                text = stringResource(Res.string.pooja_samgri_list),
                 style = text_style_h5,
                 color = textBlackShade,
                 modifier = Modifier.padding(top = 28.dp , bottom = 16.dp)
@@ -141,10 +149,7 @@ fun ColumnScope.BookingDetailScreenContent(
             SamagriItemRow(
                 item = item,
                 modifier = Modifier.background(color = whiteColor, shape = shape).padding(horizontal = 16.dp)
-            ) {
-                // Handle checkbox state change here
-            }
-
+            )
             if (index < 9) HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = "#A0A5BA3D".toColor(), thickness = 1.dp)
         }
     }
@@ -152,7 +157,7 @@ fun ColumnScope.BookingDetailScreenContent(
 
 
 @Composable
-fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem, onCheckedChange: (Boolean) -> Unit) {
+fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem) {
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically

@@ -35,12 +35,20 @@
     <string name="invite_and_collect">Invite &amp; Collect</string>
     <string name="bring_your_friends_on_devom_and_earn_rewards">Bring your friends on DevOM and earn rewards</string>
     <string name="Preferences">Preferences</string>
+    <string name="start_pooja">Start Pooja</string>
+    <string name="pooja_samgri_list">Pooja Samagri List</string>
     <string name="Notifications">Notifications</string>
     <string name="Availability">Availability</string>
     <string name="update_profile">Update Profile</string>
     <string name="Biography">Biography</string>
     <string name="Documents">Documents</string>
     <string name="Review_and_Ratings">Review &amp; Ratings</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="my_booking">My Booking</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="refer_earn">Refer &amp; Earn</string>
+
+
     <string name="invite_friends">Invite Friends</string>
     <string name="successful">Successful</string>
     <string name="bonus_wallet">Bonus Wallet</string>

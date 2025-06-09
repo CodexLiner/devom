@@ -13,6 +13,8 @@ data class UserResponse(
     @SerialName("state") var state: String = "",
     @SerialName("country") var country: String = "",
     @SerialName("referral_code") var referralCode: String = "",
+    @SerialName("verified") var verified: String = "",
+    @SerialName("profile_completion") var profileCompletion: Int = 0,
     @SerialName("review_rating") var reviewRating: Int = 0,
     @SerialName("date_of_birth") var dateOfBirth: String = "",
     @SerialName("address") var address: String = "",

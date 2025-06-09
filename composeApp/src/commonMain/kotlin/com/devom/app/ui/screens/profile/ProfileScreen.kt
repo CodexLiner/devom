@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.profile
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.devom.app.models.ApplicationStatus
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greenColor
@@ -82,9 +84,7 @@ import pandijtapp.composeapp.generated.resources.update_profile
 @Composable
 fun ProfileScreen(
     navHostController: NavHostController,
-    progress: Int = 50,
     onNavigationIconClick: () -> Unit = {},
-    onNotificationToggle: (Boolean) -> Unit = {},
 ) {
     val viewModel = viewModel<ProfileViewModel> {
         ProfileViewModel()
@@ -121,7 +121,7 @@ fun ProfileScreen(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 200.dp)
         ) {
             item {
-                ProfileCompletionProgressIndicator(progress)
+                ProfileCompletionProgressIndicator(user.profileCompletion.toFloat().coerceIn(0.1f, 100f))
             }
             item {
                 ProfileUserImageAndRatingsContent(user, user.reviewRating.toFloat())
@@ -236,10 +236,12 @@ fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float) {
             )
             Spacer(modifier = Modifier.width(4.dp))
 
-            Image(
-                painter = painterResource(Res.drawable.ic_verified),
-                contentDescription = "Verified",
-            )
+            AnimatedVisibility(user.verified == ApplicationStatus.VERIFIED.status) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_verified),
+                    contentDescription = "Verified",
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -281,20 +283,25 @@ private fun RatingsBar(rating: Float) {
 
 
 @Composable
-fun ProfileCompletionProgressIndicator(progress: Int) {
-    Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(50)).background(whiteColor)) {
+fun ProfileCompletionProgressIndicator(progress: Float) {
+    AnimatedVisibility(progress > 1) {
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth(progress / 100f)
-                .clip(RoundedCornerShape(50)).background(greenColor),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(50)).background(whiteColor)
         ) {
-            Text(
-                text = "${progress}% Completed",
-                style = text_style_h5,
-                fontSize = 10.sp,
-                color = whiteColor,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+            Box(
+                modifier = Modifier.fillMaxHeight().fillMaxWidth(progress / 100f)
+                    .clip(RoundedCornerShape(50)).background(greenColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "${progress}% Completed",
+                    style = text_style_h5,
+                    fontSize = 10.sp,
+                    color = whiteColor,
+                    maxLines = 1,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
         }
     }
 }
