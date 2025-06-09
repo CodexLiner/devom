@@ -46,10 +46,17 @@
     <string name="my_wallet">My Wallet</string>
     <string name="my_booking">My Booking</string>
     <string name="Add_Account">Add Account</string>
+    <string name="no_pooja_found">No Pooja Found</string>
+    <string name="media_galley">Media Gallery</string>
     <string name="help_support">Help &amp; Support</string>
     <string name="current_balance">Current Balance</string>
     <string name="refer_earn">Refer &amp; Earn</string>
-
+    <string name="years_of_experience">Years of Experience</string>
+    <string name="expertise">Expertise</string>
+    <string name="languages_spoken">Languages Spoken</string>
+    <string name="preferred_rituals">Preferred Rituals/Poojas</string>
+    <string name="Update">Update</string>
+    <string name="choose_file">Choose a file</string>
 
     <string name="invite_friends">Invite Friends</string>
     <string name="successful">Successful</string>

@@ -68,7 +68,8 @@ fun DocumentPicker(
         onFilePicked = { file, type ->
             selectedFileInfo = file to type
             onFilePicked(file, type)
-        })
+        }
+    )
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
 
@@ -85,15 +86,7 @@ fun DocumentPicker(
             if (addIconOnly) {
                 Image(
                     modifier = Modifier.size(30.dp).clickable {
-                        handleFilePickerClick(
-                            allowedDocs = allowedDocs,
-                            scope = scope,
-                            onFilePicked = { file, type ->
-                                selectedFileInfo = file to type
-                                onFilePicked(file, type)
-                            },
-                            onShowSheet = { showPicker = true }
-                        )
+                      showPicker = true
                     },
                     painter = painterResource(Res.drawable.ic_plus),
                     contentDescription = null
@@ -114,15 +107,7 @@ fun DocumentPicker(
                     )
                     .background(Color(0xFFF6F9FF), shape = RoundedCornerShape(8.dp))
                     .clickable {
-                        handleFilePickerClick(
-                            allowedDocs = allowedDocs,
-                            scope = scope,
-                            onFilePicked = { file, type ->
-                                selectedFileInfo = file to type
-                                onFilePicked(file, type)
-                            },
-                            onShowSheet = { showPicker = true }
-                        )
+                        showPicker = true
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -142,32 +127,4 @@ fun DocumentPicker(
             }
         }
     }
-}
-
-
-fun handleFilePickerClick(
-    allowedDocs: List<SupportedFiles>,
-    scope: CoroutineScope,
-    onFilePicked: (PlatformFile, SupportedFiles) -> Unit,
-    onShowSheet: () -> Unit
-) {
-    val isImageOrVideoOnly = allowedDocs.all {
-        it == SupportedFiles.IMAGE || it == SupportedFiles.VIDEO || it == SupportedFiles.IMAGE_AND_VIDEO
-    }
-
-    if (isImageOrVideoOnly) {
-        val type = when (allowedDocs.first()) {
-            SupportedFiles.IMAGE -> FileKitType.Image
-            SupportedFiles.VIDEO -> FileKitType.Video
-            SupportedFiles.IMAGE_AND_VIDEO -> FileKitType.ImageAndVideo
-            else -> FileKitType.File("*/*")
-        }
-
-        scope.launch {
-            val file = FileKit.openFilePicker(type = type)
-            file?.let {
-                onFilePicked(it, allowedDocs.first())
-            }
-        }
-    } else onShowSheet()
 }

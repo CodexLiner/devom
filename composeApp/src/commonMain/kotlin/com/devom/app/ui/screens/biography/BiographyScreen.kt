@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,12 +46,18 @@ import com.devom.app.ui.components.TagInputField
 import com.devom.app.ui.components.TextInputField
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toDevomDocument
-import com.devom.app.utils.toDevomImage
 import com.devom.models.pandit.UpdateBiographyInput
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.Update
+import pandijtapp.composeapp.generated.resources.expertise
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_video_camera
+import pandijtapp.composeapp.generated.resources.languages_spoken
+import pandijtapp.composeapp.generated.resources.media_galley
+import pandijtapp.composeapp.generated.resources.preferred_rituals
+import pandijtapp.composeapp.generated.resources.years_of_experience
 
 @Composable
 fun BiographyScreen(navController: NavController) {
@@ -63,7 +68,8 @@ fun BiographyScreen(navController: NavController) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Biography",
-            onNavigationIconClick = { navController.popBackStack() })
+            onNavigationIconClick = { navController.popBackStack() }
+        )
         BiographyScreenScreenContent(viewModel, navController)
     }
 
@@ -87,12 +93,11 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
 
             DocumentPicker(
                 addIconOnly = biography.value?.media.isNullOrEmpty().not(),
-                title = "Media Gallery", allowedDocs = listOf(SupportedFiles.IMAGE_AND_VIDEO)
+                title = stringResource(Res.string.media_galley),
+                allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
             ) { platformFile, supportedFiles ->
                 viewModel.uploadDocument(
-                    viewModel.user.value?.userId.toString(),
-                    platformFile,
-                    supportedFiles
+                    viewModel.user.value?.userId.toString(), platformFile, supportedFiles
                 )
             }
 
@@ -108,7 +113,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
             }
         }
         ButtonPrimary(
-            buttonText = "Update",
+            buttonText = stringResource(Res.string.Update),
             modifier = Modifier.navigationBarsPadding()
                 .padding(top = 48.dp, start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
             onClick = {
@@ -121,8 +126,12 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
 @Composable
 fun MediaItem(model: String, type: String) {
     Box(modifier = Modifier.height(124.dp).clip(RoundedCornerShape(8.dp))) {
-        AsyncImage(model = model.toDevomDocument() , contentScale = ContentScale.Crop , modifier = Modifier.fillMaxSize())
-        if (type.lowercase() == "video") Image(
+        AsyncImage(
+            model = model.toDevomDocument(),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        if (type.lowercase() == SupportedFiles.VIDEO.type) Image(
             painter = painterResource(Res.drawable.ic_video_camera),
             contentDescription = null,
             modifier = Modifier.fillMaxSize()
@@ -137,6 +146,7 @@ fun BiographyForm(
     onRitualsClicked: () -> Unit = {},
 ) {
     val biography = viewModel.biography.collectAsState()
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
@@ -144,31 +154,30 @@ fun BiographyForm(
         TextInputField(
             initialValue = biography.value?.experienceYears.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = "Years of Experience"
+            placeholder = stringResource(Res.string.years_of_experience)
         ) {
             biographyInput.value = biographyInput.value.copy(experienceYears = it)
         }
 
         TagInputField(
             initialTags = biography.value?.specialty?.split(",").orEmpty(),
-            placeholder = "Expertise",
+            placeholder = stringResource(Res.string.expertise),
             onTagsChanged = {
                 biographyInput.value.specialty = it.joinToString()
             }
         )
+
         TagInputField(
             initialTags = biography.value?.languages?.split(",").orEmpty(),
-            placeholder = "Languages Spoken",
+            placeholder = stringResource(Res.string.languages_spoken),
             onTagsChanged = {
                 biographyInput.value.languages = it.joinToString()
             }
         )
 
         Text(
-            text = "Preferred Rituals/Poojas",
-            modifier = Modifier.fillMaxWidth().clickable {
-                onRitualsClicked()
-            },
+            text = stringResource(Res.string.preferred_rituals),
+            modifier = Modifier.fillMaxWidth().clickable { onRitualsClicked() },
             textDecoration = TextDecoration.Underline,
             textAlign = TextAlign.End,
             color = textBlackShade,

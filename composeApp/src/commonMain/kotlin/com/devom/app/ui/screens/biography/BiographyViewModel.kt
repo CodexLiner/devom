@@ -9,7 +9,9 @@ import com.devom.models.auth.UserResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.pandit.GetBiographyResponse
 import com.devom.models.pandit.UpdateBiographyInput
+import com.devom.utils.Application
 import com.devom.utils.network.onResult
+import com.devom.utils.network.onResultNothing
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.extension
 import io.github.vinceglb.filekit.name
@@ -40,6 +42,7 @@ class BiographyViewModel : ViewModel() {
             ).collect {
                 it.onResult {
                     getBiography(userId)
+                    Application.showToast("Document uploaded successfully")
                 }
             }
         }
@@ -74,8 +77,9 @@ class BiographyViewModel : ViewModel() {
                     userId = _user.value?.userId ?: 0
                 )
             ).collect {
-                it.onResult {
-                    getBiography(input.userId.toString())
+                it.onResultNothing {
+                    getBiography(user.value?.userId.toString())
+                    Application.showToast("Biography updated successfully")
                 }
             }
         }

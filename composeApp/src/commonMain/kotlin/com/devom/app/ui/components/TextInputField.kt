@@ -55,6 +55,7 @@ fun TextInputField(
 
     LaunchedEffect(initialValue) {
         input = initialValue
+        onValueChange(initialValue)
     }
     TextField(
         value = input,
