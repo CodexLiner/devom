@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.models.auth.UserResponse
+import com.devom.utils.Application
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toLocalDateTime
 import com.devom.utils.network.onResult
@@ -38,6 +39,7 @@ class ProfileViewModel : ViewModel() {
             ).collect {
                 it.onResult {
                     _user.value = it.data
+                    Application.showToast("Profile updated successfully")
                 }
             }
         }

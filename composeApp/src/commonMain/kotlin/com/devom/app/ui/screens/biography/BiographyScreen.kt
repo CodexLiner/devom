@@ -152,7 +152,7 @@ fun BiographyForm(
         modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
     ) {
         TextInputField(
-            initialValue = biography.value?.experienceYears.toString(),
+            initialValue = (biography.value?.experienceYears ?: 0).toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             placeholder = stringResource(Res.string.years_of_experience)
         ) {

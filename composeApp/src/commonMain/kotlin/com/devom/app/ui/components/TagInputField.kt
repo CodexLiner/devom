@@ -80,7 +80,7 @@ fun TagInputField(
 
     LaunchedEffect(initialTags) {
         tags = initialTags
-        onTagsChanged(initialTags)
+        onTagsChanged(initialTags.map { it.trim() })
     }
 
     BasicTextField(
@@ -93,7 +93,7 @@ fun TagInputField(
                     .filter { it.isNotEmpty() }
                 tags = tags + newTags
                 textValue = ""
-                onTagsChanged(tags)
+                onTagsChanged(tags.map { it.trim() })
             } else {
                 textValue = value
             }
@@ -117,7 +117,7 @@ fun TagInputField(
                 if (textValue.isNotBlank()) {
                     tags = tags + textValue.trim()
                     textValue = ""
-                    onTagsChanged(tags)
+                    onTagsChanged(tags.map { it.trim() })
                 }
             }
         ),
@@ -128,7 +128,7 @@ fun TagInputField(
                 textValue = if (tags.isNotEmpty()) " " else textValue,
                 onTagRemoved = {
                     tags = tags - it
-                    onTagsChanged(tags)
+                    onTagsChanged(tags.map { it.trim() })
                 },
                 innerTextField = innerTextField,
                 placeholder = placeholder,
