@@ -61,3 +61,7 @@ object  PaymentEndpoints {
     const val GetWalletBalance = "/payment/get_wallet"
     const val GetTransactions = "/payment"
 }
+
+object NotificationsEndpoints {
+    const val GetNotifications = "/notification"
+}

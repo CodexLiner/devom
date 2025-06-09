@@ -2,6 +2,7 @@ package com.devom
 
 import com.devom.category.Category
 import com.devom.document.Document
+import com.devom.notification.Notification
 import com.devom.pandit.Pandit
 import com.devom.payment.Payment
 import com.devom.pooja.Pooja
@@ -43,6 +44,11 @@ object Project {
      * wallet
      */
     val payment by lazy { Payment() }
+
+    /**
+     * notification
+     */
+    val notification by lazy { Notification() }
 
 
 }
