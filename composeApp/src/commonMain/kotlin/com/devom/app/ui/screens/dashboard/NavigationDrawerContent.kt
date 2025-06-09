@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -63,7 +61,6 @@ internal fun NavigationDrawerContent(
         modifier = Modifier.fillMaxWidth(.8f).fillMaxHeight().background(whiteColor),
     ) {
         UserDetailsContent(user, appNavHostController, balance , onDismiss)
-        Spacer(modifier = Modifier.height(8.dp))
         DrawerItem(
             painter = painterResource(Res.drawable.ic_nav_wallet),
             text = "My Wallet"
@@ -120,8 +117,7 @@ fun UserDetailsContent(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().background(color = primaryColor).systemBarsPadding()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().background(color = primaryColor).padding(16.dp).statusBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(contentAlignment = Alignment.BottomEnd) {
@@ -185,7 +181,7 @@ fun UserDetailsContent(
 fun DrawerItem(painter: Painter, text: String, onClick: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp , vertical = 9.dp),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(horizontal = 16.dp).padding(top = 18.dp),
     ) {
         Row(
             verticalAlignment = Alignment.Top

@@ -42,9 +42,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
+import pandijtapp.composeapp.generated.resources.bring_your_friends_on_devom_and_earn_rewards
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_transactions
+import pandijtapp.composeapp.generated.resources.invite_and_collect
 import pandijtapp.composeapp.generated.resources.my_transactions
 import pandijtapp.composeapp.generated.resources.view_and_track_your_payments_and_transactions
 
@@ -86,10 +88,10 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
 
         WalletActionItem(
             painter = painterResource(Res.drawable.ic_refer),
-            text = "Invite & Collect",
-            description = "Bring your friends on DevOM and earn rewards"
+            text = stringResource(Res.string.invite_and_collect),
+            description = stringResource(Res.string.bring_your_friends_on_devom_and_earn_rewards)
         ) {
-
+            navController.navigate(Screens.ReferAndEarn.path)
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.devom.app.ui.screens.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,14 +17,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +49,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
+import com.devom.app.theme.greenColor
+import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_text
@@ -58,27 +58,39 @@ import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.navigation.Screens
+import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
+import com.devom.models.auth.UserResponse
 import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import pandijtapp.composeapp.generated.resources.Availability
+import pandijtapp.composeapp.generated.resources.Biography
+import pandijtapp.composeapp.generated.resources.Documents
+import pandijtapp.composeapp.generated.resources.Notifications
+import pandijtapp.composeapp.generated.resources.Preferences
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.Review_and_Ratings
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
+import pandijtapp.composeapp.generated.resources.ic_edit
 import pandijtapp.composeapp.generated.resources.ic_logout
+import pandijtapp.composeapp.generated.resources.ic_star
+import pandijtapp.composeapp.generated.resources.ic_verified
+import pandijtapp.composeapp.generated.resources.update_profile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navHostController: NavHostController,
-    rating: Float = 4.0f,
     progress: Int = 50,
     onNavigationIconClick: () -> Unit = {},
     onNotificationToggle: (Boolean) -> Unit = {},
-    onAvailabilityToggle: (Boolean) -> Unit = {}
 ) {
     val viewModel = viewModel<ProfileViewModel> {
         ProfileViewModel()
     }
     val user by viewModel.user.collectAsStateWithLifecycle()
+
 
     var notificationsEnabled by remember { mutableStateOf(false) }
     var availabilityEnabled by remember { mutableStateOf(true) }
@@ -88,158 +100,205 @@ fun ProfileScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
+        modifier = Modifier.fillMaxSize().background(backgroundColor)
     ) {
 
         AppBar(
-            title = "Profile",
-            onNavigationIconClick = onNavigationIconClick,
-            actions = {
+            title = "Profile", onNavigationIconClick = onNavigationIconClick, actions = {
                 IconButton(onClick = {
                     Application.logout()
                 }) {
-                    Icon(painterResource(Res.drawable.ic_logout), contentDescription = null, tint = Color.White)
-                }
-            }
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(16.dp)
-                .clip(RoundedCornerShape(50))
-                .background(Color(0xFFE0E0E0))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(progress / 100f)
-                    .clip(RoundedCornerShape(50))
-                    .background(Color(0xFF4CAF50)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "${progress}% Completed",
-                    style = text_style_h5,
-                    fontSize = 10.sp,
-                    color = whiteColor,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
-        ) {
-            Box(contentAlignment = Alignment.BottomEnd) {
-
-                AsyncImage(
-                    model = user?.profilePictureUrl.toDevomImage(),
-                    modifier = Modifier.padding(top = 32.dp).size(115.dp).clip(CircleShape),
-                )
-
-                Box(
-                    modifier = Modifier
-                        .offset(x = (-4).dp, y = (-4).dp)
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFFFC107)),
-                    contentAlignment = Alignment.Center
-                ) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        painterResource(Res.drawable.ic_logout),
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp),
                         tint = Color.White
                     )
                 }
-            }
+            })
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    user?.fullName.orEmpty(),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF4CAF50))
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                repeat(rating.toInt()) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFF4CAF50))
-                }
-                repeat(5 - rating.toInt()) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFBDBDBD))
-                }
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "(${rating}/5)", color = blackColor , style = text_style_lead_text)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Card(
-            colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 200.dp)
         ) {
-            Column {
-                ProfileOption("Update Profile") {
-                    navHostController.navigate(Screens.EditProfile.path)
-                }
-                ProfileOption("Biography") {
-                    navHostController.navigate(Screens.Biography.path)
-                }
-                ProfileOption("Documents") {
-                    navHostController.navigate(Screens.UploadDocument.path)
-                }
-                ProfileOption("Review & Ratings") {
-                    navHostController.navigate(Screens.ReviewsAndRatings.path)
-                }
+            item {
+                ProfileCompletionProgressIndicator(progress)
+            }
+            item {
+                ProfileUserImageAndRatingsContent(user, user.reviewRating.toFloat())
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            item {
+                ProfileActionOptionsCard(navHostController)
+            }
+            item {
+                SettingPreferencesCard(
+                    notificationsEnabled = notificationsEnabled,
+                    availabilityEnabled = availabilityEnabled,
+                    onAvailabilityToggle = {
+                        availabilityEnabled = it
+                    },
+                    onNotificationToggle = {
+                        notificationsEnabled = it
+                    })
             }
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Preferences Section
-        Text(
-            "Preferences",
-            fontWeight = FontWeight.Bold,
-            style = text_style_h5,
-            color = blackColor,
-            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
-        )
-        Card(
-            colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-        ) {
-            Column {
-                PreferenceItem("Notifications", notificationsEnabled) {
-                    notificationsEnabled = it
-                    onNotificationToggle(it)
-                }
-                PreferenceItem("Availability", availabilityEnabled) {
-                    availabilityEnabled = it
-                    onAvailabilityToggle(it)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(48.dp))
     }
 }
+
+@Composable
+fun SettingPreferencesCard(
+    notificationsEnabled: Boolean,
+    availabilityEnabled: Boolean,
+    onNotificationToggle: (Boolean) -> Unit,
+    onAvailabilityToggle: (Boolean) -> Unit,
+) {
+    Text(
+        text = stringResource(Res.string.Preferences),
+        fontWeight = FontWeight.Bold,
+        style = text_style_h5,
+        color = blackColor,
+        modifier = Modifier.padding(top = 24.dp)
+    )
+    Card(
+        colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Column {
+            PreferenceItem(
+                stringResource(Res.string.Notifications), notificationsEnabled, onNotificationToggle
+            )
+            PreferenceItem(
+                stringResource(Res.string.Availability), availabilityEnabled, onAvailabilityToggle
+            )
+        }
+    }
+
+}
+
+@Composable
+fun ProfileActionOptionsCard(navHostController: NavHostController) {
+    Card(
+        colors = CardDefaults.cardColors().copy(containerColor = whiteColor),
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Column {
+            ProfileOption(stringResource(Res.string.update_profile)) {
+                navHostController.navigate(Screens.EditProfile.path)
+            }
+            ProfileOption(stringResource(Res.string.Biography)) {
+                navHostController.navigate(Screens.Biography.path)
+            }
+            ProfileOption(stringResource(Res.string.Documents)) {
+                navHostController.navigate(Screens.UploadDocument.path)
+            }
+            ProfileOption(stringResource(Res.string.Review_and_Ratings)) {
+                navHostController.navigate(Screens.ReviewsAndRatings.path)
+            }
+        }
+    }
+
+}
+
+@Composable
+fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float) {
+    Column(
+        modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(contentAlignment = Alignment.BottomEnd) {
+            AsyncImage(
+                model = user.profilePictureUrl.toDevomImage(),
+                modifier = Modifier.padding(top = 32.dp).size(115.dp).clip(CircleShape)
+            )
+
+            Box(
+                modifier = Modifier.offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape)
+                    .background(Color(0xFFFFC107)), contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_edit),
+                    contentDescription = "Edit",
+                    modifier = Modifier.size(14.dp),
+                    tint = Color.White
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = user.fullName,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Image(
+                painter = painterResource(Res.drawable.ic_verified),
+                contentDescription = "Verified",
+            )
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        RatingsBar(rating = rating)
+    }
+}
+
+@Composable
+private fun RatingsBar(rating: Float) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        val fullStars = rating.toInt()
+        val emptyStars = 5 - fullStars
+
+        repeat(fullStars) {
+            Image(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(Res.drawable.ic_star),
+                contentDescription = null,
+            )
+        }
+
+        repeat(emptyStars) {
+            Image(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(Res.drawable.ic_star),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint("#DDDDDD".toColor())
+            )
+        }
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        Text(
+            text = "(${rating}/5)", color = blackColor, style = text_style_lead_text
+        )
+    }
+}
+
+
+@Composable
+fun ProfileCompletionProgressIndicator(progress: Int) {
+    Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(50)).background(whiteColor)) {
+        Box(
+            modifier = Modifier.fillMaxHeight().fillMaxWidth(progress / 100f)
+                .clip(RoundedCornerShape(50)).background(greenColor),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${progress}% Completed",
+                style = text_style_h5,
+                fontSize = 10.sp,
+                color = whiteColor,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+}
+
 
 @Composable
 fun ProfileOption(title: String, onClick: () -> Unit = {}) {
@@ -265,9 +324,16 @@ fun PreferenceItem(title: String, isEnabled: Boolean, onToggle: (Boolean) -> Uni
     ) {
         Text(title)
         Switch(
-            colors = SwitchDefaults.colors().copy(checkedTrackColor = primaryColor),
+            colors = SwitchDefaults.colors().copy(
+                checkedBorderColor = Color.Transparent,
+                uncheckedBorderColor = Color.Transparent,
+                uncheckedTrackColor = greyColor,
+                checkedThumbColor = whiteColor,
+                uncheckedThumbColor = whiteColor,
+                checkedTrackColor = primaryColor
+            ),
             checked = isEnabled,
-            onCheckedChange = onToggle
+            onCheckedChange = onToggle,
         )
     }
     HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)

@@ -12,6 +12,8 @@ data class UserResponse(
     @SerialName("city") var city: String = "",
     @SerialName("state") var state: String = "",
     @SerialName("country") var country: String = "",
+    @SerialName("referral_code") var referralCode: String = "",
+    @SerialName("review_rating") var reviewRating: Int = 0,
     @SerialName("date_of_birth") var dateOfBirth: String = "",
     @SerialName("address") var address: String = "",
     @SerialName("profile_picture_url") val profilePictureUrl: String? = null,
