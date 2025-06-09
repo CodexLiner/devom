@@ -34,6 +34,7 @@ fun StartEndPoojaSheet(
 
     if (showSheet) {
         ModalBottomSheet(
+            containerColor = whiteColor,
             onDismissRequest = {
                 scope.launch {
                     sheetState.hide()

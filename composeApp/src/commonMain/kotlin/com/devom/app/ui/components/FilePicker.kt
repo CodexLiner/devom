@@ -40,6 +40,7 @@ fun FilePickerBottomSheetHost(
 
     if (showSheet) {
         ModalBottomSheet(
+            containerColor = whiteColor,
             onDismissRequest = onDismissRequest,
             sheetState = sheetState
         ) {

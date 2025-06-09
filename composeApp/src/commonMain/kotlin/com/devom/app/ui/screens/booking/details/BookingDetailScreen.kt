@@ -1,7 +1,10 @@
 package com.devom.app.ui.screens.booking.details
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -44,8 +47,10 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
-import com.devom.app.ui.screens.booking.components.BookingCard
+import com.devom.app.ui.components.DropDownItem
 import com.devom.app.ui.screens.booking.BookingViewModel
+import com.devom.app.ui.screens.booking.components.BookingCard
+import com.devom.app.ui.screens.booking.components.SelectPoojaItemBottomSheet
 import com.devom.app.ui.screens.booking.components.StartEndPoojaSheet
 import com.devom.models.slots.BookingItem
 import com.devom.models.slots.GetBookingsResponse
@@ -55,7 +60,9 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.enter_pin_visible_on_customer_app
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_check
+import pandijtapp.composeapp.generated.resources.ic_plus
 import pandijtapp.composeapp.generated.resources.pooja_samgri_list
+import pandijtapp.composeapp.generated.resources.select_pooja_item
 import pandijtapp.composeapp.generated.resources.start_pooja
 import pandijtapp.composeapp.generated.resources.submit
 import pandijtapp.composeapp.generated.resources.verification_pooja_start
@@ -68,6 +75,7 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
 
     LaunchedEffect(Unit) {
         viewModel.getBookingById(bookingId.orEmpty())
+        viewModel.getPoojaItems()
     }
 
     Column(
@@ -79,7 +87,7 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
             onNavigationIconClick = { navController.popBackStack() }
         )
         booking.value?.let {
-            BookingDetailScreenContent(navController, it , viewModel)
+            BookingDetailScreenContent(navController, it, viewModel)
             if (booking.value?.status !in listOf(
                     ApplicationStatus.COMPLETED.status,
                     ApplicationStatus.REJECTED.status,
@@ -131,12 +139,7 @@ fun ColumnScope.BookingDetailScreenContent(
         }
 
         item {
-            Text(
-                text = stringResource(Res.string.pooja_samgri_list),
-                style = text_style_h5,
-                color = textBlackShade,
-                modifier = Modifier.padding(top = 28.dp , bottom = 16.dp)
-            )
+            BookingSamagriHeader(booking, viewModel)
         }
 
         itemsIndexed(booking.bookingItems) { index, item ->
@@ -147,13 +150,59 @@ fun ColumnScope.BookingDetailScreenContent(
             }
             SamagriItemRow(
                 item = item,
-                modifier = Modifier.background(color = whiteColor, shape = shape).padding(horizontal = 16.dp)
+                modifier = Modifier.background(color = whiteColor, shape = shape)
+                    .padding(horizontal = 16.dp)
             )
-            if (index < 9) HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = greyColor.copy(.24f), thickness = 1.dp)
+            if (index < 9) HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = greyColor.copy(.24f),
+                thickness = 1.dp
+            )
         }
     }
 }
 
+@Composable
+fun BookingSamagriHeader(booking: GetBookingsResponse, viewModel: BookingViewModel) {
+    val poojaItems = viewModel.poojaItems.collectAsState()
+    val dropDownState = remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(Res.string.pooja_samgri_list),
+            style = text_style_h5,
+            color = textBlackShade,
+            modifier = Modifier.padding(top = 28.dp, bottom = 16.dp)
+        )
+        if (booking.status !in listOf(
+                ApplicationStatus.COMPLETED.status,
+                ApplicationStatus.REJECTED.status,
+                ApplicationStatus.CANCELLED.status,
+            )
+        ) Image(
+            modifier = Modifier.size(24.dp).clickable {
+                dropDownState.value = true
+            },
+            painter = painterResource(Res.drawable.ic_plus),
+            contentDescription = null
+        )
+    }
+
+    SelectPoojaItemBottomSheet(
+        showSheet = dropDownState.value,
+        title = stringResource(Res.string.select_pooja_item),
+        items = poojaItems.value.map { DropDownItem(it.name, it.id.toString()) },
+        onDismiss = {
+            dropDownState.value = false
+        },
+        onClick = {
+            viewModel.addPoojaItem(it.id , booking)
+        }
+    )
+}
 
 @Composable
 fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem) {
@@ -169,7 +218,12 @@ fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem) {
             color = textBlackShade,
             modifier = Modifier.padding(start = 12.dp).weight(1f)
         )
-        Text(text = item.description, fontSize = 12.sp, color = greyColor, style = text_style_lead_text)
+        Text(
+            text = item.description,
+            fontSize = 12.sp,
+            color = greyColor,
+            style = text_style_lead_text
+        )
     }
 }
 
@@ -179,7 +233,7 @@ fun SamagriCheckbox(
     borderColor: Color = primaryColor,
     checkmarkColor: Color = primaryColor,
     size: Dp = 20.dp,
-    cornerRadius: Dp = 4.dp
+    cornerRadius: Dp = 4.dp,
 ) {
     Box(
         modifier = modifier

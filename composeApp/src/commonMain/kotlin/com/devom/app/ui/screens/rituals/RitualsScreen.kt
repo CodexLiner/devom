@@ -297,6 +297,7 @@ fun AddEditPoojaBottomSheet(
 
     if (showSheet) {
         ModalBottomSheet(
+            containerColor = whiteColor,
             onDismissRequest = {
                 scope.launch {
                     sheetState.hide()
