@@ -35,7 +35,6 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AsyncImage
 import com.devom.app.utils.to12HourTime
-import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.utils.date.convertIsoToDate

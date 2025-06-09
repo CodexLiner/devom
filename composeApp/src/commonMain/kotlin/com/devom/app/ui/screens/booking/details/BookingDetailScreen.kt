@@ -47,7 +47,6 @@ import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.app.ui.screens.booking.BookingViewModel
 import com.devom.app.ui.screens.booking.components.StartEndPoojaSheet
-import com.devom.app.utils.toColor
 import com.devom.models.slots.BookingItem
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
