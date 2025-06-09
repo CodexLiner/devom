@@ -19,7 +19,7 @@ fun <T> ResponseResult<T>.withSuccessWithoutData(block: (ResponseResult.SuccessN
 }
 
 fun <T> ResponseResult<T>.withError(block: (ResponseResult.Error) -> Unit) {
-    if (this is ResponseResult.Error)block(this)
+    if (this is ResponseResult.Error) block(this)
 }
 
 fun <T> ResponseResult<T>.withLoading(block: (ResponseResult.Loading) -> Unit) {
@@ -54,6 +54,34 @@ fun <T> ResponseResult<T>.onResult(block: (ResponseResult.Success<T>) -> Unit) {
         is ResponseResult.Success<T> -> {
             Application.hideLoader()
             block(this)
+        }
+    }
+}
+
+fun <T> ResponseResult<T>.onResultNothing(block: (ResponseResult.SuccessNothing) -> Unit) {
+    when (this) {
+        is ResponseResult.Error -> {
+            Application.showToast(this.message)
+            Application.hideLoader()
+        }
+
+        ResponseResult.SuccessNothing -> {
+            Application.hideLoader()
+            block(ResponseResult.SuccessNothing)
+        }
+
+        ResponseResult.Loading -> {
+            Application.showLoader()
+        }
+
+        ResponseResult.NetworkError -> {
+            Application.showToast("No Internet Connection")
+            Application.hideLoader()
+            block(ResponseResult.SuccessNothing)
+        }
+
+        is ResponseResult.Success<T> -> {
+            Application.hideLoader()
         }
     }
 }

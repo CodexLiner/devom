@@ -17,4 +17,5 @@ class Pandit {
     val getPanditPoojaUseCase by lazy { com.devom.domain.pandit.GetPanditPoojaUseCase() }
     val mapPanditPoojaItemUseCase by lazy { com.devom.domain.pandit.MapPanditPoojaItemUseCase() }
     val getPanditBookingById by lazy { com.devom.domain.panditslots.GetBookingByIdUseCase() }
+    val removePanditPoojaMappingUseCase by lazy { com.devom.domain.pandit.RemovePanditPoojaMappingUseCase() }
 }

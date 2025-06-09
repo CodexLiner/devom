@@ -7,9 +7,10 @@ import com.devom.models.auth.UserResponse
 import com.devom.models.pandit.GetPanditPoojaResponse
 import com.devom.models.pandit.MapPanditPoojaItemInput
 import com.devom.models.pooja.GetPoojaResponse
+import com.devom.utils.Application
 import com.devom.utils.network.onResult
+import com.devom.utils.network.onResultNothing
 import com.devom.utils.network.withSuccess
-import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -55,14 +56,28 @@ class RitualsViewModel : ViewModel() {
         }
     }
 
+    fun deletePoojaItem(input: GetPanditPoojaResponse) {
+        viewModelScope.launch {
+            Project.pandit.removePanditPoojaMappingUseCase.invoke(
+                MapPanditPoojaItemInput(
+                    panditId = input.panditId,
+                    poojaId = input.poojaId
+                )
+            ).collect {
+                it.onResultNothing {
+                    getRituals()
+                    Application.showToast("Deleted Successfully")
+                }
+            }
+        }
+    }
+
     fun mapPoojaItem(input: MapPanditPoojaItemInput) {
         viewModelScope.launch {
             Project.pandit.mapPanditPoojaItemUseCase.invoke(input.copy(panditId = user.value?.userId)).collect {
-                it.withSuccess {
+                it.onResultNothing {
                     getRituals()
-                }
-                it.withSuccessWithoutData {
-                    getRituals()
+                    Application.showToast("Pooja Item Mapped Successfully")
                 }
             }
         }

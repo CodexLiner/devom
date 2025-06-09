@@ -31,6 +31,7 @@ interface PanditRepository {
 
     suspend fun mapPanditPoojaItem(input: MapPanditPoojaItemInput): Flow<ResponseResult<String>>
     suspend fun getPanditPooja(userId: String): Flow<ResponseResult<List<GetPanditPoojaResponse>>>
+    suspend fun removePanditPoojaMapping(input: MapPanditPoojaItemInput): Flow<ResponseResult<String>>
 }
 
 class PanditRepositoryImpl : PanditRepository {
@@ -79,5 +80,9 @@ class PanditRepositoryImpl : PanditRepository {
         fetchNetwork = { panditRemoteRepository.getPanditPooja(userId) },
         saveCache = { panditLocalDataSource.savePanditPooja(userId, it) }
     )
+
+    override suspend fun removePanditPoojaMapping(input: MapPanditPoojaItemInput): Flow<ResponseResult<String>>  = apiFlow {
+        panditRemoteRepository.removePanditPoojaMapping(input)
+    }
 
 }

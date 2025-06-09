@@ -53,6 +53,7 @@ object PanditEndpoints {
     const val UpdateBiography = "pandit_profile"
     const val GetBiography = "pandit_profile/get_biography"
     const val MapPanditPoojaItem = "pandit_profile/map_pandit_pooja"
+    const val RemovePanditPoojaMapping = "pandit_profile/pooja"
     const val GetPanditPooja = "pandit_profile"
 }
 
