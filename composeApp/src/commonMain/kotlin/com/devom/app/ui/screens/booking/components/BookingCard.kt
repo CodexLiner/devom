@@ -67,7 +67,7 @@ fun BookingCard(
         Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
             BookingUserDetail(booking, onBookingUpdate)
             BookingUserContactDetail(booking = booking)
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), color = "#A0A5BA3D".toColor(), thickness = 1.dp)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), color = greyColor.copy(.24f), thickness = 1.dp)
             BookingPoojaDetails(booking = booking)
         }
     }

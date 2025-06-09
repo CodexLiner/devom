@@ -150,7 +150,7 @@ fun ColumnScope.BookingDetailScreenContent(
                 item = item,
                 modifier = Modifier.background(color = whiteColor, shape = shape).padding(horizontal = 16.dp)
             )
-            if (index < 9) HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = "#A0A5BA3D".toColor(), thickness = 1.dp)
+            if (index < 9) HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = greyColor.copy(.24f), thickness = 1.dp)
         }
     }
 }

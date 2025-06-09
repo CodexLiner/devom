@@ -132,7 +132,7 @@ fun ColumnScope.RitualsScreenScreenContent(
 fun PoojaItemContent(poojaItem: GetPanditPoojaResponse , onClick: () -> Unit = {}) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().border(
-            width = 1.dp, color = "#A0A5BA3D".toColor(), shape = RoundedCornerShape(12.dp)
+            width = 1.dp, color = greyColor.copy(.24f), shape = RoundedCornerShape(12.dp)
         ).padding(horizontal = 16.dp).padding(vertical = 8.dp).clickable(onClick = onClick)
     ) {
         Text(
