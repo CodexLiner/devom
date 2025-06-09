@@ -66,6 +66,7 @@ import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DropDownItem
 import com.devom.app.ui.components.ExposedDropdown
+import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.components.TextInputField
 import com.devom.models.pandit.GetPanditPoojaResponse
 import com.devom.models.pandit.MapPanditPoojaItemInput
@@ -78,6 +79,7 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.all_field_required
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_trash
+import pandijtapp.composeapp.generated.resources.no_pooja_found
 import kotlin.math.roundToInt
 
 @Composable
@@ -85,12 +87,21 @@ fun RitualsScreen(navController: NavController) {
     val viewModel = viewModel {
         RitualsViewModel()
     }
+    val poojaList = viewModel.rituals.collectAsState()
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Preferred Rituals/Poojas",
             onNavigationIconClick = { navController.popBackStack() })
-        RitualsScreenScreenContent(viewModel, navController)
+
+
+        if (poojaList.value.isNullOrEmpty()) {
+            NoContentView(
+                message = stringResource(Res.string.no_pooja_found), title = null, image = null
+            )
+        } else RitualsScreenScreenContent(viewModel, navController)
+
+
     }
 
     LaunchedEffect(Unit) {
