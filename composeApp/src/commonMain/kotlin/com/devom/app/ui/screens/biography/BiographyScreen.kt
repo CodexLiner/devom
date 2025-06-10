@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -95,6 +96,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
         OptionsBottomSheetItem(title = "View"),
         OptionsBottomSheetItem(title = "Delete")
     )
+    val focus = LocalFocusManager.current
 
     val isButtonEnable = remember { mutableStateOf(false) }
     var selectedMedia  = remember { mutableStateOf<Media?>(null) }
@@ -140,6 +142,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
             modifier = Modifier.navigationBarsPadding()
                 .padding(top = 48.dp, start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
             onClick = {
+                focus.clearFocus()
                 viewModel.updateBiography(biographyInput.value)
             }
         )

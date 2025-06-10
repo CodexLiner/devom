@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -72,6 +73,8 @@ fun EditProfileScreen(navHostController: NavHostController) {
 
 @Composable
 fun ColumnScope.EditProfileScreenContent(viewModel: ProfileViewModel, user: UserResponse) {
+    val focus = LocalFocusManager.current
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -82,7 +85,10 @@ fun ColumnScope.EditProfileScreenContent(viewModel: ProfileViewModel, user: User
     ButtonPrimary(
         modifier = Modifier.navigationBarsPadding().fillMaxWidth().padding(horizontal = 16.dp).height(58.dp),
         buttonText = "Update",
-        onClick = { viewModel.updateUserProfile(user) },
+        onClick = {
+            focus.clearFocus()
+            viewModel.updateUserProfile(user)
+        },
         fontStyle = text_style_lead_text
     )
 }
