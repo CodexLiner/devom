@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,23 +49,20 @@ import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DateItem
 import com.devom.app.utils.dashedBorder
-import com.devom.app.utils.format
 import com.devom.app.utils.format12HourTime
 import com.devom.app.utils.parse12HourTime
 import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toTimeParts
 import com.devom.app.utils.updateSlotTimeAndShiftFollowingSlots
 import com.devom.models.slots.Slot
-import com.devom.network.utils.toMap
-import com.devom.utils.date.yyyy_MM_DD
+import com.devom.utils.date.convertIsoToDate
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
-import kotlinx.datetime.format
-import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -80,9 +78,7 @@ import pandijtapp.composeapp.generated.resources.text_select_time_slot
 fun TimeSlotSelectorScreen(
     initialSelectedSlots: List<Slot> = listOf(),
     initialSelectedDate: LocalDate = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .date
-        .plus(1, DateTimeUnit.DAY),
+        .toLocalDateTime(TimeZone.currentSystemDefault()).date.plus(1, DateTimeUnit.DAY),
     onSlotSelected: (List<Slot>) -> Unit,
 ) {
     var selectedDate by remember { mutableStateOf(initialSelectedDate) }
@@ -94,14 +90,24 @@ fun TimeSlotSelectorScreen(
     }
 
     LaunchedEffect(Unit) {
-//       dateSlotMap[selectedDate] = initialSelectedSlots.toMutableList()
+        val groupedSlots = initialSelectedSlots.groupBy {
+            it.availableDate.convertIsoToDate()
+                ?.toLocalDateTime(TimeZone.currentSystemDefault())?.date.toString()
+        }
+        dates.forEach { date ->
+            val slotsForDate = groupedSlots[date.toString()] ?: emptyList()
+            dateSlotMap[date] = slotsForDate.map {
+                it.copy(
+                    startTime = it.startTime.to12HourTime(), endTime = it.endTime.to12HourTime()
+                )
+            }.toMutableList()
+        }
     }
 
     val currentSlots = dateSlotMap[selectedDate] ?: mutableListOf()
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
+        modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         LazyRow(
             contentPadding = PaddingValues(horizontal = 24.dp),
@@ -113,14 +119,12 @@ fun TimeSlotSelectorScreen(
                     modifier = Modifier.width(88.dp).aspectRatio(1f),
                     date = date,
                     isSelected = date == selectedDate,
-                    onClick = { selectedDate = date }
-                )
+                    onClick = { selectedDate = date })
             }
         }
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 24.dp),
@@ -129,27 +133,20 @@ fun TimeSlotSelectorScreen(
             )
 
             TimeSlotListCard(
-                timeSlots = currentSlots,
-                onTimeSlotsUpdated = { updatedList ->
+                timeSlots = currentSlots, onTimeSlotsUpdated = { updatedList ->
                     dateSlotMap[selectedDate] = updatedList
-                }
-            )
+                })
 
             ButtonPrimary(
                 buttonText = "Confirm & Save",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(58.dp),
-                enabled = dateSlotMap.values.any { it.isNotEmpty() }
-            ) {
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(58.dp),
+                enabled = dateSlotMap.values.any { it.isNotEmpty() }) {
                 val allSlots = dateSlotMap.flatMap { (date, slots) ->
                     slots.map { slot ->
-                        slot.copy(availableDate = date.format(yyyy_MM_DD))
+                        slot.copy(availableDate = date.toString())
                     }
                 }
                 onSlotSelected(allSlots)
-
             }
         }
     }
@@ -162,52 +159,41 @@ fun TimeSlotListCard(
     onTimeSlotsUpdated: (MutableList<Slot>) -> Unit,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-            .dashedBorder(
-                dashLength = 3.dp,
-                gapLength = 1.dp,
-                color = inputColor,
-                shape = RoundedCornerShape(16.dp)
-            ),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).dashedBorder(
+            dashLength = 3.dp,
+            gapLength = 1.dp,
+            color = inputColor,
+            shape = RoundedCornerShape(16.dp)
+        ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF2F7FF)),
         border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.3f))
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 500.dp, min = 500.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(max = 500.dp, min = 500.dp),
             contentPadding = PaddingValues(vertical = 24.dp)
         ) {
             items(timeSlots.size) { index ->
                 val slot = timeSlots[index]
-                TimeSlotItem(
-                    slot = slot,
-                    onStartTimeSelected = { newStartTime ->
-                        val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
-                            indexToUpdate = index,
-                            newStartTime = newStartTime
-                        )
-                        onTimeSlotsUpdated(updated)
-                    },
-                    onEndTimeSelected = { newEndTime ->
-                        val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
-                            indexToUpdate = index,
-                            newEndTime = newEndTime
-                        )
-                        onTimeSlotsUpdated(updated)
-                    },
-                    onRemove = {
-                        onTimeSlotsUpdated(timeSlots.filterIndexed { i, _ -> i != index }.toMutableList())
-                    }
-                )
+                TimeSlotItem(slot = slot, onStartTimeSelected = { newStartTime ->
+                    val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
+                        indexToUpdate = index, newStartTime = newStartTime
+                    )
+                    onTimeSlotsUpdated(updated)
+                }, onEndTimeSelected = { newEndTime ->
+                    val updated = timeSlots.updateSlotTimeAndShiftFollowingSlots(
+                        indexToUpdate = index, newEndTime = newEndTime
+                    )
+                    onTimeSlotsUpdated(updated)
+                }, onRemove = {
+                    onTimeSlotsUpdated(timeSlots.filterIndexed { i, _ -> i != index }
+                        .toMutableList())
+                })
             }
 
             stickyHeader {
                 AddTimeSlotButton(
-                    timeSlots = timeSlots,
-                    onAdd = { onTimeSlotsUpdated(it) }
-                )
+                    timeSlots = timeSlots, onAdd = { onTimeSlotsUpdated(it) })
             }
         }
     }
@@ -219,10 +205,10 @@ fun TimeSlotItem(
     slot: Slot,
     modifier: Modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
     enabled: Boolean = true,
-    datePickerEnable : Boolean = true,
+    datePickerEnable: Boolean = true,
     onStartTimeSelected: (String) -> Unit = {},
     onEndTimeSelected: (String) -> Unit = {},
-    onRemove: () -> Unit ={},
+    onRemove: () -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -230,8 +216,7 @@ fun TimeSlotItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)
         ) {
             TimePickerDialogButton(
                 selectedTime = slot.startTime,
@@ -245,10 +230,7 @@ fun TimeSlotItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = "TO",
-                style = text_style_lead_text,
-                fontSize = 14.sp,
-                color = inputColor
+                text = "TO", style = text_style_lead_text, fontSize = 14.sp, color = inputColor
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -280,6 +262,8 @@ fun TimePickerDialogButton(
     selectedTime: String,
     onTimeSelected: (String) -> Unit,
     minTime: String,
+    maxTime: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()).date.atTime(23, 59),
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
     datePickerEnable: Boolean,
@@ -306,40 +290,36 @@ fun TimePickerDialogButton(
 
     if (showPicker && datePickerEnable) {
         val selectedLocalTime = LocalTime(timePickerState.hour, timePickerState.minute)
-        val isValid = selectedLocalTime >= parse12HourTime(minTime)
+        val min = parse12HourTime(minTime)
+        val max = maxTime.time
 
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { showPicker = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onTimeSelected(
-                            format12HourTime(
-                                timePickerState.hour,
-                                timePickerState.minute
-                            )
+        val isValid = selectedLocalTime >= min && selectedLocalTime <= max
+
+        AlertDialog(onDismissRequest = { showPicker = false }, confirmButton = {
+            TextButton(
+                onClick = {
+                    onTimeSelected(
+                        format12HourTime(
+                            timePickerState.hour, timePickerState.minute
                         )
-                        showPicker = false
-                    },
-                    enabled = isValid
-                ) { Text("OK") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showPicker = false }) { Text("Cancel") }
-            },
-            text = {
-                Column {
-                    TimePicker(state = timePickerState)
-                    if (!isValid) {
-                        Text(
-                            "Please select a time after $minTime",
-                            color = Color.Red,
-                            fontSize = 12.sp
-                        )
-                    }
+                    )
+                    showPicker = false
+                }, enabled = isValid
+            ) { Text("OK") }
+        }, dismissButton = {
+            TextButton(onClick = { showPicker = false }) { Text("Cancel") }
+        }, text = {
+            Column {
+                TimePicker(state = timePickerState)
+                if (!isValid) {
+                    Text(
+                        "Please select a time between $minTime and ${maxTime.time.to12HourTime()}",
+                        color = Color.Red,
+                        fontSize = 12.sp
+                    )
                 }
             }
-        )
+        })
     }
 }
 
@@ -349,25 +329,33 @@ fun AddTimeSlotButton(
     onAdd: (MutableList<Slot>) -> Unit,
 ) {
     val localTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
     TextButton(onClick = {
-
         val currentStartTime = "12:00 AM"
-        val currentEndTime = "2:00 AM"
+        val defaultSlotDuration = 2
+        val timeZone = TimeZone.currentSystemDefault()
+        val maxEndTime = localTime.date.atTime(23, 59)
 
-        if (
-            timeSlots.isEmpty()
-        ) {
-            onAdd(mutableListOf(Slot(startTime = currentStartTime, endTime = currentEndTime)))
+        if (timeSlots.isEmpty()) {
+            onAdd(mutableListOf(Slot(startTime = currentStartTime, endTime = "2:00 AM")))
             return@TextButton
         }
 
-        val newStartTime = timeSlots.lastOrNull()?.endTime ?: currentStartTime
-        val newEndTime = localTime.date.atTime(parse12HourTime(newStartTime)).toInstant(TimeZone.currentSystemDefault()).plus(2, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.currentSystemDefault()).time.to12HourTime()
+        val newStartTimeStr = timeSlots.lastOrNull()?.endTime ?: currentStartTime
+        val newStartTime = localTime.date.atTime(parse12HourTime(newStartTimeStr))
 
+        if (newStartTime.time >= maxEndTime.time) return@TextButton
+
+        val potentialEndTime =
+            newStartTime.toInstant(timeZone).plus(defaultSlotDuration, DateTimeUnit.HOUR)
+                .toLocalDateTime(timeZone)
+
+        val adjustedEndTime =
+            if (potentialEndTime.time > maxEndTime.time) maxEndTime else potentialEndTime
+        val endTimeStr = adjustedEndTime.time.to12HourTime()
         onAdd(timeSlots.toMutableList().apply {
-            add(Slot(startTime = newStartTime, endTime = newEndTime))
+            add(Slot(startTime = newStartTimeStr, endTime = endTimeStr))
         })
-
     }) {
         Image(
             painter = painterResource(Res.drawable.ic_plus),

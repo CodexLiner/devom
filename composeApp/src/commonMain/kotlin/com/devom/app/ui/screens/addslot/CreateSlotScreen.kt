@@ -168,8 +168,8 @@ fun ColumnScope.SlotsSections(
                         datePickerEnable = false,
                         modifier = Modifier.fillMaxWidth().animateItem(),
                         slot = slot.copy(
-                            slot.startTime.to12HourTime(),
-                            slot.endTime.to12HourTime()
+                            startTime = slot.startTime.to12HourTime(),
+                            endTime = slot.endTime.to12HourTime()
                         ),
                         onRemove = {
                             viewModel.removePanditSlot(slot)
@@ -184,7 +184,7 @@ fun ColumnScope.SlotsSections(
         )
 
         TimeSlotBottomSheet(
-            initialSelectedSlots = filteredSlots,
+            initialSelectedSlots = availableSlots.value,
             initialSelectedDate = selectedDate,
             showSheet = sheetState.value,
             onDismiss = { sheetState.value = false }) {
