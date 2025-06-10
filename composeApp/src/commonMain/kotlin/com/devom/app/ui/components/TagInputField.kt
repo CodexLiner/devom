@@ -79,9 +79,10 @@ fun TagInputField(
     val mergedTextStyle = LocalTextStyle.current.merge(TextStyle(color = inputColor))
 
     LaunchedEffect(initialTags) {
-        tags = initialTags
-        onTagsChanged(initialTags.map { it.trim() })
+        tags = initialTags.map { it.trim() }.filter { it.isNotEmpty() }
+        onTagsChanged(tags)
     }
+
 
     BasicTextField(
         value = textValue,
@@ -124,7 +125,7 @@ fun TagInputField(
         interactionSource = interactionSource,
         decorationBox = { innerTextField ->
             TagDecorationBox(
-                tags = tags,
+                tags = tags.map { it.trim() },
                 textValue = if (tags.isNotEmpty()) " " else textValue,
                 onTagRemoved = {
                     tags = tags - it

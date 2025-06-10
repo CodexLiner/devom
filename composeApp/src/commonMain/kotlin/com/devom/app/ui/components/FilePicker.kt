@@ -1,18 +1,23 @@
 package com.devom.app.ui.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.devom.app.models.SupportedFiles
-import com.devom.app.theme.blackColor
-import com.devom.app.theme.orangeShadow
-import com.devom.app.theme.textStyleBody2
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h3
 import com.devom.app.theme.text_style_lead_body_1
-import com.devom.app.theme.text_style_lead_text
 import com.devom.app.theme.whiteColor
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
@@ -53,14 +58,14 @@ fun FilePickerBottomSheetHost(
                 allowedDocs.forEach { doc ->
                     ButtonPrimary(
                         colors = ButtonDefaults.buttonColors().copy(
-                            containerColor = blackColor,
+                            containerColor = primaryColor,
                             contentColor = whiteColor
                         ),
                         fontStyle = text_style_lead_body_1,
                         buttonText = "Pick ${doc.document.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }}",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 2.dp),
+                            .padding(vertical = 2.dp).height(48.dp),
                         onClick = {
                             coroutineScope.launch {
                                 val type = when {

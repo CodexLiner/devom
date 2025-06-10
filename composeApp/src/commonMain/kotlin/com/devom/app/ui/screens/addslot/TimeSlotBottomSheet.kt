@@ -5,6 +5,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.whiteColor
 import com.devom.app.utils.to24HourTime
 import com.devom.models.slots.Slot
@@ -25,11 +26,10 @@ fun TimeSlotBottomSheet(
 
     if (showSheet) {
         ModalBottomSheet(
-            containerColor = whiteColor,
             onDismissRequest = {
                 scope.launch {
                     sheetState.hide()
-                    onDismiss() // Tell parent to set showSheet = false
+                    onDismiss()
                 }
             },
             sheetState = sheetState

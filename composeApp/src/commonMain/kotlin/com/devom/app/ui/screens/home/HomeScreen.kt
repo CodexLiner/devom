@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -23,6 +26,11 @@ import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.network.NetworkClient
+import com.devom.utils.Application
+import org.jetbrains.compose.resources.painterResource
+import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.ic_logout
+import pandijtapp.composeapp.generated.resources.ic_notification
 
 @Composable
 fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () -> Unit) {
@@ -33,7 +41,17 @@ fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () 
         viewModel.getBookings()
     }
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
-        AppBar(title = "Dashboard", onNavigationIconClick = onNavigationIconClick)
+        AppBar(title = "Dashboard", onNavigationIconClick = onNavigationIconClick , actions = {
+            IconButton(onClick = {
+               navHostController.navigate(Screens.Notifications.path)
+            }) {
+                Icon(
+                    painterResource(Res.drawable.ic_notification),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        })
         HomeScreenContent(viewModel, navHostController)
     }
 }

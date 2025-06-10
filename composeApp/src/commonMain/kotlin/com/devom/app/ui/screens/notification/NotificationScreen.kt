@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.notification
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import com.devom.models.notification.GetNotificationResponse
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_notification
 
 @Composable
 fun NotificationScreen(navHostController: NavHostController) {
@@ -61,6 +63,7 @@ fun NotificationScreen(navHostController: NavHostController) {
 private fun NotificationScreenContent(list: List<GetNotificationResponse>) {
     if (list.isNotEmpty()) LazyColumn(
         contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(list) {
@@ -72,8 +75,8 @@ private fun NotificationScreenContent(list: List<GetNotificationResponse>) {
 @Composable
 fun NotificationItem(notification: GetNotificationResponse, showDivider: Boolean = true) {
     Column(
-        modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         NotificationContent(
             imageUrl = "https://picsum.photos/200",
@@ -107,8 +110,8 @@ private fun NotificationContent(
 
 @Composable
 private fun NotificationImage(imageUrl: String) {
-    AsyncImage(
-        model = imageUrl,
+    Image(
+        painter = painterResource(Res.drawable.ic_notification),
         contentDescription = null,
         modifier = Modifier.size(44.dp)
             .background(color = primaryColor, shape = RoundedCornerShape(16.dp)).padding(10.dp)

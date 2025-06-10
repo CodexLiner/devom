@@ -10,6 +10,7 @@ import com.devom.models.document.CreateDocumentInput
 import com.devom.models.pandit.GetBiographyResponse
 import com.devom.models.pandit.UpdateBiographyInput
 import com.devom.utils.Application
+import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.network.onResult
 import com.devom.utils.network.onResultNothing
 import io.github.vinceglb.filekit.PlatformFile
@@ -48,9 +49,20 @@ class BiographyViewModel : ViewModel() {
         }
     }
 
-    fun getBiography(userId: String) {
+    fun removeDocument(documentId: String) {
         viewModelScope.launch {
-            Project.pandit.getBiographyUseCase.invoke(userId).collect {
+            Project.document.removeDocumentUseCase.invoke(documentId).collect {
+                it.onResultNothing {
+                    getBiography(user.value?.userId.toString(), cachePolicy = CachePolicy.NetworkOnly)
+                    Application.showToast("Document removed successfully")
+                }
+            }
+        }
+    }
+
+    fun getBiography(userId: String , cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork) {
+        viewModelScope.launch {
+            Project.pandit.getBiographyUseCase.invoke(userId , cachePolicy).collect {
                 it.onResult {
                     _biography.value = it.data
                 }
@@ -78,7 +90,7 @@ class BiographyViewModel : ViewModel() {
                 )
             ).collect {
                 it.onResultNothing {
-                    getBiography(user.value?.userId.toString())
+                    getBiography(user.value?.userId.toString() , cachePolicy = CachePolicy.NetworkOnly)
                     Application.showToast("Biography updated successfully")
                 }
             }

@@ -92,16 +92,10 @@ fun RitualsScreen(navController: NavController) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Preferred Rituals/Poojas",
-            onNavigationIconClick = { navController.popBackStack() })
+            onNavigationIconClick = { navController.popBackStack() }
+        )
 
-
-        if (poojaList.value.isNullOrEmpty()) {
-            NoContentView(
-                message = stringResource(Res.string.no_pooja_found), title = null, image = null
-            )
-        } else RitualsScreenScreenContent(viewModel, navController)
-
-
+       RitualsScreenScreenContent(viewModel, navController)
     }
 
     LaunchedEffect(Unit) {
@@ -118,7 +112,13 @@ fun ColumnScope.RitualsScreenScreenContent(
     val poojaItemsList = viewModel.getPoojaItems.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
     val selectedDropDownItem = remember { mutableStateOf<GetPanditPoojaResponse?>(null) }
-    LazyColumn(
+
+    if (poojaList.value.isNullOrEmpty()) {
+        NoContentView(
+            modifier = Modifier.weight(1f),
+            message = stringResource(Res.string.no_pooja_found), title = null, image = null
+        )
+    } else LazyColumn(
         modifier = Modifier.weight(1f),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp)
@@ -254,7 +254,7 @@ fun PoojaItemContent(poojaItem: GetPanditPoojaResponse , onClick: () -> Unit = {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Cost with Samagri",
+                    text = "Cost without Samagri",
                     fontWeight = FontWeight.W600,
                     color = greyColor,
                     fontSize = 12.sp
