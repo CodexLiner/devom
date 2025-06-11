@@ -102,7 +102,7 @@ fun RegisterMainScreen(
                             modifier = Modifier.padding(top = 4.dp),
                             placeholder = "Referral Code"
                         ) {
-                            createUserRequest.fullName = it
+                            createUserRequest.referralCode = it
                         }
                     }
                 }
@@ -184,6 +184,7 @@ fun RegisterScreenHeader(navController: NavHostController) {
                 )
             }
 
+//            Stepper(steps = steps, currentStep = currentStep.value)
         }
     }
 }
