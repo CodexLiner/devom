@@ -16,6 +16,7 @@ import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.biography.BiographyScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
 import com.devom.app.ui.screens.document.UploadDocumentScreen
+import com.devom.app.ui.screens.helpandsupport.HelpAndSupportDetailScreen
 import com.devom.app.ui.screens.helpandsupport.HelpAndSupportScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
@@ -105,6 +106,15 @@ fun NavigationHost(
         composable(Screens.TransactionsDetails.path) {
             TransactionDetailsScreen(
                 navController = navController,
+            )
+        }
+        composable(
+            route = Screens.HelpAndSupportDetailScreen.path.plus("/{ticketId}"),
+            arguments = listOf(navArgument("ticketId") { type = NavType.StringType })
+        ) {
+            HelpAndSupportDetailScreen(
+                navController = navController,
+                ticketId = it.arguments?.getString("ticketId") ?: ""
             )
         }
     }

@@ -15,6 +15,9 @@ class HelpAndSupportViewModel : ViewModel() {
     private val _tickets = MutableStateFlow<List<GetAllTicketsResponse>>(listOf())
     val tickets = _tickets.asStateFlow()
 
+    private val _ticketDetails = MutableStateFlow<GetAllTicketsResponse?>(null)
+    val ticketDetails = _ticketDetails.asStateFlow()
+
     init {
         getAllTickets()
     }
@@ -34,6 +37,16 @@ class HelpAndSupportViewModel : ViewModel() {
             Project.helpAndSupport.createTicketUseCase.invoke(request).collect {
                 it.onResultNothing {
                     getAllTickets()
+                }
+            }
+        }
+    }
+
+    fun getTicketDetails(ticketId: String) {
+        viewModelScope.launch {
+            Project.helpAndSupport.getTicketDetailsUseCase.invoke(ticketId).collect {
+                it.onResult {
+                    _ticketDetails.value = it.data
                 }
             }
         }

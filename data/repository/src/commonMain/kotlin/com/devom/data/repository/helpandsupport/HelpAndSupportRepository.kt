@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface HelpAndSupportRepository {
     suspend fun getAllTickets(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork): Flow<ResponseResult<List<GetAllTicketsResponse>>>
     suspend fun createTicket(createTicketRequest: CreateTicketRequest): Flow<ResponseResult<String>>
+    suspend fun getTicketDetails(ticketId: String): Flow<ResponseResult<GetAllTicketsResponse>>
 }
 
 class HelpAndSupportRepositoryImpl : HelpAndSupportRepository {
@@ -30,5 +31,11 @@ class HelpAndSupportRepositoryImpl : HelpAndSupportRepository {
         apiFlow {
             helpAndSupportRemoteDataSource.createTicket(createTicketRequest)
         }
+
+    override suspend fun getTicketDetails(ticketId: String): Flow<ResponseResult<GetAllTicketsResponse>> =
+        apiFlow {
+            helpAndSupportRemoteDataSource.getTicketDetails(ticketId)
+        }
+
 
 }

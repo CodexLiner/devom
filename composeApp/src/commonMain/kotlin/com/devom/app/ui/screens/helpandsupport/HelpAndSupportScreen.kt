@@ -1,6 +1,7 @@
 package com.devom.app.ui.screens.helpandsupport
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import com.devom.app.theme.warningColor
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.formatStatus
 import com.devom.app.utils.to12HourTime
 import com.devom.models.helpandsupport.GetAllTicketsResponse
@@ -66,13 +68,17 @@ fun HelpAndSupportScreen(navController: NavHostController) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Help & Support",
-            onNavigationIconClick = { navController.popBackStack() })
-        HelpAndSupportScreenContent(viewModel)
+            onNavigationIconClick = { navController.popBackStack() }
+        )
+        HelpAndSupportScreenContent(viewModel, navController)
     }
 }
 
 @Composable
-fun ColumnScope.HelpAndSupportScreenContent(viewModel: HelpAndSupportViewModel) {
+fun ColumnScope.HelpAndSupportScreenContent(
+    viewModel: HelpAndSupportViewModel,
+    navController: NavHostController,
+) {
     val tickets = viewModel.tickets.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
 
@@ -82,13 +88,16 @@ fun ColumnScope.HelpAndSupportScreenContent(viewModel: HelpAndSupportViewModel) 
         contentPadding = (PaddingValues(horizontal = 16.dp, vertical = 24.dp))
     ) {
         items(tickets.value) {
-            HelpAndSupportTicketItem(it)
+            HelpAndSupportTicketItem(it) {
+                navController.navigate(Screens.HelpAndSupportDetailScreen.path.plus("/${it.ticketId}"))
+            }
         }
     }
     ButtonPrimary(
         buttonText = stringResource(Res.string.create_request),
         fontStyle = text_style_lead_text,
-        modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(58.dp).padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(58.dp)
+            .padding(horizontal = 16.dp),
         onClick = {
             showSheet.value = true
         }
@@ -105,7 +114,7 @@ fun ColumnScope.HelpAndSupportScreenContent(viewModel: HelpAndSupportViewModel) 
 }
 
 @Composable
-fun HelpAndSupportTicketItem(ticketRequest: GetAllTicketsResponse) {
+fun HelpAndSupportTicketItem(ticketRequest: GetAllTicketsResponse , onClick : () -> Unit) {
     val chipColor = when (ticketRequest.status.lowercase()) {
         "in_progress" -> greenColor
         "open", "pending" -> warningColor
@@ -123,7 +132,7 @@ fun HelpAndSupportTicketItem(ticketRequest: GetAllTicketsResponse) {
         modifier = Modifier
             .fillMaxWidth()
             .background(whiteColor, RoundedCornerShape(12.dp))
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp).clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -184,7 +193,7 @@ private fun TicketStatusSection(status: String, chipColor: Color, date: String) 
 }
 
 @Composable
-private fun StatusChip(text: String, color: Color) {
+fun StatusChip(text: String, color: Color) {
     Box(
         modifier = Modifier
             .background(

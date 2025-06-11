@@ -70,4 +70,5 @@ object NotificationsEndpoints {
 object HelpAndSupportEndpoints{
     const val GetAllTickets = "/support/tickets"
     const val CreateTicket = "/support/ticket"
+    const val GetTicketDetails = "/support/ticket"
 }

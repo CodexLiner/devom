@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 interface HelpAndSupportRemoteDataSource {
     suspend fun getAllTickets(): Flow<ResponseResult<List<GetAllTicketsResponse>>>
     suspend fun createTicket(createTicketRequest: CreateTicketRequest): Flow<ResponseResult<String>>
+    suspend fun getTicketDetails(ticketId: String): Flow<ResponseResult<GetAllTicketsResponse>>
 }
 
 class HelpAndSupportRemoteDataSourceImpl() : HelpAndSupportRemoteDataSource {
@@ -32,7 +33,10 @@ class HelpAndSupportRemoteDataSourceImpl() : HelpAndSupportRemoteDataSource {
                 MultiPartFormDataContent(
                     formData {
                         createTicketRequest.toMap().entries.map {
-                            if (it.value.isNotBlank() && it.value::class != ByteArray::class) append(it.key, it.value)
+                            if (it.value.isNotBlank() && it.value::class != ByteArray::class) append(
+                                it.key,
+                                it.value
+                            )
                         }
                         append("image", createTicketRequest.image, Headers.build {
                             append(HttpHeaders.ContentType, "image/*")
@@ -44,4 +48,7 @@ class HelpAndSupportRemoteDataSourceImpl() : HelpAndSupportRemoteDataSource {
                     })
             )
         }.toResponseResult()
+
+    override suspend fun getTicketDetails(ticketId: String): Flow<ResponseResult<GetAllTicketsResponse>> =
+        ktorClient.get("${HelpAndSupportEndpoints.GetTicketDetails}/$ticketId").toResponseResult()
 }
