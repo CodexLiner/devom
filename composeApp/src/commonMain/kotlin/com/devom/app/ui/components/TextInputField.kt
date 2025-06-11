@@ -25,6 +25,7 @@ import com.devom.app.theme.text_style_lead_text
 @Composable
 fun TextInputField(
     initialValue: String = "",
+    maxLength: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier.fillMaxWidth(),
     backgroundColor: Color = bgColor,
     placeholderColor: Color = com.devom.app.theme.inputColor,
@@ -61,8 +62,9 @@ fun TextInputField(
         value = input,
         keyboardOptions = keyboardOptions,
         onValueChange = {
-            input = it
-            onValueChange(it)
+            val trimmed = it.take(maxLength)
+            input = trimmed
+            onValueChange(trimmed)
         },
         readOnly = readOnly,
         label = {

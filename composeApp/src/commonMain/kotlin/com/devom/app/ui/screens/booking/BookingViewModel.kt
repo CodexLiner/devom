@@ -6,6 +6,7 @@ import com.devom.Project
 import com.devom.app.models.ApplicationStatus
 import com.devom.models.poojaitems.GetPoojaItemsResponse
 import com.devom.models.slots.GetBookingsResponse
+import com.devom.models.slots.RemoveAndUpdatePoojaItemRequest
 import com.devom.models.slots.UpdateBookingStatusInput
 import com.devom.utils.Application
 import com.devom.utils.cachepolicy.CachePolicy
@@ -73,12 +74,19 @@ class BookingViewModel : ViewModel() {
     }
 
     fun addPoojaItem(string: String, booking: GetBookingsResponse) {
+        val input = RemoveAndUpdatePoojaItemRequest(
+            addItems = listOf(string.toIntOrNull() ?: 0)
+        )
         viewModelScope.launch {
-//            Project.pooja.addPoojaItemUseCase.invoke(string).collect {
-//                it.withSuccessWithoutData {
-//                    getBookings()
-//                }
-//            }
+            Project.pandit.removeAndUpdateItemsInBookingUseCase.invoke(
+                input = input,
+                bookingId = booking.bookingId.toString()
+            ).collect {
+                it.onResult {
+                    getBookingById(booking.bookingId.toString())
+                    Application.showToast("Pooja item added successfully")
+                }
+            }
         }
     }
 }

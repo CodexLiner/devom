@@ -23,6 +23,8 @@ import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.convertToISOFormat
 import com.devom.utils.date.toIsoDateTimeString
 import com.devom.utils.date.toLocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.calendar_linear
 
@@ -48,6 +50,7 @@ internal fun GeneralMainContent(createUserRequest: CreateUserRequest , onChange 
                 onChange(createUserRequest)
             }
             TextInputField(
+                maxLength = 10,
                 placeholder = "Enter phone"
             ) {
                 createUserRequest.mobileNo = it
@@ -101,6 +104,7 @@ internal fun GeneralMainContent(createUserRequest: CreateUserRequest , onChange 
             }
 
             DatePickerDialog(
+                maxDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
                 onDismiss = { datePickerState.value = false },
                 onDateSelected = {
                     datePickerState.value = false

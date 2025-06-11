@@ -44,6 +44,11 @@ import com.devom.models.auth.UserResponse
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toIsoDateTimeString
 import com.devom.utils.date.toLocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.calendar_linear
@@ -195,7 +200,9 @@ fun showDatePicker(
     viewModel: ProfileViewModel,
     userResponse: UserResponse,
 ) {
+
     DatePickerDialog(
+        maxDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
         onDismiss = { state.value = false },
         onDateSelected = {
             state.value = false

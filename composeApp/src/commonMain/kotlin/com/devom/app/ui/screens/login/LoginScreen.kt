@@ -102,6 +102,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
             color = "#32343E".toColor()
         )
         TextInputField(
+            maxLength = 10,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
