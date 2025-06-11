@@ -12,13 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.devom.app.theme.blackColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.whiteColor
 
 @Composable
 fun ShapedScreen(
-    modifier: Modifier = Modifier.fillMaxSize().background(color = blackColor).statusBarsPadding(),
+    modifier: Modifier = Modifier.fillMaxSize().background(color = primaryColor).statusBarsPadding(),
     mainColor: Color = whiteColor,
     shapedContentShape: RoundedCornerShape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
     headerContent: @Composable () -> Unit,

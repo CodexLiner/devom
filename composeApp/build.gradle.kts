@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
             implementation("network.chaintech:cmpcharts:1.0.0")
+            implementation("io.coil-kt:coil-video:2.4.0")
 
 
 
