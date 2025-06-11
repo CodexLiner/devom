@@ -37,5 +37,7 @@ data class CreateUserResponse(
     @SerialName("created_at") val createdAt: String = "",
 
     @SerialName("updated_at") val updatedAt: String = "",
+
+    val referralCode: String = "",
 )
 
