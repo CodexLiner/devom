@@ -70,6 +70,8 @@
     <string name="enter_country">Enter Country</string>
     <string name="enter_address">Address</string>
     <string name="date_of_birth">Date of Birth</string>
+    <string name="create_support_request">Create Support Request</string>
+    <string name="create_request">Create New Request</string>
     <string name="calendar_icon_description">Calendar</string>
     <string name="view_and_track_your_payments_and_transactions">"View and track your payments and transactions.</string>
 
@@ -79,5 +81,5 @@
         <item>item 1</item>
         <item> item 2</item>
     </string-array>
-    <string name="all_field_required">all fields are required</string>
+    <string name="all_field_required">Please fill out all required fields.</string>
 </resources>

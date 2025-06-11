@@ -286,8 +286,8 @@ fun AddEditPoojaBottomSheet(
     val selectedDropDownItem = remember {
         mutableStateOf<DropDownItem?>(
             DropDownItem(
-                poojaItemMappingInput?.poojaName.orEmpty(),
-                poojaItemMappingInput?.poojaId.toString()
+                poojaItemMappingInput.poojaName,
+                poojaItemMappingInput.poojaId.toString()
             )
         )
     }

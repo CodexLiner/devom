@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 inline fun <reified T> HttpResponse.toResponseResult(): Flow<ResponseResult<T>> = flow {
     val responseText = bodyAsText()
@@ -38,8 +39,19 @@ inline fun <reified T> HttpRequestBuilder.setParams(params: T) {
 
 }
 
+
 inline fun <reified T> T.toMap(): Map<String, String> {
-    val encodeJson = NetworkClient.config.jsonConfig.encodeToString(this)
-    val jsonElement = (NetworkClient.config.jsonConfig.parseToJsonElement(encodeJson) as? JsonObject)
-    return jsonElement?.entries?.associate { it.key to it.value.toString() } ?: emptyMap()
+    val json = NetworkClient.config.jsonConfig
+    val encoded = json.encodeToString(this)
+    val jsonObject = json.parseToJsonElement(encoded) as? JsonObject
+
+    return jsonObject?.entries
+        ?.filter { (_, value) -> value is JsonPrimitive || value is JsonObject }
+        ?.associate { (key, value) ->
+            key to when (value) {
+                is JsonPrimitive -> value.content
+                is JsonObject -> value.toString()
+                else -> ""
+            }
+        } ?: emptyMap()
 }

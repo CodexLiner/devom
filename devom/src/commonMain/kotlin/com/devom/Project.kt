@@ -2,6 +2,7 @@ package com.devom
 
 import com.devom.category.Category
 import com.devom.document.Document
+import com.devom.helpandsupport.HelpAndSupport
 import com.devom.notification.Notification
 import com.devom.pandit.Pandit
 import com.devom.payment.Payment
@@ -49,6 +50,8 @@ object Project {
      * notification
      */
     val notification by lazy { Notification() }
+
+    val helpAndSupport by lazy { HelpAndSupport() }
 
 
 }

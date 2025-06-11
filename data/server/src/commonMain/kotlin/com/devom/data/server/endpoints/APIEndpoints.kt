@@ -66,3 +66,8 @@ object  PaymentEndpoints {
 object NotificationsEndpoints {
     const val GetNotifications = "/notification"
 }
+
+object HelpAndSupportEndpoints{
+    const val GetAllTickets = "/support/tickets"
+    const val CreateTicket = "/support/ticket"
+}
