@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,9 +18,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.devom.app.ui.components.DatePickerDialog
-import com.devom.models.auth.CreateUserRequest
+import com.devom.app.ui.components.DropDownItem
+import com.devom.app.ui.components.ExposedDropdown
+import com.devom.models.auth.UserRequestResponse
 import pandijtapp.composeapp.generated.resources.Res
 import com.devom.app.ui.components.TextInputField
+import com.devom.models.other.City
+import com.devom.models.other.Country
+import com.devom.models.other.State
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toIsoDateTimeString
 import com.devom.utils.date.toLocalDateTime
@@ -38,37 +45,52 @@ import pandijtapp.composeapp.generated.resources.enter_phone
 import pandijtapp.composeapp.generated.resources.enter_state
 
 @Composable
-internal fun RegisterScreenMainContent(
-    createUserRequest: CreateUserRequest,
-    onChange: (CreateUserRequest) -> Unit,
+internal fun UserDetailsScreenMainContent(
+    userResponse: UserRequestResponse,
+    onChange: (UserRequestResponse) -> Unit,
 ) {
+    val viewModel = remember { UserDetailScreenViewModel() }
+    val countryList = viewModel.countryList.collectAsState()
+    val stateList = viewModel.stateList.collectAsState()
+    val cityList = viewModel.cityList.collectAsState()
+
+    val selectedCountry = viewModel.selectedCountry.collectAsState()
+    val selectedCity = viewModel.selectedCity.collectAsState()
+    val selectedState = viewModel.selectedState.collectAsState()
+
     val datePickerState = remember { mutableStateOf(false) }
 
+    LaunchedEffect(userResponse) {
+        viewModel.setInitialValues(userResponse)
+    }
+
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         TextInputField(
+            initialValue = userResponse.fullName.toString(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
             placeholder = stringResource(Res.string.enter_full_name)
         ) {
-            createUserRequest.fullName = it
-            onChange(createUserRequest)
+            userResponse.fullName = it
+            onChange(userResponse)
         }
         TextInputField(
+            initialValue = userResponse.email.toString(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
             placeholder = stringResource(Res.string.enter_email)
         ) {
-            createUserRequest.email = it
-            onChange(createUserRequest)
+            userResponse.email = it
+            onChange(userResponse)
         }
         TextInputField(
+            initialValue = userResponse.mobileNo.toString(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -76,59 +98,55 @@ internal fun RegisterScreenMainContent(
             maxLength = 10,
             placeholder = stringResource(Res.string.enter_phone)
         ) {
-            createUserRequest.mobileNo = it
-            onChange(createUserRequest)
+            userResponse.mobileNo = it
+            onChange(userResponse)
         }
-        TextInputField(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            placeholder = stringResource(Res.string.enter_city)
-        ) {
-            createUserRequest.city = it
-            onChange(createUserRequest)
-        }
-        TextInputField(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            placeholder = stringResource(Res.string.enter_state)
-        ) {
-            createUserRequest.state = it
-            onChange(createUserRequest)
-        }
-        TextInputField(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
+
+        ExposedDropdown(
+            selectedOption = DropDownItem(option = selectedCountry.value?.name.orEmpty() , selectedCountry.value?.isoCode.orEmpty()),
+            options = countryList.value.map { DropDownItem(it.name, it.isoCode) },
             placeholder = stringResource(Res.string.enter_country)
         ) {
-            createUserRequest.country = it
-            onChange(createUserRequest)
+            userResponse.country = it.option
+            viewModel.selectedCountry.value = Country(name = it.option, isoCode = it.id)
+            viewModel.getStateList(it.id)
+            onChange(userResponse)
         }
-        TextInputField(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            placeholder = stringResource(Res.string.enter_address)
+
+        ExposedDropdown(
+            selectedOption = DropDownItem(option = selectedState.value?.name.orEmpty() , selectedState.value?.isoCode.orEmpty()),
+            options = stateList.value.map { DropDownItem(it.name, it.isoCode) },
+            placeholder = stringResource(Res.string.enter_state)
         ) {
-            createUserRequest.address = it
-            onChange(createUserRequest)
+            userResponse.state = it.option
+            viewModel.selectedState.value = State(name = it.option, isoCode = it.id)
+            viewModel.getCityList(stateCode = it.id)
+            onChange(userResponse)
+        }
+
+        ExposedDropdown(
+            selectedOption = DropDownItem(option = selectedCity.value?.name.orEmpty() , selectedCity.value?.isoCode.orEmpty()),
+            options = cityList.value.map { DropDownItem(it.name, it.isoCode) },
+            placeholder = stringResource(Res.string.enter_city)
+        ) {
+            userResponse.city = it.option
+            viewModel.selectedCity.value = City(name = it.option, isoCode = it.id)
+            viewModel.getCityList(stateCode = it.id)
+            onChange(userResponse)
+        }
+
+        TextInputField(
+            initialValue = userResponse.address.toString(), keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+            ), placeholder = stringResource(Res.string.enter_address)
+        ) {
+            userResponse.address = it
+            onChange(userResponse)
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { datePickerState.value = true }
-        ) {
-            val initialValue = createUserRequest.dateOfBirth
-                .convertIsoToDate()
-                ?.toLocalDateTime()
-                ?.date
+            modifier = Modifier.fillMaxWidth().clickable { datePickerState.value = true }) {
+            val initialValue = userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date
 
             TextInputField(
                 readOnly = true,
@@ -141,10 +159,9 @@ internal fun RegisterScreenMainContent(
                         contentDescription = stringResource(Res.string.calendar_icon_description),
                         modifier = Modifier.size(24.dp)
                     )
-                }
-            ) {
-                createUserRequest.dateOfBirth = it
-                onChange(createUserRequest)
+                }) {
+                userResponse.dateOfBirth = it
+                onChange(userResponse)
             }
         }
 
@@ -153,7 +170,7 @@ internal fun RegisterScreenMainContent(
             onDismiss = { datePickerState.value = false },
             onDateSelected = {
                 datePickerState.value = false
-                val updatedUser = createUserRequest.copy(dateOfBirth = it.toIsoDateTimeString())
+                val updatedUser = userResponse.copy(dateOfBirth = it.toIsoDateTimeString())
                 onChange(updatedUser)
             },
             showPicker = datePickerState.value,

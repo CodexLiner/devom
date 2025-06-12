@@ -26,7 +26,7 @@ import com.devom.app.ui.screens.home.HomeScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
 import com.devom.app.ui.screens.wallet.WalletScreen
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -117,7 +117,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
 
 @Composable
 fun DrawerContent(
-    user: UserResponse?,
+    user: UserRequestResponse?,
     appNavHostController: NavHostController,
     scope: CoroutineScope,
     drawerState: DrawerState,

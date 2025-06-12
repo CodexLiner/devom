@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserResponse(
+data class UserRequestResponse(
     @SerialName("user_id") val userId: Int = 0,
     @SerialName("fullname") var fullName: String = "",
     @SerialName("email") var email: String = "",
@@ -19,7 +19,7 @@ data class UserResponse(
     @SerialName("date_of_birth") var dateOfBirth: String = "",
     @SerialName("address") var address: String = "",
     @SerialName("profile_picture_url") val profilePictureUrl: String? = null,
-    @SerialName("user_type_id") val userTypeId: Int = 0,
+    @SerialName("user_type_id") var userTypeId: Int = 0,
     @SerialName("is_online") val isOnline: Int = 0,
     @SerialName("uuid") val uuid: String = "",
     @SerialName("created_at") val createdAt: String = "",

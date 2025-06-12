@@ -3,7 +3,7 @@ package com.devom.app.ui.screens.rituals
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.models.pandit.GetPanditPoojaResponse
 import com.devom.models.pandit.MapPanditPoojaItemInput
 import com.devom.models.pooja.GetPoojaResponse
@@ -18,7 +18,7 @@ class RitualsViewModel : ViewModel() {
     private val _getPoojaItems = MutableStateFlow<List<GetPoojaResponse>>(listOf())
     val getPoojaItems = _getPoojaItems
 
-    private val _user = MutableStateFlow<UserResponse?>(null)
+    private val _user = MutableStateFlow<UserRequestResponse?>(null)
     val user = _user
 
     private val _rituals = MutableStateFlow<List<GetPanditPoojaResponse>?>(null)

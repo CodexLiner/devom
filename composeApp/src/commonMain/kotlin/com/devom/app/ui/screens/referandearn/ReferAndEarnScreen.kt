@@ -30,7 +30,7 @@ import com.devom.app.theme.text_style_h3
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ShapedScreen
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -58,7 +58,7 @@ fun ReferAndEarnScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ReferAndEarnScreenContent(user: State<UserResponse?>) {
+fun ReferAndEarnScreenContent(user: State<UserRequestResponse?>) {
     ShapedScreen(
         modifier = Modifier.fillMaxSize().background(primaryColor),
         headerContent = {
@@ -89,7 +89,7 @@ fun ReferMainContent() {
 }
 
 @Composable
-fun ReferHeaderContent(user: State<UserResponse?>) {
+fun ReferHeaderContent(user: State<UserRequestResponse?>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()

@@ -51,7 +51,16 @@ object Project {
      */
     val notification by lazy { Notification() }
 
+    /**
+     * help and support
+     */
     val helpAndSupport by lazy { HelpAndSupport() }
+
+    /**
+     * other
+     */
+    val other by lazy { Other() }
+
 
 
 }

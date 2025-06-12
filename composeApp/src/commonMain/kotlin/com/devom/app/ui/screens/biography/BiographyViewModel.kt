@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.app.models.SupportedFiles
 import com.devom.app.utils.videoExtensions
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.pandit.GetBiographyResponse
 import com.devom.models.pandit.UpdateBiographyInput
@@ -23,7 +23,7 @@ import kotlinx.io.buffered
 import kotlinx.io.readByteArray
 
 class BiographyViewModel : ViewModel() {
-    private val _user = MutableStateFlow<UserResponse?>(null)
+    private val _user = MutableStateFlow<UserRequestResponse?>(null)
     val user = _user
 
     private val _biography = MutableStateFlow<GetBiographyResponse?>(null)

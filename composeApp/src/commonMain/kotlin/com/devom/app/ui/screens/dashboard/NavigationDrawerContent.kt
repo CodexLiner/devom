@@ -33,10 +33,11 @@ import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AsyncImage
+import com.devom.app.ui.components.UserProfilePicture
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -57,7 +58,7 @@ import pandijtapp.composeapp.generated.resources.refer_earn
 
 @Composable
 internal fun NavigationDrawerContent(
-    user: UserResponse?,
+    user: UserRequestResponse?,
     appNavHostController: NavHostController,
     onWalletClick: () -> Unit,
     onBookings: () -> Unit,
@@ -123,7 +124,7 @@ internal fun NavigationDrawerContent(
 
 @Composable
 fun UserDetailsContent(
-    user: UserResponse?,
+    user: UserRequestResponse?,
     appNavHostController: NavHostController,
     balance: State<GetWalletBalanceResponse>,
     onDismiss: () -> Unit,
@@ -137,26 +138,14 @@ fun UserDetailsContent(
             .statusBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(contentAlignment = Alignment.BottomEnd) {
-            AsyncImage(
-                model = user?.profilePictureUrl.toDevomImage(),
-                modifier = Modifier.size(66.dp).clip(CircleShape),
-            )
 
-            Box(
-                modifier = Modifier
-                    .offset(x = (-4).dp, y = (-4).dp)
-                    .size(24.dp)
-                    .clip(CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_badge_verified),
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                )
-            }
+        user?.let {
+            UserProfilePicture(
+                modifier = Modifier.size(66.dp).clip(CircleShape),
+                userResponse = user
+            )
         }
+
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = user?.fullName.orEmpty(), style = text_style_h5, color = whiteColor)
             val accountBalance = buildAnnotatedString {

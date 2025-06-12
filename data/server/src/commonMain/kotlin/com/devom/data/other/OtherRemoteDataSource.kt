@@ -1,6 +1,7 @@
 package com.devom.data.other
 
 import com.devom.data.server.endpoints.OtherEndpoints
+import com.devom.models.other.City
 import com.devom.models.other.Country
 import com.devom.network.NetworkClient
 import com.devom.network.utils.toResponseResult
@@ -14,7 +15,7 @@ interface OtherRemoteDataSource {
     suspend fun getCityList(
         countryCode: String,
         stateCode: String,
-    ): Flow<ResponseResult<List<Country>>>
+    ): Flow<ResponseResult<List<City>>>
 }
 
 class OtherRemoteDataSourceImpl : OtherRemoteDataSource {
@@ -28,7 +29,7 @@ class OtherRemoteDataSourceImpl : OtherRemoteDataSource {
     override suspend fun getCityList(
         countryCode: String,
         stateCode: String,
-    ): Flow<ResponseResult<List<Country>>> =
+    ): Flow<ResponseResult<List<City>>> =
         ktorClient.get(OtherEndpoints.GetCityList.plus("/$countryCode/$stateCode")).toResponseResult()
 
 }

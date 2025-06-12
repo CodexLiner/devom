@@ -3,6 +3,7 @@ package com.devom.data.cache.other
 import com.devom.data.cache.CacheHelper
 import com.devom.data.cache.utils.jsonConfig
 import com.devom.data.cache.utils.toCacheResult
+import com.devom.models.other.City
 import com.devom.models.other.Country
 import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +16,9 @@ interface OtherLocalDataSource {
     suspend fun getAllCities(
         countryCode: String,
         stateCode: String,
-    ): Flow<ResponseResult<List<Country>>>
+    ): Flow<ResponseResult<List<City>>>
 
-    suspend fun saveAllCities(countryCode: String, stateCode: String, data: List<Country>)
+    suspend fun saveAllCities(countryCode: String, stateCode: String, data: List<City>)
 }
 
 class OtherLocalDataSourceImpl : OtherLocalDataSource {
@@ -40,12 +41,12 @@ class OtherLocalDataSourceImpl : OtherLocalDataSource {
     override suspend fun getAllCities(
         countryCode: String,
         stateCode: String,
-    ): Flow<ResponseResult<List<Country>>> =
+    ): Flow<ResponseResult<List<City>>> =
         cacheHelper.getData("getAllCities$countryCode$stateCode").toCacheResult()
 
     override suspend fun saveAllCities(
         countryCode: String,
         stateCode: String,
-        data: List<Country>,
+        data: List<City>,
     ) = cacheHelper.saveData("getAllCities$countryCode$stateCode", jsonConfig.encodeToString(data))
 }

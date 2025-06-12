@@ -2,10 +2,9 @@ package com.devom.data.server.auth
 
 import com.devom.data.server.endpoints.AuthEndpoints
 import com.devom.models.GenericResponse
-import com.devom.models.auth.CreateUserRequest
 import com.devom.models.auth.CreateUserResponse
 import com.devom.models.auth.LoginWithOtpRequest
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.network.NetworkClient
 import com.devom.network.utils.setParams
 import com.devom.network.utils.toMap
@@ -22,15 +21,15 @@ import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 
 interface UserRemoteDataSource {
-    suspend fun signUp(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>>
-    suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserResponse>>
+    suspend fun signUp(user: UserRequestResponse): Flow<ResponseResult<CreateUserResponse>>
+    suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserRequestResponse>>
     suspend fun generateOtp(body: Map<String, String>): Flow<ResponseResult<GenericResponse>>
-    suspend fun getUser(params: Map<String, Any>): Flow<ResponseResult<UserResponse>>
-    suspend fun getUserProfile(): Flow<ResponseResult<UserResponse>>
+    suspend fun getUser(params: Map<String, Any>): Flow<ResponseResult<UserRequestResponse>>
+    suspend fun getUserProfile(): Flow<ResponseResult<UserRequestResponse>>
     suspend fun updateUserProfile(
-        user: UserResponse,
+        user: UserRequestResponse,
         image: ByteArray? = null,
-    ): Flow<ResponseResult<UserResponse>>
+    ): Flow<ResponseResult<UserRequestResponse>>
 }
 
 class UserRemoteDataSourceImpl : UserRemoteDataSource {
@@ -40,14 +39,14 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
      * @param user
      * @return Flow<ResponseResult<CreateUserResponse>>
      */
-    override suspend fun signUp(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>> =
+    override suspend fun signUp(user: UserRequestResponse): Flow<ResponseResult<CreateUserResponse>> =
         ktorClient.post(AuthEndpoints.SignUp) { setBody(user) }.toResponseResult()
 
     /**
      * @param credentials
      * @return Flow<ResponseResult<UserResponse>>
      */
-    override suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserResponse>> =
+    override suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserRequestResponse>> =
         ktorClient.post(AuthEndpoints.LoginWithOtp) { setBody(credentials) }.toResponseResult()
 
     /**
@@ -57,18 +56,18 @@ class UserRemoteDataSourceImpl : UserRemoteDataSource {
     override suspend fun generateOtp(body: Map<String, String>): Flow<ResponseResult<GenericResponse>> =
         ktorClient.post(AuthEndpoints.GenerateOtp) { setBody(body) }.toResponseResult()
 
-    override suspend fun getUser(params: Map<String, Any>): Flow<ResponseResult<UserResponse>> =
+    override suspend fun getUser(params: Map<String, Any>): Flow<ResponseResult<UserRequestResponse>> =
         ktorClient.get(AuthEndpoints.GetUser) {
             setParams(params)
         }.toResponseResult()
 
-    override suspend fun getUserProfile(): Flow<ResponseResult<UserResponse>> =
+    override suspend fun getUserProfile(): Flow<ResponseResult<UserRequestResponse>> =
         ktorClient.get(AuthEndpoints.GetUserProfile).toResponseResult()
 
     override suspend fun updateUserProfile(
-        user: UserResponse,
+        user: UserRequestResponse,
         image: ByteArray?,
-    ): Flow<ResponseResult<UserResponse>> =
+    ): Flow<ResponseResult<UserRequestResponse>> =
         ktorClient.put(AuthEndpoints.UpdateUserProfile) {
             setBody(
                 MultiPartFormDataContent(

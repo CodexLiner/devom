@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.app.models.SupportedFiles
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
 import com.devom.utils.Application
@@ -22,7 +22,7 @@ class UploadDocumentViewModel : ViewModel() {
     private val _documents = MutableStateFlow<List<GetDocumentResponse>>(emptyList())
     val documents = _documents
 
-    private val _user = MutableStateFlow<UserResponse?>(null)
+    private val _user = MutableStateFlow<UserRequestResponse?>(null)
     val user = _user
 
     init {

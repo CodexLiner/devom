@@ -3,10 +3,9 @@ package com.devom.data.repository.user
 import com.devom.data.cache.user.UserLocalDataSourceImpl
 import com.devom.data.server.auth.UserRemoteDataSourceImpl
 import com.devom.models.GenericResponse
-import com.devom.models.auth.CreateUserRequest
 import com.devom.models.auth.CreateUserResponse
 import com.devom.models.auth.LoginWithOtpRequest
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.flow.apiFlow
 import com.devom.utils.flow.cacheAwareFlow
@@ -14,12 +13,12 @@ import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun addUser(user : CreateUserRequest) : Flow<ResponseResult<CreateUserResponse>>
-    suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
+    suspend fun addUser(user : UserRequestResponse) : Flow<ResponseResult<CreateUserResponse>>
+    suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserRequestResponse>>
     suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<GenericResponse>>
-    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
-    suspend fun updateUserProfile(user : UserResponse , image: ByteArray? = null) : Flow<ResponseResult<UserResponse>>
-    suspend fun getUserProfile(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork) : Flow<ResponseResult<UserResponse>>
+    suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserRequestResponse>>
+    suspend fun updateUserProfile(user : UserRequestResponse, image: ByteArray? = null) : Flow<ResponseResult<UserRequestResponse>>
+    suspend fun getUserProfile(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork) : Flow<ResponseResult<UserRequestResponse>>
 }
 
 class UserRepositoryImpl : UserRepository {
@@ -29,12 +28,12 @@ class UserRepositoryImpl : UserRepository {
     /**
      * add new user
      */
-    override suspend fun addUser(user: CreateUserRequest): Flow<ResponseResult<CreateUserResponse>> =
+    override suspend fun addUser(user: UserRequestResponse): Flow<ResponseResult<CreateUserResponse>> =
         apiFlow {
             remoteDataSource.signUp(user)
         }
 
-    override suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserResponse>> = apiFlow {
+    override suspend fun loginWithOtp(credentials: LoginWithOtpRequest): Flow<ResponseResult<UserRequestResponse>> = apiFlow {
         remoteDataSource.loginWithOtp(credentials)
     }
 
@@ -42,17 +41,17 @@ class UserRepositoryImpl : UserRepository {
         remoteDataSource.generateOtp(body)
     }
 
-    override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserResponse>> = apiFlow {
+    override suspend fun getUser(params : Map<String , Any>): Flow<ResponseResult<UserRequestResponse>> = apiFlow {
         remoteDataSource.getUser(params)
     }
 
     override suspend fun updateUserProfile(
-        user: UserResponse,
+        user: UserRequestResponse,
         image: ByteArray?
-    ): Flow<ResponseResult<UserResponse>> = apiFlow {
+    ): Flow<ResponseResult<UserRequestResponse>> = apiFlow {
         remoteDataSource.updateUserProfile(user , image)
     }
-    override suspend fun getUserProfile(cachePolicy: CachePolicy): Flow<ResponseResult<UserResponse>> =
+    override suspend fun getUserProfile(cachePolicy: CachePolicy): Flow<ResponseResult<UserRequestResponse>> =
         cacheAwareFlow(cachePolicy = cachePolicy, fetchCache = {
             localDataSource.getUserProfile()
         }, saveCache = {

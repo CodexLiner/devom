@@ -62,7 +62,7 @@ import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
-import com.devom.models.auth.UserResponse
+import com.devom.models.auth.UserRequestResponse
 import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -215,7 +215,7 @@ fun ProfileActionOptionsCard(navHostController: NavHostController) {
 }
 
 @Composable
-fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float, onClick: () -> Unit) {
+fun ProfileUserImageAndRatingsContent(user: UserRequestResponse, rating: Float, onClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {

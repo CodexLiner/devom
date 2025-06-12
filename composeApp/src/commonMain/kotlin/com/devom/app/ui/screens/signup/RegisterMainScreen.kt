@@ -46,9 +46,9 @@ import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.TextInputField
 import com.devom.app.ui.navigation.Screens
-import com.devom.app.ui.screens.signup.fragments.RegisterScreenMainContent
+import com.devom.app.ui.screens.signup.fragments.UserDetailsScreenMainContent
 import com.devom.app.utils.toColor
-import com.devom.models.auth.CreateUserRequest
+import com.devom.models.auth.UserRequestResponse
 import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -64,7 +64,7 @@ fun RegisterMainScreen(
 ) {
     val createUserStatus by viewModel.signUpState.collectAsStateWithLifecycle()
     var createUserRequest by remember {
-        mutableStateOf(CreateUserRequest())
+        mutableStateOf(UserRequestResponse())
     }
 
     LaunchedEffect(createUserStatus) {
@@ -90,7 +90,7 @@ fun RegisterMainScreen(
                 ) {
 
                     item {
-                        RegisterScreenMainContent(createUserRequest) {
+                        UserDetailsScreenMainContent(createUserRequest) {
                             createUserRequest = it.copy()
                         }
                     }
@@ -117,7 +117,7 @@ fun RegisterMainScreen(
 @Composable
 fun RegisterButtonContent(
     viewModel: SignUpViewModel,
-    createUserRequest: CreateUserRequest,
+    createUserRequest: UserRequestResponse,
     navController: NavHostController
 ) {
     val requiredText = stringResource(Res.string.all_field_required)

@@ -2,7 +2,6 @@ package com.devom.domain.auth
 
 import com.devom.data.repository.user.UserRepository
 import com.devom.data.repository.user.UserRepositoryImpl
-import com.devom.models.auth.UserResponse
 
 class GetUserUseCase {
     private val repository : UserRepository = UserRepositoryImpl()

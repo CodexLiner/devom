@@ -2,6 +2,7 @@ package com.devom.data.repository.other
 
 import com.devom.data.cache.other.OtherLocalDataSourceImpl
 import com.devom.data.other.OtherRemoteDataSourceImpl
+import com.devom.models.other.City
 import com.devom.models.other.Country
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.flow.cacheAwareFlow
@@ -19,7 +20,7 @@ interface OtherRepository {
         countryCode: String,
         stateCode: String,
         cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork,
-    ): Flow<ResponseResult<List<Country>>>
+    ): Flow<ResponseResult<List<City>>>
 }
 
 class OtherRepositoryImpl : OtherRepository {
@@ -45,7 +46,7 @@ class OtherRepositoryImpl : OtherRepository {
         countryCode: String,
         stateCode: String,
         cachePolicy: CachePolicy,
-    ): Flow<ResponseResult<List<Country>>> = cacheAwareFlow(
+    ): Flow<ResponseResult<List<City>>> = cacheAwareFlow(
         cachePolicy = cachePolicy,
         fetchCache = { otherLocalDataSource.getAllCities(countryCode, stateCode) },
         saveCache = { otherLocalDataSource.saveAllCities(countryCode, stateCode, it) },
