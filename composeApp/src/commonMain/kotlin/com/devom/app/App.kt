@@ -20,23 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import com.devom.network.NetworkClient
-import com.devom.utils.Application.isLoggedIn
-import com.devom.utils.Application.loaderState
-import com.devom.utils.Application.loginState
-import com.russhwolf.settings.Settings
-import com.russhwolf.settings.get
 import com.devom.app.theme.AppTheme
 import com.devom.app.theme.greenColor
-import com.devom.app.theme.greyColor
-import com.devom.app.theme.secondaryColor
-import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppContainer
 import com.devom.app.ui.components.ProgressLoader
 import com.devom.app.ui.components.ShowSnackBar
@@ -44,17 +33,21 @@ import com.devom.app.ui.navigation.NavigationHost
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.providers.LoadingCompositionProvider
 import com.devom.models.payment.WalletTransaction
+import com.devom.network.NetworkClient
+import com.devom.utils.Application.isLoggedIn
+import com.devom.utils.Application.loaderState
+import com.devom.utils.Application.loginState
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toLocalDateTime
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import network.chaintech.cmpcharts.axis.AxisData
 import network.chaintech.cmpcharts.axis.DataCategoryOptions
 import network.chaintech.cmpcharts.common.model.Point
 import network.chaintech.cmpcharts.ui.barchart.BarChart
 import network.chaintech.cmpcharts.ui.barchart.models.BarChartData
-import network.chaintech.cmpcharts.ui.barchart.models.BarChartType
 import network.chaintech.cmpcharts.ui.barchart.models.BarData
 import network.chaintech.cmpcharts.ui.barchart.models.BarStyle
-import network.chaintech.cmpcharts.ui.barchart.models.SelectionHighlightData
 import kotlin.math.roundToInt
 
 val settings = Settings()

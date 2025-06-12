@@ -3,7 +3,7 @@
 <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Multiplatform App"
+        android:label="DevOm"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
             android:name="com.devom.app.AppActivity"

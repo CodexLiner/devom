@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <application
-        android:label="Multiplatform App"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+    <application>
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
