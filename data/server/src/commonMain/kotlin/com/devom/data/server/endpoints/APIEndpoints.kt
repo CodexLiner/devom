@@ -72,3 +72,9 @@ object HelpAndSupportEndpoints{
     const val CreateTicket = "/support/ticket"
     const val GetTicketDetails = "/support/ticket"
 }
+
+object OtherEndpoints {
+    const val GetCountryList = "/countries"
+    const val GetStateList = "/states"
+    const val GetCityList = "/cities"
+}
