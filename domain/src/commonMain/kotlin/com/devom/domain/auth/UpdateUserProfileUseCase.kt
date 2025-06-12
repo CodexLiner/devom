@@ -6,5 +6,6 @@ import com.devom.models.auth.UserResponse
 
 class UpdateUserProfileUseCase {
     private val userRepository: UserRepository = UserRepositoryImpl()
-    suspend operator fun invoke(user: UserResponse) = userRepository.updateUserProfile(user)
+    suspend operator fun invoke(user: UserResponse, image: ByteArray? = null) =
+        userRepository.updateUserProfile(user)
 }

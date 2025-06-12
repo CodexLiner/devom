@@ -20,10 +20,12 @@ data class UserResponse(
     @SerialName("address") var address: String = "",
     @SerialName("profile_picture_url") val profilePictureUrl: String? = null,
     @SerialName("user_type_id") val userTypeId: Int = 0,
+    @SerialName("is_online") val isOnline: Int = 0,
     @SerialName("uuid") val uuid: String = "",
     @SerialName("created_at") val createdAt: String = "",
     @SerialName("updated_at") val updatedAt: String = "",
     @SerialName("access_token") val accessToken: String = "",
     @SerialName("refresh_token") val refreshToken: String = "",
-    @SerialName("expires_at") val expiresAt: String = ""
+    @SerialName("expires_at") val expiresAt: String = "",
+    @SerialName("image_file_name") var imageFileName: String = ""
 )

@@ -29,5 +29,6 @@ data class GetBookingsResponse(
 data class BookingItem(
     val name: String = "",
     val description: String = "",
+    val id : Int = 0,
 //    var image: String = "",
 )

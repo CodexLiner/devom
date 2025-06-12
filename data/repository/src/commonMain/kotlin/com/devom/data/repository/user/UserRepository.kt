@@ -18,7 +18,7 @@ interface UserRepository {
     suspend fun loginWithOtp(credentials : LoginWithOtpRequest) : Flow<ResponseResult<UserResponse>>
     suspend fun generateOtp(body : Map<String , String>) : Flow<ResponseResult<GenericResponse>>
     suspend fun getUser(params : Map<String , Any>) : Flow<ResponseResult<UserResponse>>
-    suspend fun updateUserProfile(user : UserResponse) : Flow<ResponseResult<UserResponse>>
+    suspend fun updateUserProfile(user : UserResponse , image: ByteArray? = null) : Flow<ResponseResult<UserResponse>>
     suspend fun getUserProfile(cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork) : Flow<ResponseResult<UserResponse>>
 }
 
@@ -46,8 +46,11 @@ class UserRepositoryImpl : UserRepository {
         remoteDataSource.getUser(params)
     }
 
-    override suspend fun updateUserProfile(user: UserResponse): Flow<ResponseResult<UserResponse>> = apiFlow {
-        remoteDataSource.updateUserProfile(user)
+    override suspend fun updateUserProfile(
+        user: UserResponse,
+        image: ByteArray?
+    ): Flow<ResponseResult<UserResponse>> = apiFlow {
+        remoteDataSource.updateUserProfile(user , image)
     }
     override suspend fun getUserProfile(cachePolicy: CachePolicy): Flow<ResponseResult<UserResponse>> =
         cacheAwareFlow(cachePolicy = cachePolicy, fetchCache = {

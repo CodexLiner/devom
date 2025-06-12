@@ -38,7 +38,7 @@ class HelpAndSupportRemoteDataSourceImpl() : HelpAndSupportRemoteDataSource {
                                 it.value
                             )
                         }
-                        append("image", createTicketRequest.image, Headers.build {
+                        append("file", createTicketRequest.image, Headers.build {
                             append(HttpHeaders.ContentType, "image/*")
                             append(
                                 HttpHeaders.ContentDisposition,
