@@ -44,10 +44,8 @@ import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DatePickerDialog
-import com.devom.app.ui.components.DocumentPicker
 import com.devom.app.ui.components.FilePickerBottomSheetHost
 import com.devom.app.ui.components.TextInputField
-import com.devom.app.utils.isValid
 import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserResponse
 import com.devom.utils.Application
@@ -57,10 +55,7 @@ import com.devom.utils.date.toLocalDateTime
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.source
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
 import kotlinx.io.buffered
 import kotlinx.io.readByteArray
 import org.jetbrains.compose.resources.painterResource

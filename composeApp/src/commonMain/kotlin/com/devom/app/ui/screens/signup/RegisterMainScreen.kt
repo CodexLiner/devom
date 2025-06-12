@@ -47,7 +47,6 @@ import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.TextInputField
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.signup.fragments.RegisterScreenMainContent
-import com.devom.app.utils.isValid
 import com.devom.app.utils.toColor
 import com.devom.models.auth.CreateUserRequest
 import com.devom.utils.Application
