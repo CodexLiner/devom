@@ -17,7 +17,7 @@ class DashboardViewModel : ViewModel() {
     private val _walletBalances = MutableStateFlow(GetWalletBalanceResponse())
     val walletBalances = _walletBalances
 
-    private var _selectedTab = MutableStateFlow(0)
+    private var _selectedTab = MutableStateFlow(3)
     var selectedTab = _selectedTab
     fun onTabSelected(index: Int) {
         _selectedTab.value = index
