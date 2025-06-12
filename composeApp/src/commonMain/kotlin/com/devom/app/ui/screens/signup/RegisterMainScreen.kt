@@ -47,11 +47,14 @@ import com.devom.app.ui.components.ShapedScreen
 import com.devom.app.ui.components.TextInputField
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.signup.fragments.RegisterScreenMainContent
+import com.devom.app.utils.isValid
 import com.devom.app.utils.toColor
 import com.devom.models.auth.CreateUserRequest
+import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.all_field_required
 import pandijtapp.composeapp.generated.resources.ic_left
 import pandijtapp.composeapp.generated.resources.referral_code
 
@@ -118,12 +121,16 @@ fun RegisterButtonContent(
     createUserRequest: CreateUserRequest,
     navController: NavHostController
 ) {
+    val requiredText = stringResource(Res.string.all_field_required)
     Column(modifier = Modifier.navigationBarsPadding().padding(horizontal = 16.dp)) {
         ButtonPrimary(
             fontStyle = text_style_lead_text,
             modifier = Modifier.fillMaxWidth().height(58.dp),
             onClick = {
-                viewModel.signUp(createUserRequest)
+                val isValid = createUserRequest.isValid()
+                if (isValid.first)
+                    viewModel.signUp(createUserRequest)
+                else Application.showToast(isValid.second ?: requiredText)
             }
         )
 

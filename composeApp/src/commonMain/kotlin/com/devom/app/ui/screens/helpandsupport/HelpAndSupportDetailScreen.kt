@@ -3,11 +3,13 @@ package com.devom.app.ui.screens.helpandsupport
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,17 +67,22 @@ fun HelpAndSupportDetailScreenContent(viewModel: HelpAndSupportViewModel) {
             else -> secondaryColor
         }
 
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 24.dp)
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(start = 16.dp , end = 16.dp, top = 24.dp , bottom = 200.dp)
         ) {
-            TicketHeader(ticketCode = ticket.ticketCode, date = date)
-            TicketDetailsCard(
-                subject = ticket.subject,
-                status = ticket.status,
-                description = ticket.message,
-                chipColor = chipColor,
-                imageUrl = ticket.image.toDevomImage()
-            )
+            item {
+                TicketHeader(ticketCode = ticket.ticketCode, date = date)
+            }
+            item {
+                TicketDetailsCard(
+                    subject = ticket.subject,
+                    status = ticket.status,
+                    description = ticket.message,
+                    chipColor = chipColor,
+                    imageUrl = ticket.image.toDevomImage()
+                )
+            }
         }
     }
 }

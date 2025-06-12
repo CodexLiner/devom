@@ -3,6 +3,8 @@ package com.devom.app.utils
 import androidx.compose.ui.graphics.Color
 import com.devom.app.DOCUMENT_BASE_URL
 import com.devom.app.IMAGE_BASE_URL
+import com.devom.models.auth.CreateUserRequest
+import com.devom.models.auth.UserResponse
 import com.devom.models.slots.Slot
 import io.ktor.http.encodeURLPath
 import kotlinx.datetime.Clock
@@ -91,5 +93,6 @@ fun String.formatStatus(): String =
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 
 val videoExtensions = listOf("mp4", "mov", "avi", "mkv", "webm", "flv", "wmv", "3gp", "mpeg")
+
 
 

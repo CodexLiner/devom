@@ -75,7 +75,9 @@ class BookingViewModel : ViewModel() {
 
     fun addPoojaItem(string: String, booking: GetBookingsResponse) {
         val input = RemoveAndUpdatePoojaItemRequest(
-            addItems = listOf(string.toIntOrNull() ?: 0)
+            addItems = booking.bookingItems.toMutableList().map { it.id }.toMutableList().apply {
+                add(string.toInt())
+            }.toSet().toList()
         )
         viewModelScope.launch {
             Project.pandit.removeAndUpdateItemsInBookingUseCase.invoke(
@@ -85,6 +87,24 @@ class BookingViewModel : ViewModel() {
                 it.onResult {
                     getBookingById(booking.bookingId.toString())
                     Application.showToast("Pooja item added successfully")
+                }
+            }
+        }
+    }
+
+    fun removePoojaItem(string: String, booking: GetBookingsResponse) {
+        val input = RemoveAndUpdatePoojaItemRequest(
+            removeItems = listOf(string.toInt()),
+            addItems = booking.bookingItems.toMutableList().map { it.id }
+        )
+        viewModelScope.launch {
+            Project.pandit.removeAndUpdateItemsInBookingUseCase.invoke(
+                input = input,
+                bookingId = booking.bookingId.toString()
+            ).collect {
+                it.onResult {
+                    getBookingById(booking.bookingId.toString())
+                    Application.showToast("Pooja removed successfully")
                 }
             }
         }

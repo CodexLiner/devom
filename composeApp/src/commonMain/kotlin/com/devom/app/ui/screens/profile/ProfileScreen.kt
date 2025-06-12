@@ -93,10 +93,13 @@ fun ProfileScreen(
 
 
     var notificationsEnabled by remember { mutableStateOf(false) }
-    var availabilityEnabled by remember { mutableStateOf(true) }
+    var availabilityEnabled by remember { mutableStateOf(user.isOnline == 1) }
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
+    }
+    LaunchedEffect(user) {
+        availabilityEnabled = user.isOnline == 1
     }
 
     Column(
@@ -121,7 +124,9 @@ fun ProfileScreen(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 200.dp)
         ) {
             item {
-                ProfileCompletionProgressIndicator(user.profileCompletion.toFloat().coerceIn(0.1f, 100f))
+                ProfileCompletionProgressIndicator(
+                    user.profileCompletion.toFloat().coerceIn(0.1f, 100f)
+                )
             }
             item {
                 ProfileUserImageAndRatingsContent(user, user.reviewRating.toFloat()) {
@@ -138,6 +143,10 @@ fun ProfileScreen(
                     availabilityEnabled = availabilityEnabled,
                     onAvailabilityToggle = {
                         availabilityEnabled = it
+                        viewModel.updateUserProfile(
+                            user.copy(isOnline = if (it) 1 else 0),
+                            message = "Availability updated successfully"
+                        )
                     },
                     onNotificationToggle = {
                         notificationsEnabled = it
@@ -206,7 +215,7 @@ fun ProfileActionOptionsCard(navHostController: NavHostController) {
 }
 
 @Composable
-fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float , onClick: () -> Unit) {
+fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float, onClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -218,7 +227,8 @@ fun ProfileUserImageAndRatingsContent(user: UserResponse, rating: Float , onClic
 
             Box(
                 modifier = Modifier.offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape)
-                    .background(Color(0xFFFFC107)).clickable(onClick = onClick), contentAlignment = Alignment.Center
+                    .background(Color(0xFFFFC107)).clickable(onClick = onClick),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_edit),

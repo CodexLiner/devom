@@ -29,17 +29,18 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfile(userResponse: UserResponse) {
+    fun updateUserProfile(userResponse: UserResponse , image : ByteArray? = null , message : String =  "Profile updated successfully") {
         viewModelScope.launch {
             Project.user.updateUserProfileUseCase.invoke(
                 userResponse.copy(
                     dateOfBirth = if (userResponse.dateOfBirth.contains("T")) userResponse.dateOfBirth.convertIsoToDate()
                         ?.toLocalDateTime()?.date.toString() else userResponse.dateOfBirth
-                )
+                ),
+                image
             ).collect {
                 it.onResult {
                     _user.value = it.data
-                    Application.showToast("Profile updated successfully")
+                    Application.showToast(message)
                 }
             }
         }

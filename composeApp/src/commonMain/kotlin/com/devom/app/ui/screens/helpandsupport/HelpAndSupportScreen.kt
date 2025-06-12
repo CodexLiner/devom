@@ -105,10 +105,14 @@ fun ColumnScope.HelpAndSupportScreenContent(
 
     CreateNewTicketSheet(
         title = stringResource(Res.string.create_support_request),
-        onDismiss = {},
+        onDismiss = {
+            showSheet.value = false
+        },
         showSheet = showSheet.value,
         onClick = {
             viewModel.createTicket(it)
+            showSheet.value = false
+
         }
     )
 }

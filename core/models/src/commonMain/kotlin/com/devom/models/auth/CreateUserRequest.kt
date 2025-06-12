@@ -15,7 +15,26 @@ data class CreateUserRequest(
     @SerialName("user_type_id") var userTypeId: String = "1",
     @SerialName("address") var address: String = "",
     var referralCode: String = "",
-)
+) {
+    fun isValid(): Pair<Boolean, String?> {
+        return when {
+            fullName.isBlank() -> false to "Full name is required."
+            email.isBlank() -> false to "Email is required."
+            !email.matches(Regex("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) ->
+                false to "Invalid email format."
+            mobileNo.isBlank() -> false to "Mobile number is required."
+            !mobileNo.matches(Regex("^\\d{10}$")) ->
+                false to "Mobile number must be 10 digits."
+            city.isBlank() -> false to "City is required."
+            state.isBlank() -> false to "State is required."
+            country.isBlank() -> false to "Country is required."
+            dateOfBirth.isBlank() -> false to "Date of birth is required."
+            userTypeId.isBlank() -> false to "User type is required."
+            address.isBlank() -> false to "Address is required."
+            else -> true to null
+        }
+    }
+}
 
 @Serializable
 data class CreateUserResponse(

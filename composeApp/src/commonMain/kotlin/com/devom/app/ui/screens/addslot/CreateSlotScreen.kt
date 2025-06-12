@@ -83,7 +83,8 @@ fun CreateSlotScreen(
 
         ButtonPrimary(
             buttonText = stringResource(Res.string.add_time_slot),
-            modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp)
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp)
         ) {
             scope.launch {
                 sheetState.value = true
@@ -99,22 +100,26 @@ fun CreateSlotScreenContent(
     initialSelectedDate: LocalDate,
     viewModel: CreateSlotViewModel,
     sheetState: MutableState<Boolean>,
-    buttonTextChange : (String) -> Unit = {}
+    buttonTextChange: (String) -> Unit = {},
 
-) {
+    ) {
 
     val availableSlots = viewModel.slots.collectAsState()
     var selectedDate by remember { mutableStateOf(initialSelectedDate) }
     val formattedMonthYear = remember(selectedDate) {
-        """${selectedDate.month.name.lowercase().replaceFirstChar(Char::uppercaseChar)} ${selectedDate.year}"""
+        """${
+            selectedDate.month.name.lowercase().replaceFirstChar(Char::uppercaseChar)
+        } ${selectedDate.year}"""
     }
     val startOfList = initialSelectedDate
     val dates = remember(startOfList) {
         List(7) { index -> startOfList.plus(index, DateTimeUnit.DAY) }
     }
     LaunchedEffect(selectedDate) {
-        val isSlotsAvailable = availableSlots.value.any { it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD) }
-        val buttonText = if (isSlotsAvailable)  "Update Time Slot" else  "Add Time Slot"
+        val isSlotsAvailable = availableSlots.value.any {
+            it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD)
+        }
+        val buttonText = if (isSlotsAvailable) "Update Time Slot" else "Add Time Slot"
         buttonTextChange(buttonText)
     }
 
@@ -127,12 +132,15 @@ fun CreateSlotScreenContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(dates) { date ->
-                DateItem(date = date, isSelected = date == selectedDate, onClick = { selectedDate = date })
+                DateItem(
+                    date = date,
+                    isSelected = date == selectedDate,
+                    onClick = { selectedDate = date })
             }
         }
 
         Spacer(Modifier.height(24.dp))
-        SlotsSections(availableSlots , selectedDate , sheetState , viewModel)
+        SlotsSections(availableSlots, selectedDate, sheetState, viewModel)
     }
 }
 
@@ -141,10 +149,12 @@ fun ColumnScope.SlotsSections(
     availableSlots: State<List<Slot>>,
     selectedDate: LocalDate,
     sheetState: MutableState<Boolean>,
-    viewModel: CreateSlotViewModel
+    viewModel: CreateSlotViewModel,
 ) {
     Text(text = "Slots Available", fontSize = 18.sp, fontWeight = FontWeight.Bold)
     Spacer(Modifier.height(8.dp))
+    val temporarySelectedSlots = remember { mutableStateOf(listOf<Slot>()) }
+    val slotsConfirmationSheet = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.weight(1f).fillMaxWidth().border(
@@ -187,8 +197,23 @@ fun ColumnScope.SlotsSections(
             initialSelectedSlots = availableSlots.value,
             initialSelectedDate = selectedDate,
             showSheet = sheetState.value,
-            onDismiss = { sheetState.value = false }) {
-            viewModel.createPanditSlot(it)
+            onDismiss = { sheetState.value = false }
+        ) {
+            temporarySelectedSlots.value = it
+            slotsConfirmationSheet.value = true
+        }
+        TimeSlotConfirmationBottomSheet(
+            selectedSlots = temporarySelectedSlots.value,
+            showSheet = slotsConfirmationSheet.value,
+            onDismiss = {
+                temporarySelectedSlots.value = listOf()
+                slotsConfirmationSheet.value = false
+            }
+        ) { selectedSlots, selectedRepeatOption ->
+            slotsConfirmationSheet.value = false
+            sheetState.value = false
+            viewModel.createPanditSlot(selectedSlots)
+            temporarySelectedSlots.value = listOf()
         }
     }
 }

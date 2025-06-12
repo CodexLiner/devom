@@ -7,17 +7,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -37,11 +45,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
 import com.devom.app.models.OptionsBottomSheetItem
 import com.devom.app.models.SupportedFiles
+import com.devom.app.theme.backgroundColor
+import com.devom.app.theme.primaryColor
 import com.devom.app.theme.textBlackShade
+import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.ButtonPrimary
@@ -59,6 +72,7 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.Update
 import pandijtapp.composeapp.generated.resources.expertise
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
+import pandijtapp.composeapp.generated.resources.ic_close
 import pandijtapp.composeapp.generated.resources.ic_video_camera
 import pandijtapp.composeapp.generated.resources.languages_spoken
 import pandijtapp.composeapp.generated.resources.media_galley
@@ -92,6 +106,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
     }
     val biography = viewModel.biography.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
+    val viewImage = remember { mutableStateOf(false) }
     val options = listOf(
         OptionsBottomSheetItem(title = "View"),
         OptionsBottomSheetItem(title = "Delete")
@@ -156,10 +171,53 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
             if (it.title.lowercase() == "delete" && selectedMedia.value != null) {
                 viewModel.removeDocument(selectedMedia.value?.documentId.toString())
                 showSheet.value = false
+            }else {
+                viewImage.value = true
             }
             showSheet.value = false
         }
     )
+
+    if (viewImage.value) {
+        Dialog(onDismissRequest = { viewImage.value = false }) {
+            Box(
+                modifier = Modifier.size(400.dp)
+                    .background(backgroundColor, shape = RoundedCornerShape(12.dp))
+
+            ) {
+                Column(horizontalAlignment = Alignment.End) {
+                    // Close button (aligned to top-right)
+                    Box(
+                        modifier = Modifier.wrapContentSize().background(primaryColor , CircleShape),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        IconButton(onClick = { viewImage.value = false }) {
+                            Image(
+                                colorFilter = ColorFilter.tint(whiteColor),
+                                painter = painterResource(Res.drawable.ic_close),
+                                contentDescription = "Close"
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Image display
+                    selectedMedia.value?.let { media ->
+                        Image(
+                            painter = rememberAsyncImagePainter(model = media.documentUrl.toDevomDocument()),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable

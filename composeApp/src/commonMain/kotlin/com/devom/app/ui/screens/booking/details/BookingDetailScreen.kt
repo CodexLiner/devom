@@ -111,7 +111,6 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
                     onDismiss = {
                         showSheet.value = false
                     },
-                    onResendOtp = {},
                     onOtpEntered = {}
                 )
             }
@@ -143,17 +142,24 @@ fun ColumnScope.BookingDetailScreenContent(
         }
 
         itemsIndexed(booking.bookingItems) { index, item ->
-            val shape = when (index) {
-                0 -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                9 -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+            val shape = when {
+                booking.bookingItems.size == 1 -> RoundedCornerShape(12.dp)
+                index == 0 -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                index == booking.bookingItems.size - 1 -> RoundedCornerShape(
+                    bottomStart = 12.dp,
+                    bottomEnd = 12.dp
+                )
+
                 else -> RoundedCornerShape(0.dp)
             }
             SamagriItemRow(
                 item = item,
                 modifier = Modifier.background(color = whiteColor, shape = shape)
                     .padding(horizontal = 16.dp)
-            )
-            if (index < 9) HorizontalDivider(
+            ) {
+                viewModel.removePoojaItem(item.id.toString(), booking)
+            }
+            if (index < booking.bookingItems.size - 1) HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 color = greyColor.copy(.24f),
                 thickness = 1.dp
@@ -199,18 +205,18 @@ fun BookingSamagriHeader(booking: GetBookingsResponse, viewModel: BookingViewMod
             dropDownState.value = false
         },
         onClick = {
-            viewModel.addPoojaItem(it.id , booking)
+            viewModel.addPoojaItem(it.id, booking)
         }
     )
 }
 
 @Composable
-fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem) {
+fun SamagriItemRow(modifier: Modifier = Modifier, item: BookingItem, onItemClick: () -> Unit = {}) {
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SamagriCheckbox()
+        SamagriCheckbox(onClick = onItemClick)
         Text(
             style = text_style_lead_body_1,
             text = item.name,
@@ -234,11 +240,13 @@ fun SamagriCheckbox(
     checkmarkColor: Color = primaryColor,
     size: Dp = 20.dp,
     cornerRadius: Dp = 4.dp,
+    onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .size(size)
-            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(cornerRadius)),
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(cornerRadius))
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Icon(
