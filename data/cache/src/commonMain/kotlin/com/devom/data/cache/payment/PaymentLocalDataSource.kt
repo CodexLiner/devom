@@ -5,6 +5,7 @@ import com.devom.data.cache.utils.jsonConfig
 import com.devom.data.cache.utils.toCacheResult
 import com.devom.models.payment.GetWalletBalanceResponse
 import com.devom.models.payment.GetWalletTransactionsResponse
+import com.devom.models.payment.UserBankDetails
 import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +14,8 @@ interface PaymentLocalDataSource {
     suspend fun getTransactions(userId: String): Flow<ResponseResult<GetWalletTransactionsResponse>>
     suspend fun saveWalletBalance(userId: String, data: GetWalletBalanceResponse)
     suspend fun saveTransactions(userId: String, data: GetWalletTransactionsResponse)
+    suspend fun getBankDetails(userId: String): Flow<ResponseResult<UserBankDetails>>
+    suspend fun saveBankDetails(userId: String, data: UserBankDetails)
 }
 
 class PaymentLocalDataSourceImpl : PaymentLocalDataSource {
@@ -28,6 +31,15 @@ class PaymentLocalDataSourceImpl : PaymentLocalDataSource {
     override suspend fun saveTransactions(userId: String, data: GetWalletTransactionsResponse) {
         cacheHelper.saveData("getTransactions$userId", jsonConfig.encodeToString(data))
     }
+
+    override suspend fun getBankDetails(userId: String): Flow<ResponseResult<UserBankDetails>> =
+        cacheHelper.getData("getBankDetails$userId").toCacheResult()
+
+    override suspend fun saveBankDetails(
+        userId: String,
+        data: UserBankDetails,
+    ) = cacheHelper.saveData("getBankDetails$userId", jsonConfig.encodeToString(data))
+
 
     override suspend fun getTransactions(userId: String): Flow<ResponseResult<GetWalletTransactionsResponse>> {
         return cacheHelper.getData("getTransactions$userId").toCacheResult()

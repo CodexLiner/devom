@@ -61,6 +61,8 @@ object PanditEndpoints {
 object  PaymentEndpoints {
     const val GetWalletBalance = "/payment/get_wallet"
     const val GetTransactions = "/payment"
+    const val AddBankAccount = "/bank-detail"
+
 }
 
 object NotificationsEndpoints {

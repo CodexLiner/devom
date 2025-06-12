@@ -6,6 +6,7 @@ import com.devom.data.server.payment.PaymentRemoteDataSource
 import com.devom.data.server.payment.PaymentRemoteDataSourceImpl
 import com.devom.models.payment.GetWalletBalanceResponse
 import com.devom.models.payment.GetWalletTransactionsResponse
+import com.devom.models.payment.UserBankDetails
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.flow.apiFlow
 import com.devom.utils.flow.cacheAwareFlow
@@ -22,6 +23,12 @@ interface PaymentRepository {
         userId: String,
         cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork,
     ): Flow<ResponseResult<GetWalletTransactionsResponse>>
+
+    suspend fun addBankAccount(input: UserBankDetails): Flow<ResponseResult<String>>
+    suspend fun getBankDetails(
+        userId: String,
+        cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork,
+    ): Flow<ResponseResult<UserBankDetails>>
 }
 
 class PaymentRepositoryImpl() : PaymentRepository {
@@ -51,4 +58,18 @@ class PaymentRepositoryImpl() : PaymentRepository {
             saveCache = { paymentLocalDataSource.saveTransactions(userId, it) }
         )
 
+    override suspend fun addBankAccount(input: UserBankDetails): Flow<ResponseResult<String>> =
+        apiFlow {
+            paymentRemoteDataSource.addBankAccount(input)
+        }
+
+    override suspend fun getBankDetails(
+        userId: String,
+        cachePolicy: CachePolicy,
+    ): Flow<ResponseResult<UserBankDetails>> = cacheAwareFlow(
+        cachePolicy = cachePolicy,
+        fetchCache = { paymentLocalDataSource.getBankDetails(userId) },
+        fetchNetwork = { paymentRemoteDataSource.getBankDetails(userId) },
+        saveCache = { paymentLocalDataSource.saveBankDetails(userId, it) }
+    )
 }
