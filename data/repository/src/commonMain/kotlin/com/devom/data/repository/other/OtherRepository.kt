@@ -4,6 +4,7 @@ import com.devom.data.cache.other.OtherLocalDataSourceImpl
 import com.devom.data.other.OtherRemoteDataSourceImpl
 import com.devom.models.other.City
 import com.devom.models.other.Country
+import com.devom.models.other.State
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.flow.cacheAwareFlow
 import com.devom.utils.network.ResponseResult
@@ -14,7 +15,7 @@ interface OtherRepository {
     suspend fun getAllStates(
         countryCode: String,
         cachePolicy: CachePolicy = CachePolicy.CacheAndNetwork,
-    ): Flow<ResponseResult<List<Country>>>
+    ): Flow<ResponseResult<List<State>>>
 
     suspend fun getAllCities(
         countryCode: String,
@@ -36,7 +37,7 @@ class OtherRepositoryImpl : OtherRepository {
     override suspend fun getAllStates(
         countryCode: String,
         cachePolicy: CachePolicy,
-    ): Flow<ResponseResult<List<Country>>> = cacheAwareFlow(
+    ): Flow<ResponseResult<List<State>>> = cacheAwareFlow(
         cachePolicy = cachePolicy,
         fetchCache = { otherLocalDataSource.getAllStates(countryCode) },
         saveCache = { otherLocalDataSource.saveAllStates(countryCode, it) },

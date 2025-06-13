@@ -12,12 +12,14 @@ data class Country(
     @SerialName("currency") val currency: String = "",
 )
 
+@Serializable
 data class State(
     @SerialName("name") val name: String = "",
     @SerialName("isoCode") val isoCode: String = "",
     @SerialName("countryCode") val countryCode: String = "",
 )
 
+@Serializable
 data class City(
     @SerialName("name") val name: String = "",
     @SerialName("isoCode") val isoCode: String = "",

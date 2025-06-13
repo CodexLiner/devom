@@ -18,7 +18,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
-
+            implementation(libs.androidx.startup.runtime)
         }
         iosMain.dependencies {
 

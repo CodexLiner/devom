@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_drop_down
@@ -30,6 +31,8 @@ data class DropDownItem(
 @Composable
 fun ExposedDropdown(
     expanded: Boolean = false,
+    enabled: Boolean = true,
+    disabledMessage: String = "",
     modifier: Modifier = Modifier,
     placeholder: String = "",
     options: List<DropDownItem> = listOf(),
@@ -37,15 +40,23 @@ fun ExposedDropdown(
     onOptionSelected: (DropDownItem) -> Unit,
 ) {
     var isExpanded by remember { mutableStateOf(expanded) }
+    var isEnabled  by remember { mutableStateOf(enabled) }
+
     LaunchedEffect(expanded) {
         isExpanded = expanded
     }
+    LaunchedEffect(enabled) {
+        isEnabled = enabled
+    }
+
     LaunchedEffect(Unit) {
         if (selectedOption != null) {
             onOptionSelected(selectedOption)
         }
     }
     DropDownContent(
+        enabled = isEnabled,
+        disabledMessage = disabledMessage,
         placeholder = placeholder,
         expanded = isExpanded,
         modifier = modifier,
@@ -68,6 +79,8 @@ private fun DropDownContent(
     onSelect: (DropDownItem) -> Unit,
     expanded: Boolean,
     placeholder: String,
+    enabled: Boolean,
+    disabledMessage: String,
 ) {
     val focusManager = LocalFocusManager.current
     var expanded = remember { mutableStateOf(expanded) }
@@ -94,7 +107,9 @@ private fun DropDownContent(
             modifier = Modifier.fillMaxWidth().menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
             trailingIcon = {
                 IconButton(onClick = {
-                    expanded.value = !expanded.value
+                    if (enabled) {
+                        expanded.value = !expanded.value
+                    } else if (disabledMessage.isNotEmpty()) Application.showToast(disabledMessage)
                 }) {
                     Image(
                         painter = painterResource(Res.drawable.ic_arrow_drop_down),

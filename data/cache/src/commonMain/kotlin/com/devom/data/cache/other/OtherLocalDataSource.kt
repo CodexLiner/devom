@@ -5,14 +5,15 @@ import com.devom.data.cache.utils.jsonConfig
 import com.devom.data.cache.utils.toCacheResult
 import com.devom.models.other.City
 import com.devom.models.other.Country
+import com.devom.models.other.State
 import com.devom.utils.network.ResponseResult
 import kotlinx.coroutines.flow.Flow
 
 interface OtherLocalDataSource {
     suspend fun getAllCountries(): Flow<ResponseResult<List<Country>>>
     suspend fun saveAllCountries(data: List<Country>)
-    suspend fun getAllStates(countryCode: String): Flow<ResponseResult<List<Country>>>
-    suspend fun saveAllStates(countryCode: String, data: List<Country>)
+    suspend fun getAllStates(countryCode: String): Flow<ResponseResult<List<State>>>
+    suspend fun saveAllStates(countryCode: String, data: List<State>)
     suspend fun getAllCities(
         countryCode: String,
         stateCode: String,
@@ -30,12 +31,12 @@ class OtherLocalDataSourceImpl : OtherLocalDataSource {
         cacheHelper.saveData("getAllCountries", jsonConfig.encodeToString(data))
     }
 
-    override suspend fun getAllStates(countryCode: String): Flow<ResponseResult<List<Country>>> =
+    override suspend fun getAllStates(countryCode: String): Flow<ResponseResult<List<State>>> =
         cacheHelper.getData("getAllStates$countryCode").toCacheResult()
 
     override suspend fun saveAllStates(
         countryCode: String,
-        data: List<Country>,
+        data: List<State>,
     ) = cacheHelper.saveData("getAllStates$countryCode", jsonConfig.encodeToString(data))
 
     override suspend fun getAllCities(

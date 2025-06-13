@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.devom.app.ui.components.DatePickerDialog
 import com.devom.app.ui.components.DropDownItem
 import com.devom.app.ui.components.ExposedDropdown
@@ -49,7 +50,9 @@ internal fun UserDetailsScreenMainContent(
     userResponse: UserRequestResponse,
     onChange: (UserRequestResponse) -> Unit,
 ) {
-    val viewModel = remember { UserDetailScreenViewModel() }
+    val viewModel = viewModel {
+        UserDetailScreenViewModel()
+    }
     val countryList = viewModel.countryList.collectAsState()
     val stateList = viewModel.stateList.collectAsState()
     val cityList = viewModel.cityList.collectAsState()
@@ -109,22 +112,29 @@ internal fun UserDetailsScreenMainContent(
         ) {
             userResponse.country = it.option
             viewModel.selectedCountry.value = Country(name = it.option, isoCode = it.id)
+            viewModel.selectedState.value = null
+            viewModel.selectedCity.value = null
             viewModel.getStateList(it.id)
             onChange(userResponse)
         }
 
         ExposedDropdown(
+            enabled = selectedCountry.value?.name?.isNotEmpty() == true,
+            disabledMessage = "Please Select Country First",
             selectedOption = DropDownItem(option = selectedState.value?.name.orEmpty() , selectedState.value?.isoCode.orEmpty()),
             options = stateList.value.map { DropDownItem(it.name, it.isoCode) },
             placeholder = stringResource(Res.string.enter_state)
         ) {
             userResponse.state = it.option
             viewModel.selectedState.value = State(name = it.option, isoCode = it.id)
+            viewModel.selectedCity.value = null
             viewModel.getCityList(stateCode = it.id)
             onChange(userResponse)
         }
 
         ExposedDropdown(
+            enabled = selectedState.value?.name?.isNotEmpty() == true,
+            disabledMessage = "Please Select State First",
             selectedOption = DropDownItem(option = selectedCity.value?.name.orEmpty() , selectedCity.value?.isoCode.orEmpty()),
             options = cityList.value.map { DropDownItem(it.name, it.isoCode) },
             placeholder = stringResource(Res.string.enter_city)
@@ -137,7 +147,7 @@ internal fun UserDetailsScreenMainContent(
 
         TextInputField(
             initialValue = userResponse.address.toString(), keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ), placeholder = stringResource(Res.string.enter_address)
         ) {
             userResponse.address = it

@@ -78,7 +78,7 @@ internal fun App() = AppTheme {
         isLoggedIn(loggedIn)
         NetworkClient.configure {
             setTokens(access = accessKey.orEmpty(), refresh = refreshToken.orEmpty())
-            baseUrl = "https://devom-api-bold-smoke-8130.fly.dev"
+            baseUrl = BASE_URL
             onLogOut = {
                 Logger.d("ON_LOGOUT") { "user has been logged out" }
                 isLoggedIn(false)

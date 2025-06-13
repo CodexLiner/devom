@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ import com.devom.app.utils.toColor
 import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
+import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Biography
@@ -141,6 +143,7 @@ fun UserDetailsContent(
 
         user?.let {
             UserProfilePicture(
+                mainModifier = Modifier.wrapContentWidth(),
                 modifier = Modifier.size(66.dp).clip(CircleShape),
                 userResponse = user
             )

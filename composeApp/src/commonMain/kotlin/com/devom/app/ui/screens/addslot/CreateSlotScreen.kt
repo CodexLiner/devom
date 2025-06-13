@@ -202,6 +202,7 @@ fun ColumnScope.SlotsSections(
             temporarySelectedSlots.value = it
             slotsConfirmationSheet.value = true
         }
+
         TimeSlotConfirmationBottomSheet(
             selectedSlots = temporarySelectedSlots.value,
             showSheet = slotsConfirmationSheet.value,

@@ -85,7 +85,7 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
             balance, if (bankDetails.value == null) stringResource(Res.string.Add_Account)
             else stringResource(Res.string.Withdraw)
         ) {
-
+            navController.navigate(Screens.BankAccountScreen.path)
         }
     }
     WalletBreakdownRow(balance)

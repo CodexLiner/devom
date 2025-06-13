@@ -54,7 +54,7 @@ class UserDetailScreenViewModel : ViewModel() {
         viewModelScope.launch {
             Project.other.getAllStatesUseCase.invoke(countryCode).collect {
                 it.onResult {
-                    _countryList.value = it.data
+                    _stateList.value = it.data
                 }
             }
         }

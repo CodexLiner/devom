@@ -2,18 +2,27 @@ package com.devom.app.ui.screens.referandearn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.devom.app.BASE_URL
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
@@ -31,6 +41,10 @@ import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.models.auth.UserRequestResponse
+import com.devom.utils.Contact
+import com.devom.utils.getContacts
+import com.devom.utils.share.ShareServiceProvider
+import com.devom.utils.share.shareContent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -38,7 +52,9 @@ import pandijtapp.composeapp.generated.resources.copy
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_search
 import pandijtapp.composeapp.generated.resources.img_social_friends
+import pandijtapp.composeapp.generated.resources.invite
 import pandijtapp.composeapp.generated.resources.invite_friends
+import pandijtapp.composeapp.generated.resources.referral_message
 import pandijtapp.composeapp.generated.resources.share
 
 @Composable
@@ -64,13 +80,14 @@ fun ReferAndEarnScreenContent(user: State<UserRequestResponse?>) {
         headerContent = {
             ReferHeaderContent(user)
         }, mainContent = {
-            ReferMainContent()
+            ReferMainContent(user)
         }
     )
 }
 
 @Composable
-fun ReferMainContent() {
+fun ReferMainContent(user: State<UserRequestResponse?>) {
+    val contacts = remember { mutableStateOf(getContacts()) }
     Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
@@ -81,15 +98,107 @@ fun ReferMainContent() {
             Image(
                 painter = painterResource(Res.drawable.ic_search),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.padding(end = 6.dp).size(24.dp)
             )
         }
+        ReferContactList(user , contacts.value)
 
     }
 }
 
 @Composable
+fun ReferContactList(user: State<UserRequestResponse?>, contacts: List<Contact>) {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 41.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        items(contacts) {
+            ReferContactItem(it, user)
+        }
+    }
+}
+
+@Composable
+fun ReferContactItem(contact: Contact, user: State<UserRequestResponse?>) {
+    Row {
+        ContactInitials(contact)
+        ContactDetails(contact)
+        InviteButton(user.value, contact)
+    }
+}
+
+@Composable
+fun InviteButton(user: UserRequestResponse?, contact: Contact) {
+    val referralMessage = stringResource(Res.string.referral_message, user?.referralCode.orEmpty())
+    Text(
+        text = stringResource(Res.string.invite),
+        color = whiteColor,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.W700,
+        fontSize = 12.sp,
+        modifier = Modifier
+            .background(primaryColor, RoundedCornerShape(12.dp))
+            .padding(vertical = 12.dp, horizontal = 18.dp).clickable {
+                shareContent(
+                    ShareServiceProvider(),
+                    referralMessage,
+                    BASE_URL.plus(
+                        "referral?phone=${
+                            contact.phoneNumber.replace(
+                                Regex("(\\d{5})(\\d{5})"),
+                                "$1-$2"
+                            )
+                        }&code=${user?.referralCode}"
+                    )
+                )
+            }
+    )
+}
+
+@Composable
+fun RowScope.ContactDetails(contact: Contact) {
+    Column(
+        modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)
+    ) {
+        Text(
+            text = contact.name,
+            color = blackColor,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp
+        )
+        Text(
+            text = contact.phoneNumber,
+            color = greyColor,
+            fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+fun ContactInitials(contact: Contact) {
+    Box(modifier = Modifier.size(48.dp).background(blackColor, CircleShape)) {
+        val initials = contact.name
+            .split(" ")
+            .filter { it.isNotEmpty() }
+            .take(2)
+            .map { it.first().uppercaseChar() }
+            .joinToString("")
+
+        Text(
+            text = initials,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
 fun ReferHeaderContent(user: State<UserRequestResponse?>) {
+    val referralMessage =
+        stringResource(Res.string.referral_message, user.value?.referralCode.orEmpty())
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -133,7 +242,13 @@ fun ReferHeaderContent(user: State<UserRequestResponse?>) {
                 modifier = Modifier
                     .weight(0.3f)
                     .background(blackColor, RoundedCornerShape(16.dp))
-                    .padding(vertical = 14.dp, horizontal = 16.dp)
+                    .padding(vertical = 14.dp, horizontal = 16.dp).clickable {
+                        shareContent(
+                            ShareServiceProvider(),
+                            referralMessage,
+                            BASE_URL.plus("referral?code=${user.value?.referralCode}")
+                        )
+                    }
             )
         }
     }

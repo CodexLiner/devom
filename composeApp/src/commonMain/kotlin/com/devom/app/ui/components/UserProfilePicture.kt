@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import pandijtapp.composeapp.generated.resources.ic_edit
 
 @Composable
 fun UserProfilePicture(
+    mainModifier : Modifier = Modifier.fillMaxWidth(),
     modifier: Modifier = Modifier
         .size(100.dp)
         .clip(CircleShape)
@@ -29,13 +31,13 @@ fun UserProfilePicture(
     userResponse: UserRequestResponse, onImageClick: () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onImageClick),
+        modifier =mainModifier,
         contentAlignment = Alignment.Center
     ) {
         Box(contentAlignment = Alignment.BottomEnd) {
             AsyncImage(
                 model = userResponse.profilePictureUrl.toDevomImage(),
-                modifier = modifier
+                modifier = modifier.clickable(onClick = onImageClick)
             )
 
             Box(
