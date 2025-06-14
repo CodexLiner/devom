@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,7 +90,7 @@ fun BiographyScreen(navController: NavController) {
 }
 
 @Composable
-fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: NavController) {
+fun ColumnScope.BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: NavController) {
     val biographyInput = remember {
         mutableStateOf(UpdateBiographyInput())
     }
@@ -104,59 +105,57 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
     val focus = LocalFocusManager.current
 
     val isButtonEnable = remember { mutableStateOf(false) }
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            item {
-                BiographyForm(
-                    viewModel = viewModel, biographyInput = biographyInput,
-                    onButtonStateChanged = {
-                        isButtonEnable.value = it
-                    }, onRitualsClicked = {
-                        navController.navigate(Screens.Rituals.path)
-                    }
+    LazyColumn(modifier = Modifier.weight(1f)) {
+        item {
+            BiographyForm(
+                viewModel = viewModel, biographyInput = biographyInput,
+                onButtonStateChanged = {
+                    isButtonEnable.value = it
+                }, onRitualsClicked = {
+                    navController.navigate(Screens.Rituals.path)
+                }
+            )
+        }
+
+        item {
+            DocumentPicker(
+                addIconOnly = biography.value?.media.isNullOrEmpty().not(),
+                title = stringResource(Res.string.media_galley),
+                allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
+            ) { platformFile, supportedFiles ->
+                viewModel.uploadDocument(
+                    viewModel.user.value?.userId.toString(), platformFile, supportedFiles
                 )
             }
+        }
 
-            item {
-                DocumentPicker(
-                    addIconOnly = biography.value?.media.isNullOrEmpty().not(),
-                    title = stringResource(Res.string.media_galley),
-                    allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
-                ) { platformFile, supportedFiles ->
-                    viewModel.uploadDocument(
-                        viewModel.user.value?.userId.toString(), platformFile, supportedFiles
-                    )
-                }
-            }
-
-            item {
-                LazyVerticalGrid(
-                    modifier = Modifier.heightIn(max = 3000.dp),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp),
-                    columns = GridCells.Fixed(3),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    items(biography.value?.media.orEmpty()) {
-                        MediaItem(model = it.documentUrl, it.documentType) {
-                            showSheet.value = true
-                            selectedMedia.value = it
-                        }
+        item {
+            LazyVerticalGrid(
+                modifier = Modifier.heightIn(max = 3000.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp),
+                columns = GridCells.Fixed(3),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(biography.value?.media.orEmpty()) {
+                    MediaItem(model = it.documentUrl, it.documentType) {
+                        showSheet.value = true
+                        selectedMedia.value = it
                     }
                 }
             }
         }
-
-        ButtonPrimary(
-            enabled = isButtonEnable.value,
-            buttonText = stringResource(Res.string.Update),
-            modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp).fillMaxWidth().height(48.dp),
-            onClick = {
-                focus.clearFocus()
-                viewModel.updateBiography(biographyInput.value)
-            }
-        )
     }
+
+    ButtonPrimary(
+        enabled = isButtonEnable.value,
+        buttonText = stringResource(Res.string.Update),
+        modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp).fillMaxWidth().height(48.dp),
+        onClick = {
+            focus.clearFocus()
+            viewModel.updateBiography(biographyInput.value)
+        }
+    )
 
     OptionsBottomSheet(
         showSheet = showSheet.value,
