@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import com.devom.app.theme.bgColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.whiteColor
@@ -41,7 +40,7 @@ fun AppBar(
                     isClickAllowed.value = false
                     onNavigationIconClick()
                     coroutineScope.launch {
-                        delay(500)
+                        delay(1000)
                         isClickAllowed.value = true
                     }
                 }
