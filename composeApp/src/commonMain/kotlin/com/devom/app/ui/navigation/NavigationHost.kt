@@ -1,5 +1,7 @@
 package com.devom.app.ui.navigation
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -39,7 +41,19 @@ fun NavigationHost(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController, startDestination = startDestination
+        navController = navController, startDestination = startDestination,
+        enterTransition = {
+            slideInHorizontally(initialOffsetX = { it },)
+        },
+        exitTransition = {
+            slideOutHorizontally(targetOffsetX = { -it })
+        },
+        popEnterTransition = {
+            slideInHorizontally(initialOffsetX = { -it })
+        },
+        popExitTransition = {
+            slideOutHorizontally(targetOffsetX = { it })
+        },
     ) {
         composable(Screens.Login.path) {
             LoginScreen(navController)

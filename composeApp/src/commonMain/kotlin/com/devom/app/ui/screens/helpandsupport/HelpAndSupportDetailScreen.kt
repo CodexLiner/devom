@@ -107,7 +107,7 @@ fun TicketDetailsCard(
     status: String,
     description: String?,
     chipColor: Color,
-    imageUrl: Any?,
+    imageUrl: String?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).background(whiteColor).padding(24.dp),
@@ -121,7 +121,7 @@ fun TicketDetailsCard(
         }
 
         TicketInformationFields(title = "Description", value = description)
-        TicketImage(imageUrl)
+        if (imageUrl.isNullOrEmpty().not()) TicketImage(imageUrl)
     }
 }
 
