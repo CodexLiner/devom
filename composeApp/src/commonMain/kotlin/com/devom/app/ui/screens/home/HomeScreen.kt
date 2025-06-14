@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.devom.app.BarChartExample
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.text_style_h5
@@ -25,11 +26,8 @@ import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.booking.components.BookingCard
-import com.devom.network.NetworkClient
-import com.devom.utils.Application
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
-import pandijtapp.composeapp.generated.resources.ic_logout
 import pandijtapp.composeapp.generated.resources.ic_notification
 
 @Composable
@@ -59,6 +57,7 @@ fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () 
 @Composable
 fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHostController) {
     val bookings = viewModel.bookings.collectAsState()
+    val transactions = viewModel.transactions.collectAsState()
     if (bookings.value.isEmpty()) NoContentView(
         message = "No Bookings Found",
         title = null,
@@ -74,6 +73,11 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
             ),
             modifier = Modifier.fillMaxSize()
         ) {
+
+            item {
+                BarChartExample(transactions.value.transactions)
+            }
+
             item {
                 Text(
                     text = "Recent Bookings",
