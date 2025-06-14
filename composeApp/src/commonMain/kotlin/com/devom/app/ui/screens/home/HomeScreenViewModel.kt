@@ -21,14 +21,11 @@ class HomeScreenViewModel : ViewModel(){
     private val _bookings = MutableStateFlow<List<GetBookingsResponse>>(listOf())
     val bookings: StateFlow<List<GetBookingsResponse>> = _bookings
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
-
 
     private val _transactions = MutableStateFlow(GetWalletTransactionsResponse())
     val transactions = _transactions
     init {
-        getUserProfile()
+        getTransactions()
     }
 
     fun getBookings() {
@@ -41,21 +38,10 @@ class HomeScreenViewModel : ViewModel(){
         }
     }
 
-    fun getUserProfile() {
-        viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getTransactions(_user.value?.userId.toString())
-                }
-            }
-        }
-    }
 
-
-    fun getTransactions(userId : String) {
+    fun getTransactions() {
         viewModelScope.launch {
-            Project.payment.getWalletTransactionsUseCase.invoke(userId).collect {
+            Project.payment.getWalletTransactionsUseCase.invoke().collect {
                 it.onResult {
                     _transactions.value = it.data
                 }

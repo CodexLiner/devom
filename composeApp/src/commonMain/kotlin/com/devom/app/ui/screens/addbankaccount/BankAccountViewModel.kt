@@ -3,7 +3,6 @@ package com.devom.app.ui.screens.addbankaccount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devom.Project
-import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.UserBankDetails
 import com.devom.utils.Application
 import com.devom.utils.network.onResultNothing
@@ -16,16 +15,14 @@ class BankAccountViewModel : ViewModel() {
     private val _bankAccount = MutableStateFlow(UserBankDetails())
     val bankAccount = _bankAccount.asStateFlow()
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
     init {
-        getUserProfile()
+        getBankAccountDetails()
     }
 
 
     fun updateBankAccount(details: UserBankDetails) {
         viewModelScope.launch {
-            Project.payment.addBankDetailsUseCase.invoke(details.copy(userId = _user.value?.userId ?: 0)).collect {
+            Project.payment.addBankDetailsUseCase.invoke(details).collect {
                 it.onResultNothing {
                     _bankAccount.value = details
                     Application.showToast("Bank account updated successfully")
@@ -34,20 +31,10 @@ class BankAccountViewModel : ViewModel() {
         }
     }
 
-    fun getUserProfile() {
-        viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getBankAccountDetails(it.data.userId)
-                }
-            }
-        }
-    }
 
-    private fun getBankAccountDetails(userId: Int) {
+    private fun getBankAccountDetails() {
         viewModelScope.launch {
-            Project.payment.getBankDetailsUseCase.invoke(userId.toString()).collect {
+            Project.payment.getBankDetailsUseCase.invoke().collect {
                 it.withSuccess {
                     _bankAccount.value = it.data
                 }

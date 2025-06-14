@@ -12,30 +12,17 @@ import kotlinx.coroutines.launch
 
 class NotificationViewModel : ViewModel() {
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
-
     private val _notifications = MutableStateFlow<List<GetNotificationResponse>>(emptyList())
     val notifications = _notifications
 
     init {
-        getUserProfile()
+        getNotifications()
+
     }
 
-    fun getUserProfile() {
+    fun getNotifications() {
         viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getNotifications(_user.value?.userId.toString())
-                }
-            }
-        }
-    }
-
-    fun getNotifications(userId: String) {
-        viewModelScope.launch {
-            Project.notification.getNotificationsUseCase.invoke(userId).collect {
+            Project.notification.getNotificationsUseCase.invoke().collect {
                 it.onResult {
                     _notifications.value = it.data
                 }

@@ -85,18 +85,21 @@ fun BiographyScreen(navController: NavController) {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getUserProfile()
+        viewModel.getBiography()
     }
 }
 
 @Composable
-fun ColumnScope.BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: NavController) {
+fun ColumnScope.BiographyScreenScreenContent(
+    viewModel: BiographyViewModel,
+    navController: NavController,
+) {
     val biographyInput = remember {
         mutableStateOf(UpdateBiographyInput())
     }
     val biography = viewModel.biography.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
-    var selectedMedia  = remember { mutableStateOf<Media?>(null) }
+    var selectedMedia = remember { mutableStateOf<Media?>(null) }
     val viewImage = remember { mutableStateOf(false) }
     val options = listOf(
         OptionsBottomSheetItem(title = "View"),
@@ -124,7 +127,7 @@ fun ColumnScope.BiographyScreenScreenContent(viewModel: BiographyViewModel, navC
                 allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
             ) { platformFile, supportedFiles ->
                 viewModel.uploadDocument(
-                    viewModel.user.value?.userId.toString(), platformFile, supportedFiles
+                    platformFile, supportedFiles
                 )
             }
         }
@@ -150,7 +153,8 @@ fun ColumnScope.BiographyScreenScreenContent(viewModel: BiographyViewModel, navC
     ButtonPrimary(
         enabled = isButtonEnable.value,
         buttonText = stringResource(Res.string.Update),
-        modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp).fillMaxWidth().height(48.dp),
+        modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth().height(48.dp),
         onClick = {
             focus.clearFocus()
             viewModel.updateBiography(biographyInput.value)
@@ -165,13 +169,13 @@ fun ColumnScope.BiographyScreenScreenContent(viewModel: BiographyViewModel, navC
             if (it.title.lowercase() == "delete" && selectedMedia.value != null) {
                 viewModel.removeDocument(selectedMedia.value?.documentId.toString())
                 showSheet.value = false
-            }else {
+            } else {
                 viewImage.value = true
             }
             showSheet.value = false
         }
     )
-    ImageViewer(viewImage , selectedMedia)
+    ImageViewer(viewImage, selectedMedia)
 }
 
 @Composable
@@ -210,11 +214,11 @@ fun MediaItem(model: String, type: String, onClick: () -> Unit = {}) {
 fun BiographyForm(
     viewModel: BiographyViewModel,
     biographyInput: MutableState<UpdateBiographyInput>,
-    onButtonStateChanged : (Boolean) -> Unit = {},
+    onButtonStateChanged: (Boolean) -> Unit = {},
     onRitualsClicked: () -> Unit = {},
 ) {
     val biography = viewModel.biography.collectAsState()
-    val checkButtonEnable =  {
+    val checkButtonEnable = {
         biographyInput.value.experienceYears.isNotEmpty() &&
                 biographyInput.value.languages.isNotEmpty() &&
                 biographyInput.value.specialty.isNotEmpty()

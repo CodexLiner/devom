@@ -26,8 +26,8 @@ import com.devom.app.ui.screens.home.HomeScreen
 import com.devom.app.ui.screens.booking.BookingScreen
 import com.devom.app.ui.screens.profile.ProfileScreen
 import com.devom.app.ui.screens.wallet.WalletScreen
-import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
+import com.devom.network.getUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pandijtapp.composeapp.generated.resources.Res
@@ -41,7 +41,6 @@ import pandijtapp.composeapp.generated.resources.ic_nav_wallet
 fun DashboardScreen(appNavHostController: NavHostController) {
     val viewModel = viewModel { DashboardViewModel() }
     var selectedTab = viewModel.selectedTab.collectAsState().value
-    val user = viewModel.user.collectAsState().value
     val balance = viewModel.walletBalances.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -56,7 +55,7 @@ fun DashboardScreen(appNavHostController: NavHostController) {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(user = user, appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel, balance = balance) }
+        drawerContent = { DrawerContent(appNavHostController = appNavHostController, scope = scope, drawerState = drawerState, viewModel = viewModel, balance = balance) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(
@@ -117,7 +116,6 @@ fun DashboardScreen(appNavHostController: NavHostController) {
 
 @Composable
 fun DrawerContent(
-    user: UserRequestResponse?,
     appNavHostController: NavHostController,
     scope: CoroutineScope,
     drawerState: DrawerState,
@@ -126,7 +124,7 @@ fun DrawerContent(
 ) {
     NavigationDrawerContent(
         balance = balance,
-        user = user,
+        user = getUser(),
         appNavHostController = appNavHostController,
         onWalletClick = {
             viewModel.onTabSelected(3)

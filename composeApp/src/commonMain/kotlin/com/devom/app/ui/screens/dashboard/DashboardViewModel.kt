@@ -10,10 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class DashboardViewModel : ViewModel() {
-
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
-
     private val _walletBalances = MutableStateFlow(GetWalletBalanceResponse())
     val walletBalances = _walletBalances
 
@@ -22,26 +18,16 @@ class DashboardViewModel : ViewModel() {
     fun onTabSelected(index: Int) {
         _selectedTab.value = index
     }
+
     init {
-        getUserProfile()
+        getWalletBalance()
     }
 
-    fun getWalletBalance(userId: String) {
+    fun getWalletBalance() {
         viewModelScope.launch {
-            Project.payment.getWalletBalanceUseCase.invoke(userId).collect {
+            Project.payment.getWalletBalanceUseCase.invoke().collect {
                 it.withSuccess {
                     _walletBalances.value = it.data
-                }
-            }
-        }
-    }
-
-    fun getUserProfile() {
-        viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getWalletBalance(_user.value?.userId.toString())
                 }
             }
         }

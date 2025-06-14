@@ -11,6 +11,7 @@ import com.devom.utils.share.UtilsApp
 actual fun getContacts(): List<Contact> {
     return UtilsApp.applicationContext.getContactList()
 }
+
 @SuppressLint("Recycle", "Range")
 private fun Context.getContactList(): List<Contact> {
     val contacts = mutableListOf<Contact>()

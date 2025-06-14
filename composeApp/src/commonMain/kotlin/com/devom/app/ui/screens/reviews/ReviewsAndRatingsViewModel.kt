@@ -13,27 +13,13 @@ class ReviewsAndRatingsViewModel : ViewModel() {
     private val _reviews = MutableStateFlow<List<Review>>(emptyList())
     val reviews = _reviews
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
-
     init {
-        getUserProfile()
+        getReviews()
     }
 
-    fun getUserProfile() {
+    fun getReviews() {
         viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.onResult {
-                    _user.value = it.data
-                    getReviews(user.value?.userId.toString())
-                }
-            }
-        }
-    }
-
-    fun getReviews(panditId : String) {
-        viewModelScope.launch {
-            Project.pandit.getPanditReviewsUseCase.invoke(panditId).collect {
+            Project.pandit.getPanditReviewsUseCase.invoke().collect {
                 it.onResult {
                     _reviews.value = it.data.reviews
                 }

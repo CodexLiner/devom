@@ -62,7 +62,7 @@ import kotlin.math.roundToInt
 fun ReviewsAndRatingsScreen(navController: NavController) {
     val viewModel = viewModel { ReviewsAndRatingsViewModel() }
     LaunchedEffect(Unit) {
-        viewModel.getUserProfile()
+        viewModel.getReviews()
     }
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(

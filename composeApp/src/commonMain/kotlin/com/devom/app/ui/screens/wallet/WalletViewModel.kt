@@ -23,24 +23,13 @@ class WalletViewModel : ViewModel() {
     val walletBalances = _walletBalances
 
     init {
-        getUserProfile()
+        getWalletBalance()
+        getBankDetails()
     }
 
-    fun getUserProfile() {
+    fun getWalletBalance() {
         viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getWalletBalance(user.value?.userId.toString())
-                    getBankDetails(user.value?.userId.toString())
-                }
-            }
-        }
-    }
-
-    fun getWalletBalance(userId: String) {
-        viewModelScope.launch {
-            Project.payment.getWalletBalanceUseCase.invoke(userId).collect {
+            Project.payment.getWalletBalanceUseCase.invoke().collect {
                 it.onResult {
                     _walletBalances.value = it.data
                 }
@@ -48,9 +37,9 @@ class WalletViewModel : ViewModel() {
         }
     }
 
-    fun getBankDetails(userId: String) {
+    fun getBankDetails() {
         viewModelScope.launch {
-            Project.payment.getBankDetailsUseCase.invoke(userId).collect {
+            Project.payment.getBankDetailsUseCase.invoke().collect {
                 it.onResult {
                     _bankDetails.value = it.data
                 }

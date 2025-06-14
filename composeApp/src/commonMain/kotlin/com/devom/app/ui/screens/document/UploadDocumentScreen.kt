@@ -72,7 +72,7 @@ private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
     val documents = viewModel.documents.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getUserProfile()
+        viewModel.getDocuments()
     }
     val showSheet = remember { mutableStateOf(false) }
     var selectedMedia  = remember { mutableStateOf<Media?>(null) }
@@ -92,7 +92,7 @@ private fun UploadDocumentScreenContent(viewModel: UploadDocumentViewModel) {
             }
             item {
                 DocumentPicker(title = "Upload Documents") { platformFile, supportedFiles ->
-                    viewModel.uploadDocument(viewModel.user.value?.userId.toString(), platformFile, supportedFiles)
+                    viewModel.uploadDocument(platformFile, supportedFiles)
                 }
             }
         }

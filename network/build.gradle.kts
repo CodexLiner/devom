@@ -16,6 +16,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(project(":core:utils"))
+            api(project(":core:models"))
             api(libs.kotlinx.coroutines.core)
             api(libs.ktor.client.core)
             api(libs.ktor.client.content.negotiation)

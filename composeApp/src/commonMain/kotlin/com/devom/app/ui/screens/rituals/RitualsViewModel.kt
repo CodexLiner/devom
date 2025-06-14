@@ -18,27 +18,14 @@ class RitualsViewModel : ViewModel() {
     private val _getPoojaItems = MutableStateFlow<List<GetPoojaResponse>>(listOf())
     val getPoojaItems = _getPoojaItems
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
+
 
     private val _rituals = MutableStateFlow<List<GetPanditPoojaResponse>?>(null)
     val rituals = _rituals
 
-    fun getUserProfile() {
-        viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.withSuccess {
-                    _user.value = it.data
-                    getRituals()
-                    getPoojaList()
-                }
-            }
-        }
-    }
-
     fun getRituals() {
         viewModelScope.launch {
-            Project.pandit.getPanditPoojaUseCase.invoke(user.value?.userId.toString()).collect {
+            Project.pandit.getPanditPoojaUseCase.invoke().collect {
                 it.onResult {
                     _rituals.value = it.data
                 }
@@ -74,7 +61,7 @@ class RitualsViewModel : ViewModel() {
 
     fun mapPoojaItem(input: MapPanditPoojaItemInput) {
         viewModelScope.launch {
-            Project.pandit.mapPanditPoojaItemUseCase.invoke(input.copy(panditId = user.value?.userId)).collect {
+            Project.pandit.mapPanditPoojaItemUseCase.invoke(input).collect {
                 it.onResultNothing {
                     getRituals()
                     Application.showToast("Pooja Item Mapped Successfully")

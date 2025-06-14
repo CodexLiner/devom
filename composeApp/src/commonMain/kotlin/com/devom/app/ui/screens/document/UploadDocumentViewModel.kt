@@ -7,6 +7,7 @@ import com.devom.app.models.SupportedFiles
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
+import com.devom.network.getUser
 import com.devom.utils.Application
 import com.devom.utils.network.onResult
 import com.devom.utils.network.onResultNothing
@@ -23,28 +24,15 @@ class UploadDocumentViewModel : ViewModel() {
     private val _documents = MutableStateFlow<List<GetDocumentResponse>>(emptyList())
     val documents = _documents
 
-    private val _user = MutableStateFlow<UserRequestResponse?>(null)
-    val user = _user
-
     init {
-        getUserProfile()
+        getDocuments()
     }
 
-    fun getUserProfile() {
-        viewModelScope.launch {
-            Project.user.getUserProfileUseCase.invoke().collect {
-                it.onResult {
-                    _user.value = it.data
-                    getDocuments(user.value?.userId.toString())
-                }
-            }
-        }
-    }
-    fun uploadDocument(userId: String, platformFile: PlatformFile, supportedFiles: SupportedFiles) {
+    fun uploadDocument(platformFile: PlatformFile, supportedFiles: SupportedFiles) {
         viewModelScope.launch {
             Project.document.createDocumentUseCase.invoke(
                 input = CreateDocumentInput(
-                    userId = userId,
+                    userId = getUser().userId.toString(),
                     mimeType = "image/${platformFile.extension}",
                     documentType = supportedFiles.type,
                     description = supportedFiles.document,
@@ -53,7 +41,7 @@ class UploadDocumentViewModel : ViewModel() {
                 )
             ).collect {
                 it.onResult {
-                    getDocuments(user.value?.userId.toString())
+                    getDocuments()
                     Application.showToast("Document uploaded successfully")
                 }
             }
@@ -64,7 +52,7 @@ class UploadDocumentViewModel : ViewModel() {
         viewModelScope.launch {
             Project.document.removeDocumentUseCase.invoke(documentId).collect {
                 it.onResultNothing {
-                    getDocuments(user.value?.userId.toString())
+                    getDocuments()
                     Application.showToast("Document removed successfully")
                 }
             }
@@ -72,9 +60,9 @@ class UploadDocumentViewModel : ViewModel() {
     }
 
 
-    fun getDocuments(userId: String) {
+    fun getDocuments() {
         viewModelScope.launch {
-            Project.document.getDocumentsUseCase.invoke(userId = userId).collect {
+            Project.document.getDocumentsUseCase.invoke().collect {
                 it.onResult {
                     _documents.value = it.data
                 }

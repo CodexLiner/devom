@@ -99,7 +99,8 @@ fun RitualsScreen(navController: NavController) {
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getUserProfile()
+        viewModel.getRituals()
+        viewModel.getPoojaList()
     }
 }
 

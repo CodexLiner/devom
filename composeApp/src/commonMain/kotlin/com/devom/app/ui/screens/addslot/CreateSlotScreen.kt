@@ -47,12 +47,11 @@ fun CreateSlotScreen(
         .toLocalDateTime(TimeZone.currentSystemDefault()).date,
 ) {
     val viewModel = viewModel { CreateSlotViewModel() }
-    val user = viewModel.user.collectAsState()
 
     val buttonText = remember { mutableStateOf("Update Time Slot") }
 
-    LaunchedEffect(user.value) {
-        user.value?.userId?.let { viewModel.getAvailableSlots(it) }
+    LaunchedEffect(Unit) {
+        viewModel.getAvailableSlots()
     }
 
     val sheetState = remember { mutableStateOf(false) }
