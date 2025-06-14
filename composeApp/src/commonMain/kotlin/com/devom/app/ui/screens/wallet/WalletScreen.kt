@@ -78,17 +78,17 @@ fun WalletScreenContent(navHostController: NavHostController, viewModel: WalletV
 
 @Composable
 fun WalletDetailsContent(navController: NavHostController, viewModel: WalletViewModel) {
-    val balance = viewModel.walletBalances.value.balance
+    val balance = viewModel.walletBalances.collectAsState()
     val bankDetails = viewModel.bankDetails.collectAsState()
     Box(modifier = Modifier.fillMaxWidth().background(primaryColor)) {
         WalletHeader(
-            balance, if (bankDetails.value == null) stringResource(Res.string.Add_Account)
+            balance.value.balance, if (bankDetails.value == null) stringResource(Res.string.Add_Account)
             else stringResource(Res.string.Withdraw)
         ) {
             navController.navigate(Screens.BankAccountScreen.path)
         }
     }
-    WalletBreakdownRow(balance)
+    WalletBreakdownRow(balance.value.balance)
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
@@ -130,7 +130,7 @@ private fun WalletHeader(
                 color = whiteColor,
                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             )
-            .padding(16.dp)
+            .padding(start = 16.dp , top = 16.dp , bottom = 16.dp)
     ) {
         WalletIcon()
         WalletBalanceInfo(balance)
@@ -158,8 +158,7 @@ private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
             fontWeight = FontWeight.W400,
             fontSize = 14.sp
         )
-        val currentBalance =
-            (balance.cashWallet.toIntOrNull() ?: 0) + (balance.bonusWallet.toIntOrNull() ?: 0)
+        val currentBalance =(balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.bonusWallet.toFloatOrNull() ?: 0f)
 
         Text(
             text = "₹${currentBalance}",
@@ -178,9 +177,7 @@ private fun WithdrawButton(
         onClick = onClick,
         content = {
             Text(
-                modifier = Modifier
-                    .background(blackColor, RoundedCornerShape(12.dp))
-                    .padding(vertical = 10.dp, horizontal = 16.dp),
+                modifier = Modifier.background(blackColor, RoundedCornerShape(12.dp)).padding(vertical = 10.dp, horizontal = 8.dp),
                 text = buttonText,
                 color = whiteColor,
                 style = text_style_lead_text,

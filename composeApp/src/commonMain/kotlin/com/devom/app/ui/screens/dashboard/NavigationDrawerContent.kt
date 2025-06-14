@@ -4,12 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -18,7 +16,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,14 +36,11 @@ import androidx.navigation.NavHostController
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.whiteColor
-import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.UserProfilePicture
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.utils.toColor
-import com.devom.app.utils.toDevomImage
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
-import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Biography
@@ -48,7 +48,6 @@ import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.Review_and_Ratings
 import pandijtapp.composeapp.generated.resources.arrow_drop_down_right
 import pandijtapp.composeapp.generated.resources.help_support
-import pandijtapp.composeapp.generated.resources.ic_badge_verified
 import pandijtapp.composeapp.generated.resources.ic_help_support
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
@@ -69,7 +68,7 @@ internal fun NavigationDrawerContent(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(0.8f)
+            .fillMaxWidth(0.85f)
             .fillMaxHeight()
             .background(whiteColor),
     ) {
@@ -131,9 +130,11 @@ fun UserDetailsContent(
     balance: State<GetWalletBalanceResponse>,
     onDismiss: () -> Unit,
 ) {
-    val currentBalance = (balance.value.balance.cashWallet.toIntOrNull()
-        ?: 0) + (balance.value.balance.bonusWallet.toIntOrNull() ?: 0)
+    var currentBalance by remember { mutableStateOf(0f) }
 
+    LaunchedEffect(balance.value , Unit) {
+        currentBalance = (balance.value.balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.value.balance.bonusWallet.toFloatOrNull() ?: 0f)
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().background(color = primaryColor).padding(16.dp)
