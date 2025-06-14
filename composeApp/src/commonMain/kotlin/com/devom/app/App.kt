@@ -5,7 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -104,9 +104,9 @@ fun MainScreen(isLoggedIn: Boolean) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedContent(
                         targetState = isLoggedIn, transitionSpec = {
-                            fadeIn(animationSpec = tween(300)) with fadeOut(
+                            fadeIn(animationSpec = tween(500)) togetherWith  fadeOut(
                                 animationSpec = tween(
-                                    300
+                                    500
                                 )
                             )
                         }, label = "Auth/Dashboard Transition"
