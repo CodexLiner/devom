@@ -1,6 +1,9 @@
 package com.devom.utils.date
 
 import kotlinx.datetime.*
+import kotlinx.datetime.format.MonthNames
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
 
 /**
  * Date formats vars
@@ -223,6 +226,113 @@ fun LocalDate.toEpochMilli(): Long {
 
 fun LocalDate.toIsoDateTimeString(): String {
     return this.atTime(LocalTime(0, 0)).toInstant(TimeZone.UTC).toString()
+}
+
+/**
+ * Get Current Local Date Time
+ * */
+fun getCurrentLocalDateTime(): LocalDateTime {
+    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+}
+/**
+ * Get Local Date Time from String
+ * */
+fun getLocalDateTime(date: String, time: String): LocalDateTime? {
+    try {
+        return LocalDateTime(
+            LocalDate.parse(date), LocalTime.parse(time)
+        )
+    } catch (e: Exception) {
+        return null
+    }
+}
+/**
+ * Get Local Date Time in current timezone from UTC String
+ * */
+fun getLocalDateTimeFromUTC(dateTime: String): LocalDateTime? {
+    try {
+        return Instant.parse(dateTime).toLocalDateTime(TimeZone.currentSystemDefault())
+    } catch (e: Exception) {
+        return null
+    }
+}
+/**
+ * Get Local Date in current timezone from String
+ * */
+fun getLocalDate(date: String): LocalDate? {
+    try {
+        return LocalDate.parse(date)
+    } catch (e: Exception) {
+        return null
+    }
+}
+fun LocalTime?.toAmPm(): String {
+    return this?.format(LocalTime.Format {
+        amPmHour(padding = Padding.NONE)
+        char(':')
+        minute()
+        char(' ')
+        amPmMarker("Am", "Pm")
+    }).orEmpty()
+}
+fun LocalDateTime?.addMinutesToLocalDateTime(minutesToAdd: Int): LocalDateTime? {
+    return this?.toInstant(TimeZone.currentSystemDefault())?.plus(minutesToAdd, DateTimeUnit.MINUTE)
+        ?.toLocalDateTime(TimeZone.currentSystemDefault())
+}
+fun LocalDateTime?.minusMinutesToLocalDateTime(minutesToAdd: Int): LocalDateTime? {
+    return this?.toInstant(TimeZone.currentSystemDefault())
+        ?.minus(minutesToAdd, DateTimeUnit.MINUTE)?.toLocalDateTime(TimeZone.currentSystemDefault())
+}
+fun LocalTime.toTimeFormat(): String {
+    return this.format(LocalTime.Format {
+        hour()
+        char(':')
+        minute()
+        char(':')
+        second()
+    })
+}
+fun LocalDate.toDateFormat(): String {
+    return this.format(LocalDate.Format {
+        monthName(MonthNames.ENGLISH_FULL)
+        char(' ')
+        dayOfMonth(padding = Padding.NONE)
+    })
+}
+fun LocalDate.toCompleteDateFormat(): String {
+    return this.format(LocalDate.Format {
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+        char(' ')
+        dayOfMonth(padding = Padding.NONE)
+        char(',')
+        char(' ')
+        year(padding = Padding.NONE)
+    })
+}
+
+fun LocalDate?.formatDate(): String? {
+   return this?.let {
+        val currentDate = getCurrentLocalDateTime().date
+        val yesterday = currentDate.minus(1, DateTimeUnit.DAY)
+        return when(this){
+            currentDate -> "Today, ${this.toDateFormat()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}"
+            yesterday -> "Yesterday, ${this.toDateFormat()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}"
+            else -> this.toCompleteDateFormat()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        }
+    }
+}
+
+
+
+fun formatDateAndTime(inputDate: LocalDate): String{
+    val currentDate = getCurrentLocalDateTime().date
+    return when(inputDate){
+        currentDate -> "${getCurrentLocalDateTime().time.toAmPm().uppercase()} , Today"
+        else -> getCurrentLocalDateTime().time.toAmPm().uppercase()+" , "+ getCurrentLocalDateTime().date.toDateFormat()
+    }
 }
 
 /*
