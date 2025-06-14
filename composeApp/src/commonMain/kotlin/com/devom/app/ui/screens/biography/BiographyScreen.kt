@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -103,36 +105,43 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
 
     val isButtonEnable = remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Column(modifier = Modifier.weight(1f)) {
-            BiographyForm(
-                viewModel = viewModel, biographyInput = biographyInput,
-                onButtonStateChanged = {
-                    isButtonEnable.value = it
-                }, onRitualsClicked = {
-                    navController.navigate(Screens.Rituals.path)
-                }
-            )
-
-            DocumentPicker(
-                addIconOnly = biography.value?.media.isNullOrEmpty().not(),
-                title = stringResource(Res.string.media_galley),
-                allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
-            ) { platformFile, supportedFiles ->
-                viewModel.uploadDocument(
-                    viewModel.user.value?.userId.toString(), platformFile, supportedFiles
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            item {
+                BiographyForm(
+                    viewModel = viewModel, biographyInput = biographyInput,
+                    onButtonStateChanged = {
+                        isButtonEnable.value = it
+                    }, onRitualsClicked = {
+                        navController.navigate(Screens.Rituals.path)
+                    }
                 )
             }
 
-            LazyVerticalGrid(
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp),
-                columns = GridCells.Fixed(3),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(biography.value?.media.orEmpty()) {
-                    MediaItem(model = it.documentUrl, it.documentType) {
-                        showSheet.value = true
-                        selectedMedia.value = it
+            item {
+                DocumentPicker(
+                    addIconOnly = biography.value?.media.isNullOrEmpty().not(),
+                    title = stringResource(Res.string.media_galley),
+                    allowedDocs = listOf(SupportedFiles.IMAGE, SupportedFiles.VIDEO)
+                ) { platformFile, supportedFiles ->
+                    viewModel.uploadDocument(
+                        viewModel.user.value?.userId.toString(), platformFile, supportedFiles
+                    )
+                }
+            }
+
+            item {
+                LazyVerticalGrid(
+                    modifier = Modifier.heightIn(max = 3000.dp),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp),
+                    columns = GridCells.Fixed(3),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(biography.value?.media.orEmpty()) {
+                        MediaItem(model = it.documentUrl, it.documentType) {
+                            showSheet.value = true
+                            selectedMedia.value = it
+                        }
                     }
                 }
             }
@@ -141,8 +150,7 @@ fun BiographyScreenScreenContent(viewModel: BiographyViewModel, navController: N
         ButtonPrimary(
             enabled = isButtonEnable.value,
             buttonText = stringResource(Res.string.Update),
-            modifier = Modifier.navigationBarsPadding()
-                .padding(top = 48.dp, start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
+            modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp).fillMaxWidth().height(48.dp),
             onClick = {
                 focus.clearFocus()
                 viewModel.updateBiography(biographyInput.value)
