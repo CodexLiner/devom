@@ -1,5 +1,8 @@
 package com.devom.app.ui.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -95,7 +98,11 @@ fun NavigationHost(
                 bookingId = it.arguments?.getString("booking")
             )
         }
-        composable(Screens.Dashboard.path) {
+        composable(
+            enterTransition = { fadeIn(animationSpec = tween(300)) },
+            exitTransition = { fadeOut(animationSpec = tween(300)) },
+            route = Screens.Dashboard.path
+        ) {
             DashboardScreen(navController)
         }
         composable(Screens.EditProfile.path) {

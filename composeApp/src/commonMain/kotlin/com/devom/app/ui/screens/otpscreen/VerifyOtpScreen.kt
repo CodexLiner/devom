@@ -42,7 +42,11 @@ import com.devom.app.ui.components.OtpView
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewModel : RegisterViewModel = viewModel { RegisterViewModel() }) {
+fun VerifyOtpScreen(
+    navController: NavController,
+    mobileNumber: String?,
+    viewModel: RegisterViewModel = viewModel { RegisterViewModel() },
+) {
 
     var otpState: String by remember { mutableStateOf("") }
 
@@ -50,7 +54,8 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
         navController.navigateUp()
     }) {
         Column(
-            modifier = Modifier.fillMaxSize().statusBarsPadding().padding(top = 42.dp).padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxSize().statusBarsPadding().padding(top = 42.dp)
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.Start
         ) {
             /**
@@ -65,7 +70,10 @@ fun VerifyOtpScreen(navController: NavController, mobileNumber: String? , viewMo
 
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = stringResource(Res.string.we_have_sent_the_verification_code, mobileNumber.toString()),
+                text = stringResource(
+                    Res.string.we_have_sent_the_verification_code,
+                    mobileNumber.toString()
+                ),
                 style = text_style_lead_text,
                 textAlign = TextAlign.Start,
             )

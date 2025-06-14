@@ -1,5 +1,6 @@
 package com.devom.app.ui.screens.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -71,7 +72,7 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
                 top = 16.dp,
                 bottom = 200.dp
             ),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().animateContentSize()
         ) {
 
             item {
@@ -85,12 +86,16 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
                     color = blackColor
                 )
             }
+
             items(bookings.value.take(5)) { booking ->
-                BookingCard(booking, onBookingUpdate = {
-                    viewModel.updateBookingStatus(booking.bookingId, it)
-                }, onClick = {
-                    navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
-                })
+                BookingCard(
+                    booking = booking,
+                    onBookingUpdate = {
+                        viewModel.updateBookingStatus(booking.bookingId, it)
+                    }, onClick = {
+                        navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
+                    }
+                )
             }
         }
 }
