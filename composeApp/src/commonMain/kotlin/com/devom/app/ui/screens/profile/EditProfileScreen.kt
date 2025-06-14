@@ -123,12 +123,10 @@ fun EditProfileFormContent(userResponse: UserRequestResponse, viewModel: Profile
         item {
             UserDetailsScreenMainContent(
                 userResponse = userResponse,
-                onChange = { createUserRequest = it }
+                onChange = { createUserRequest = it.copy() }
             )
         }
     }
-
-    showDatePicker(datePickerState, viewModel, createUserRequest)
 
     FilePickerBottomSheetHost(
         showSheet = imagePickerState.value,

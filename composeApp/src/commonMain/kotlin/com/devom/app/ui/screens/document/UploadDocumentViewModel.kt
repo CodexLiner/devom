@@ -9,6 +9,7 @@ import com.devom.models.document.CreateDocumentInput
 import com.devom.models.document.GetDocumentResponse
 import com.devom.utils.Application
 import com.devom.utils.network.onResult
+import com.devom.utils.network.onResultNothing
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.extension
 import io.github.vinceglb.filekit.name
@@ -49,8 +50,6 @@ class UploadDocumentViewModel : ViewModel() {
                     description = supportedFiles.document,
                     documentName = platformFile.name,
                     file = platformFile.source().buffered().readByteArray()
-
-
                 )
             ).collect {
                 it.onResult {
@@ -60,6 +59,18 @@ class UploadDocumentViewModel : ViewModel() {
             }
         }
     }
+
+    fun removeDocument(documentId: String) {
+        viewModelScope.launch {
+            Project.document.removeDocumentUseCase.invoke(documentId).collect {
+                it.onResultNothing {
+                    getDocuments(user.value?.userId.toString())
+                    Application.showToast("Document removed successfully")
+                }
+            }
+        }
+    }
+
 
     fun getDocuments(userId: String) {
         viewModelScope.launch {

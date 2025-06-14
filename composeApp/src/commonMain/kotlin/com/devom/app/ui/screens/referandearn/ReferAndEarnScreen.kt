@@ -19,10 +19,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,17 +31,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.devom.app.BASE_URL
+import com.devom.app.ASSET_LINK_BASE_URL
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h3
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.components.ShapedScreen
 import com.devom.models.auth.UserRequestResponse
 import com.devom.utils.Contact
-import com.devom.utils.getContacts
 import com.devom.utils.share.ShareServiceProvider
 import com.devom.utils.share.shareContent
 import org.jetbrains.compose.resources.painterResource
@@ -62,32 +61,35 @@ fun ReferAndEarnScreen(navController: NavHostController) {
     val viewModel: ReferAndEarnViewModel = viewModel {
         ReferAndEarnViewModel()
     }
+    LaunchedEffect(Unit) {
+        viewModel.getContactList()
+    }
     val user = viewModel.user.collectAsState()
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             title = "Refer & Earn",
             onNavigationIconClick = { navController.popBackStack() })
-        ReferAndEarnScreenContent(user)
+        ReferAndEarnScreenContent(user , viewModel)
     }
 
 }
 
 @Composable
-fun ReferAndEarnScreenContent(user: State<UserRequestResponse?>) {
+fun ReferAndEarnScreenContent(user: State<UserRequestResponse?>, viewModel: ReferAndEarnViewModel) {
     ShapedScreen(
         modifier = Modifier.fillMaxSize().background(primaryColor),
         headerContent = {
             ReferHeaderContent(user)
         }, mainContent = {
-            ReferMainContent(user)
+            ReferMainContent(user , viewModel)
         }
     )
 }
 
 @Composable
-fun ReferMainContent(user: State<UserRequestResponse?>) {
-    val contacts = remember { mutableStateOf(getContacts()) }
+fun ReferMainContent(user: State<UserRequestResponse?>, viewModel: ReferAndEarnViewModel) {
+    val contacts = viewModel.contacts.collectAsState()
     Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
@@ -108,13 +110,19 @@ fun ReferMainContent(user: State<UserRequestResponse?>) {
 
 @Composable
 fun ReferContactList(user: State<UserRequestResponse?>, contacts: List<Contact>) {
-    LazyColumn(
+    if (contacts.isNotEmpty())LazyColumn(
         contentPadding = PaddingValues(vertical = 41.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(contacts) {
             ReferContactItem(it, user)
         }
+    }else {
+        NoContentView(
+            image = null,
+            title = null,
+            message = "Please Allow Contact Permission\n from settings to view contacts"
+        )
     }
 }
 
@@ -142,12 +150,9 @@ fun InviteButton(user: UserRequestResponse?, contact: Contact) {
                 shareContent(
                     ShareServiceProvider(),
                     referralMessage,
-                    BASE_URL.plus(
+                    ASSET_LINK_BASE_URL.plus(
                         "referral?phone=${
-                            contact.phoneNumber.replace(
-                                Regex("(\\d{5})(\\d{5})"),
-                                "$1-$2"
-                            )
+                            contact.phoneNumber.trim().replace("\\s+".toRegex(), "")
                         }&code=${user?.referralCode}"
                     )
                 )
@@ -246,7 +251,7 @@ fun ReferHeaderContent(user: State<UserRequestResponse?>) {
                         shareContent(
                             ShareServiceProvider(),
                             referralMessage,
-                            BASE_URL.plus("referral?code=${user.value?.referralCode}")
+                            ASSET_LINK_BASE_URL.plus("referral?code=${user.value?.referralCode}")
                         )
                     }
             )

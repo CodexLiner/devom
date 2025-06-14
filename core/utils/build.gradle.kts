@@ -19,6 +19,7 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.androidx.startup.runtime)
+            implementation("androidx.core:core-ktx:1.16.0")
         }
         iosMain.dependencies {
 

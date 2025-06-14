@@ -106,19 +106,19 @@ internal fun UserDetailsScreenMainContent(
         }
 
         ExposedDropdown(
+            isSearchEnabled = true,
             selectedOption = DropDownItem(option = selectedCountry.value?.name.orEmpty() , selectedCountry.value?.isoCode.orEmpty()),
             options = countryList.value.map { DropDownItem(it.name, it.isoCode) },
             placeholder = stringResource(Res.string.enter_country)
         ) {
             userResponse.country = it.option
             viewModel.selectedCountry.value = Country(name = it.option, isoCode = it.id)
-            viewModel.selectedState.value = null
-            viewModel.selectedCity.value = null
             viewModel.getStateList(it.id)
             onChange(userResponse)
         }
 
         ExposedDropdown(
+            isSearchEnabled = selectedCountry.value?.name?.isNotEmpty() == true ,
             enabled = selectedCountry.value?.name?.isNotEmpty() == true,
             disabledMessage = "Please Select Country First",
             selectedOption = DropDownItem(option = selectedState.value?.name.orEmpty() , selectedState.value?.isoCode.orEmpty()),
@@ -127,12 +127,12 @@ internal fun UserDetailsScreenMainContent(
         ) {
             userResponse.state = it.option
             viewModel.selectedState.value = State(name = it.option, isoCode = it.id)
-            viewModel.selectedCity.value = null
             viewModel.getCityList(stateCode = it.id)
             onChange(userResponse)
         }
 
         ExposedDropdown(
+            isSearchEnabled = selectedState.value?.name?.isNotEmpty() == true,
             enabled = selectedState.value?.name?.isNotEmpty() == true,
             disabledMessage = "Please Select State First",
             selectedOption = DropDownItem(option = selectedCity.value?.name.orEmpty() , selectedCity.value?.isoCode.orEmpty()),
@@ -156,7 +156,8 @@ internal fun UserDetailsScreenMainContent(
 
         Box(
             modifier = Modifier.fillMaxWidth().clickable { datePickerState.value = true }) {
-            val initialValue = userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date
+
+            val initialValue = if (userResponse.dateOfBirth.contains("T")) userResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date else userResponse.dateOfBirth
 
             TextInputField(
                 readOnly = true,
@@ -169,10 +170,8 @@ internal fun UserDetailsScreenMainContent(
                         contentDescription = stringResource(Res.string.calendar_icon_description),
                         modifier = Modifier.size(24.dp)
                     )
-                }) {
-                userResponse.dateOfBirth = it
-                onChange(userResponse)
-            }
+                }
+            )
         }
 
         DatePickerDialog(
@@ -180,8 +179,8 @@ internal fun UserDetailsScreenMainContent(
             onDismiss = { datePickerState.value = false },
             onDateSelected = {
                 datePickerState.value = false
-                val updatedUser = userResponse.copy(dateOfBirth = it.toIsoDateTimeString())
-                onChange(updatedUser)
+                userResponse.dateOfBirth = it.toIsoDateTimeString()
+                onChange(userResponse)
             },
             showPicker = datePickerState.value,
         )

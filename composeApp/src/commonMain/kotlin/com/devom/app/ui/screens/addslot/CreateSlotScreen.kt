@@ -172,7 +172,7 @@ fun ColumnScope.SlotsSections(
             it.availableDate.formatIsoTo(yyyy_MM_DD) == selectedDate.format(yyyy_MM_DD)
         }
         if (filteredSlots.isNotEmpty()) {
-            LazyColumn {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(filteredSlots) { slot ->
                     TimeSlotItem(
                         datePickerEnable = false,

@@ -6,19 +6,21 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
+import com.devom.app.ASSET_LINK_BASE_URL
 import com.devom.app.ui.navigation.Screens.Biography
-import com.devom.app.ui.screens.login.LoginScreen
 import com.devom.app.ui.navigation.Screens.BookingDetails
 import com.devom.app.ui.navigation.Screens.Notifications
 import com.devom.app.ui.navigation.Screens.ReviewsAndRatings
 import com.devom.app.ui.screens.addbankaccount.BankAccountScreen
-import com.devom.app.ui.screens.dashboard.DashboardScreen
 import com.devom.app.ui.screens.addslot.CreateSlotScreen
 import com.devom.app.ui.screens.biography.BiographyScreen
 import com.devom.app.ui.screens.booking.details.BookingDetailScreen
+import com.devom.app.ui.screens.dashboard.DashboardScreen
 import com.devom.app.ui.screens.document.UploadDocumentScreen
 import com.devom.app.ui.screens.helpandsupport.HelpAndSupportDetailScreen
 import com.devom.app.ui.screens.helpandsupport.HelpAndSupportScreen
+import com.devom.app.ui.screens.login.LoginScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
@@ -54,8 +56,18 @@ fun NavigationHost(
         composable(Screens.SignUpSuccess.path) {
             SignupSuccessScreen(navHostController = navController)
         }
-        composable(Screens.Register.path) {
-            RegisterMainScreen(navController)
+
+        composable(
+            route = Screens.Register.path ,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "${ASSET_LINK_BASE_URL}referral?phone={phone}&code={code}"
+                }
+            )
+        ) {
+            val phone = it.arguments?.getString("phone") ?: ""
+            val code = it.arguments?.getString("code") ?: ""
+            RegisterMainScreen(navController, phone, code = code)
         }
         composable(Screens.Document.path) {
             DocumentUploadScreen(navController)

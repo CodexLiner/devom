@@ -3,6 +3,8 @@ package com.devom.app.ui.screens.addslot
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,7 +27,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -170,6 +171,7 @@ fun TimeSlotListCard(
         border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.3f))
     ) {
         LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth().heightIn(max = 500.dp, min = 500.dp),
             contentPadding = PaddingValues(vertical = 24.dp)
         ) {
@@ -213,7 +215,6 @@ fun TimeSlotItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)
@@ -245,7 +246,7 @@ fun TimeSlotItem(
             )
         }
         AnimatedVisibility(visible = enabled) {
-            IconButton(onClick = onRemove, modifier = Modifier.size(40.dp)) {
+            IconButton(onClick = onRemove, modifier = Modifier.padding(start = 12.dp).size(20.dp)) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_close),
                     contentDescription = "Remove slot",
@@ -275,13 +276,16 @@ fun TimePickerDialogButton(
 
     var showPicker by remember { mutableStateOf(false) }
 
-    OutlinedButton(
-        onClick = { if (enabled) showPicker = true },
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier,
-        enabled = enabled
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier.clickable { showPicker = true }.border(
+            width = 1.dp,
+            color = inputColor,
+            shape = RoundedCornerShape(12.dp)
+        ).padding(horizontal = 8.dp, vertical = 14.dp),
     ) {
-        Text(text = selectedTime)
+        Text(text = selectedTime, fontSize = 12.sp, fontWeight = FontWeight.W500)
         if (enabled) Icon(
             painter = painterResource(Res.drawable.ic_dual_dropdown),
             contentDescription = "Select time"
