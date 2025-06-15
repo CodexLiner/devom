@@ -30,10 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.devom.app.theme.blackColor
 import com.devom.app.theme.greenColor
 import com.devom.app.theme.greyColor
 import com.devom.app.theme.inputColor
 import com.devom.app.theme.textStyleBody2
+import com.devom.app.theme.text_style_h4
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.whiteColor
 import com.devom.models.payment.WalletTransaction
@@ -56,7 +58,9 @@ val monthNames = listOf(
 )
 
 @Composable
-fun EarningsBarChart(transactions: List<WalletTransaction>) {
+fun EarningsBarChart(
+    totalEarning: String = "",
+    transactions: List<WalletTransaction>) {
     var selectedOption by remember { mutableStateOf("Week") }
     var expanded by remember { mutableStateOf(false) }
     val timeZone = TimeZone.currentSystemDefault()
@@ -73,8 +77,8 @@ fun EarningsBarChart(transactions: List<WalletTransaction>) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text("Total Earning")
-                Text("₹2,241")
+                Text("Total Earning" ,  style = text_style_lead_body_1 , color = greyColor)
+                Text("₹$totalEarning" , style = text_style_h4, color = blackColor)
             }
 
             OutlinedButton(
@@ -129,7 +133,7 @@ fun DisplayCurrentYearChart(
     val months = monthlySums.map { it.first }
     val values = monthlySums.map { it.second }
     Box(
-        modifier = Modifier.padding(horizontal = 16.dp).horizontalScroll(rememberScrollState()), contentAlignment = Alignment.Center
+        modifier = Modifier.padding(horizontal = 16.dp), contentAlignment = Alignment.Center
     ) {
         BarChart(labels = months, values = values)
     }
@@ -172,11 +176,9 @@ fun BarChart(
             verticalArrangement = Arrangement.spacedBy(26.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            val numberOfTicks = 5 // 5 intervals
+            val numberOfTicks = 5
             val step = max / numberOfTicks
-
             val tickLabels = (0..numberOfTicks).map { (it * step) / 1000 }.reversed()
-
             for (label in tickLabels) {
                 Text(
                     color = inputColor,
@@ -190,34 +192,45 @@ fun BarChart(
 
         Spacer(Modifier.width(16.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth().height(maxBarHeight),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.Bottom
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(maxBarHeight)
+                .horizontalScroll(rememberScrollState())
         ) {
-            for (i in labels.indices) {
-                val barProportion = (values[i].toFloat() / max.toFloat()).coerceAtMost(1f)
-                val barHeight = barProportion * maxBarHeight.value
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                for (i in labels.indices) {
+                    val barProportion = (values[i].toFloat() / max.toFloat()).coerceAtMost(1f)
+                    val barHeight = barProportion * maxBarHeight.value
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier.height(maxBarHeight)
-                ) {
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.BottomCenter) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Bottom,
+                        modifier = Modifier.height(maxBarHeight)
+                    ) {
                         Box(
-                            modifier = Modifier.width(12.dp).height(barHeight.dp)
-                                .background(greenColor, RoundedCornerShape(4.dp))
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .width(10.dp)
+                                    .height(barHeight.dp)
+                                    .background(greenColor, RoundedCornerShape(4.dp))
+                            )
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = labels[i],
+                            color = inputColor,
+                            style = textStyleBody2,
+                            fontSize = 12.sp
                         )
                     }
-
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        text = labels[i],
-                        color = inputColor,
-                        style = textStyleBody2,
-                        fontSize = 12.sp
-                    )
                 }
             }
         }
