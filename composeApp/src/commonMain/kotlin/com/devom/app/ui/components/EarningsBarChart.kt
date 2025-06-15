@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,11 +60,12 @@ val monthNames = listOf(
 
 @Composable
 fun EarningsBarChart(
-    totalEarning: String = "",
-    transactions: List<WalletTransaction>) {
+    transactions: List<WalletTransaction>,
+) {
     var selectedOption by remember { mutableStateOf("Week") }
     var expanded by remember { mutableStateOf(false) }
     val timeZone = TimeZone.currentSystemDefault()
+    val totalEarning = remember { mutableStateOf("") }
 
 
     Column(
@@ -77,8 +79,8 @@ fun EarningsBarChart(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text("Total Earning" ,  style = text_style_lead_body_1 , color = greyColor)
-                Text("₹$totalEarning" , style = text_style_h4, color = blackColor)
+                Text("Total Earning", style = text_style_lead_body_1, color = greyColor)
+                Text("₹${totalEarning.value}", style = text_style_h4, color = blackColor)
             }
 
             OutlinedButton(
@@ -87,8 +89,7 @@ fun EarningsBarChart(
                 shape = RoundedCornerShape(8.dp),
                 onClick = {
                     expanded = true
-                }
-            ) {
+                }) {
                 Text(text = selectedOption, color = greyColor, style = text_style_lead_body_1)
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
@@ -98,9 +99,7 @@ fun EarningsBarChart(
                 )
 
                 DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
+                    expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(text = { Text("Week") }, onClick = {
                         selectedOption = "Week"
                         expanded = false
@@ -113,8 +112,13 @@ fun EarningsBarChart(
             }
         }
         when (selectedOption) {
-            "Week" -> DisplayCurrentWeekChart(transactions, timeZone)
-            "Year" -> DisplayCurrentYearChart(transactions, timeZone)
+            "Week" -> DisplayCurrentWeekChart(transactions, timeZone) {
+                totalEarning.value = it.toString()
+            }
+
+            "Year" -> DisplayCurrentYearChart(transactions, timeZone) {
+                totalEarning.value = it.toString()
+            }
         }
     }
 
@@ -125,6 +129,7 @@ fun EarningsBarChart(
 fun DisplayCurrentYearChart(
     transactions: List<WalletTransaction>,
     timeZone: TimeZone = TimeZone.UTC,
+    onSum: (Int) -> Unit = {},
 ) {
     val today = Clock.System.now().toLocalDateTime(timeZone).date
     val currentYear = today.year
@@ -132,8 +137,12 @@ fun DisplayCurrentYearChart(
     val monthlySums = sumByMonth(currentYearTransactions, currentYear)
     val months = monthlySums.map { it.first }
     val values = monthlySums.map { it.second }
+    val sum = remember { values.sum() }
+    LaunchedEffect(Unit , values) {
+        onSum(sum)
+    }
     Box(
-        modifier = Modifier.padding(horizontal = 16.dp), contentAlignment = Alignment.Center
+        modifier = Modifier, contentAlignment = Alignment.Center
     ) {
         BarChart(labels = months, values = values)
     }
@@ -143,6 +152,7 @@ fun DisplayCurrentYearChart(
 fun DisplayCurrentWeekChart(
     transactions: List<WalletTransaction>,
     timeZone: TimeZone = TimeZone.UTC,
+    onSum: (Int) -> Unit = {},
 ) {
     val today = Clock.System.now().toLocalDateTime(timeZone).date
     val startOfWeek = today.previousOrSame(DayOfWeek.MONDAY)
@@ -150,10 +160,12 @@ fun DisplayCurrentWeekChart(
     val dailySums = sumByDay(currentWeekTransactions, startOfWeek)
     val weeks = dailySums.map { it.first }
     val values = dailySums.map { it.second }
-
+    val sum = remember { values.sum() }
+    LaunchedEffect(Unit , values) {
+        onSum(sum)
+    }
     Box(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier = Modifier, contentAlignment = Alignment.Center
     ) {
         BarChart(labels = weeks, values = values)
     }
@@ -193,9 +205,7 @@ fun BarChart(
         Spacer(Modifier.width(16.dp))
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(maxBarHeight)
+            modifier = Modifier.fillMaxWidth().height(maxBarHeight)
                 .horizontalScroll(rememberScrollState())
         ) {
             Row(
@@ -216,9 +226,7 @@ fun BarChart(
                             contentAlignment = Alignment.BottomCenter
                         ) {
                             Box(
-                                modifier = Modifier
-                                    .width(10.dp)
-                                    .height(barHeight.dp)
+                                modifier = Modifier.width(10.dp).height(barHeight.dp)
                                     .background(greenColor, RoundedCornerShape(4.dp))
                             )
                         }
