@@ -70,8 +70,7 @@ fun EarningsBarChart(
 
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = Modifier.fillMaxWidth().background(whiteColor, RoundedCornerShape(12.dp))
-            .padding(16.dp)
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp).background(whiteColor, RoundedCornerShape(12.dp)).padding(16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

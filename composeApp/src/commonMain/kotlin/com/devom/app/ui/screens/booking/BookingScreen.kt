@@ -52,8 +52,6 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
             else -> bookings.value
         }
 
-
-
         if (filteredBookings.isNotEmpty()) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
