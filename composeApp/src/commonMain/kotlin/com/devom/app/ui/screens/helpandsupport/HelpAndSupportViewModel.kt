@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.devom.Project
 import com.devom.models.helpandsupport.CreateTicketRequest
 import com.devom.models.helpandsupport.GetAllTicketsResponse
+import com.devom.network.getUser
 import com.devom.utils.network.onResult
 import com.devom.utils.network.onResultNothing
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +35,7 @@ class HelpAndSupportViewModel : ViewModel() {
 
     fun createTicket(request: CreateTicketRequest) {
         viewModelScope.launch {
-            Project.helpAndSupport.createTicketUseCase.invoke(request).collect {
+            Project.helpAndSupport.createTicketUseCase.invoke(request.copy(userId = getUser().userId)).collect {
                 it.onResultNothing {
                     getAllTickets()
                 }
