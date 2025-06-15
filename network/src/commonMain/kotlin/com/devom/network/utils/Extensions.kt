@@ -15,11 +15,23 @@ import kotlinx.serialization.json.JsonPrimitive
 
 inline fun <reified T> HttpResponse.toResponseResult(): Flow<ResponseResult<T>> = flow {
     val responseText = bodyAsText()
+
     val result = runCatching {
-        val parsed = if (status.isSuccess()) NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText) else NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<Nothing>>(responseText)
-        if (status.isSuccess() && parsed.data != null) ResponseResult.Success(parsed.data)
-        else if (status.isSuccess() && parsed.data == null) ResponseResult.SuccessNothing
-        else ResponseResult.Error(message = parsed.message.takeIf { it.isNotBlank() } ?: "Something went wrong", code = status.value)
+        val parsed = if (status.isSuccess()) {
+            NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<T>>(responseText)
+        } else {
+            NetworkClient.config.jsonConfig.decodeFromString<BaseResponse<Nothing>>(responseText)
+        }
+
+        when {
+            status.isSuccess() && parsed.data != null -> ResponseResult.Success(parsed.data)
+            status.isSuccess() && parsed.data == null -> ResponseResult.SuccessNothing
+            status.value == 401 -> ResponseResult.SuccessNothing
+            else -> ResponseResult.Error(
+                message = parsed.message.takeIf { it.isNotBlank() } ?: "Something went wrong",
+                code = status.value
+            )
+        }
     }.getOrElse {
         ResponseResult.Error(message = it.message ?: "Something went wrong", code = status.value)
     }

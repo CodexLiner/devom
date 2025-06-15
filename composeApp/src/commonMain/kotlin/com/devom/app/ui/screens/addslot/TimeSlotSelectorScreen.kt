@@ -56,6 +56,7 @@ import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toTimeParts
 import com.devom.app.utils.updateSlotTimeAndShiftFollowingSlots
 import com.devom.models.slots.Slot
+import com.devom.utils.Application
 import com.devom.utils.date.convertIsoToDate
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -339,6 +340,16 @@ fun AddTimeSlotButton(
         val defaultSlotDuration = 2
         val timeZone = TimeZone.currentSystemDefault()
         val maxEndTime = localTime.date.atTime(23, 59)
+        val cutOffTime = localTime.date.atTime(23, 30) // 11:30 pm cut-off
+
+        if (timeSlots.isNotEmpty()) {
+            val lastSlot = timeSlots.last()
+            val lastEnd = localTime.date.atTime(parse12HourTime(lastSlot.endTime))
+            if (lastEnd >= cutOffTime) {
+                Application.showToast("Last slot cannot be more than 11:30 pm")
+                return@TextButton
+            }
+        }
 
         if (timeSlots.isEmpty()) {
             onAdd(mutableListOf(Slot(startTime = currentStartTime, endTime = "2:00 AM")))
@@ -348,15 +359,15 @@ fun AddTimeSlotButton(
         val newStartTimeStr = timeSlots.lastOrNull()?.endTime ?: currentStartTime
         val newStartTime = localTime.date.atTime(parse12HourTime(newStartTimeStr))
 
-        if (newStartTime.time >= maxEndTime.time) return@TextButton
+        if (newStartTime >= maxEndTime) return@TextButton
 
-        val potentialEndTime =
-            newStartTime.toInstant(timeZone).plus(defaultSlotDuration, DateTimeUnit.HOUR)
-                .toLocalDateTime(timeZone)
+        val potentialEndTime = newStartTime.toInstant(timeZone)
+            .plus(defaultSlotDuration, DateTimeUnit.HOUR)
+            .toLocalDateTime(timeZone)
 
-        val adjustedEndTime =
-            if (potentialEndTime.time > maxEndTime.time) maxEndTime else potentialEndTime
+        val adjustedEndTime = if (potentialEndTime > maxEndTime) maxEndTime else potentialEndTime
         val endTimeStr = adjustedEndTime.time.to12HourTime()
+
         onAdd(timeSlots.toMutableList().apply {
             add(Slot(startTime = newStartTimeStr, endTime = endTimeStr))
         })

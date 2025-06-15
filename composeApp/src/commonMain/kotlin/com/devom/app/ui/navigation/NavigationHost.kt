@@ -3,8 +3,6 @@ package com.devom.app.ui.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -45,18 +43,10 @@ fun NavigationHost(
 ) {
     NavHost(
         navController = navController, startDestination = startDestination,
-        enterTransition = {
-            slideInHorizontally(initialOffsetX = { it },)
-        },
-        exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -it })
-        },
-        popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -it })
-        },
-        popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { it })
-        },
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(300)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(300)) },
+        popExitTransition = { fadeOut(animationSpec = tween(300)) },
     ) {
         composable(Screens.Login.path) {
             LoginScreen(navController)
@@ -75,7 +65,7 @@ fun NavigationHost(
         }
 
         composable(
-            route = Screens.Register.path ,
+            route = Screens.Register.path,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "${ASSET_LINK_BASE_URL}referral?phone={phone}&code={code}"
@@ -99,8 +89,6 @@ fun NavigationHost(
             )
         }
         composable(
-            enterTransition = { fadeIn(animationSpec = tween(300)) },
-            exitTransition = { fadeOut(animationSpec = tween(300)) },
             route = Screens.Dashboard.path
         ) {
             DashboardScreen(navController)

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.touchlab.kermit.Logger
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greenColor
 import com.devom.app.theme.greyColor
@@ -183,14 +185,15 @@ fun BarChart(
         modifier = Modifier.fillMaxWidth().height(maxBarHeight)
     ) {
         Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.spacedBy(26.dp),
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
         ) {
             val numberOfTicks = 5
             val step = max / numberOfTicks
             val tickLabels = (0..numberOfTicks).map { (it * step) / 1000 }.reversed()
             for (label in tickLabels) {
+                Logger.d("KermitLogs $label")
                 Text(
                     color = inputColor,
                     style = textStyleBody2,
@@ -199,6 +202,12 @@ fun BarChart(
                     fontSize = 12.sp
                 )
             }
+
+            Text(
+                lineHeight = 16.sp,
+                text = "",
+                fontSize = 12.sp
+            )
         }
 
         Spacer(Modifier.width(16.dp))

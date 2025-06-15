@@ -82,7 +82,7 @@ fun TimeSlotBottomSheet(
                             startTime = slot.startTime.to24HourTime(),
                             endTime = slot.endTime.to24HourTime()
                         )
-                    })
+                    }.distinctBy { Pair(it.availableDate, Pair(it.startTime, it.endTime)) })
                     sheetState.hide()
                     onDismiss()
                 }
