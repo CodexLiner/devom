@@ -79,6 +79,7 @@ fun HelpAndSupportDetailScreenContent(viewModel: HelpAndSupportViewModel) {
                     subject = ticket.subject,
                     status = ticket.status,
                     description = ticket.message,
+                    response = ticket.response,
                     chipColor = chipColor,
                     imageUrl = ticket.image.toDevomImage()
                 )
@@ -108,6 +109,7 @@ fun TicketDetailsCard(
     description: String?,
     chipColor: Color,
     imageUrl: String?,
+    response: String?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).background(whiteColor).padding(24.dp),
@@ -121,6 +123,7 @@ fun TicketDetailsCard(
         }
 
         TicketInformationFields(title = "Description", value = description)
+        TicketInformationFields(title = "Response by Devom", value = response?:"".ifBlank { "-" })
         if (imageUrl.isNullOrEmpty().not()) TicketImage(imageUrl)
     }
 }
