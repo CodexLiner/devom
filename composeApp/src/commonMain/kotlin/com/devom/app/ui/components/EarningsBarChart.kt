@@ -209,7 +209,7 @@ fun BarChart(
                 .horizontalScroll(rememberScrollState())
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
                 for (i in labels.indices) {
